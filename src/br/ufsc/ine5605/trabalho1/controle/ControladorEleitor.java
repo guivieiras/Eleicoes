@@ -12,14 +12,14 @@ import java.util.ArrayList;
  */
 public class ControladorEleitor {
 
-	private final Collection<Eleitor> eleitores = new ArrayList<>();
-
+	private ArrayList<Eleitor> eleitores;
+        
 	private TelaEleitor telaEleitor;
 
-	private ControladorPrincipal controladorPrincipal;
+	public final ControladorPrincipal controladorPrincipal;
 
 	public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
-
+            this.controladorPrincipal = controladorPrincipal;
 	}
 
 	public void cadastraEleitor(Eleitor eleitor) {
@@ -39,7 +39,8 @@ public class ControladorEleitor {
 	}
 
 	public void exibeTelaEleitor() {
-
+            TelaEleitor te = new TelaEleitor(this);
+            te.setVisible(true);
 	}
 
 }

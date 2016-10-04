@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipal;
 import java.util.Collection;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
@@ -9,40 +10,33 @@ import java.util.ArrayList;
 
 public class ControladorUrna {
 
-	private ControladorPrincipal controladorPrincipal;
+    public final ControladorPrincipal controladorPrincipal;
 
-	private Collection<Urna> urnas;
+    private Collection<Urna> urnas;
 
-	private TelaUrna telaUrna;
+    private TelaUrna telaUrna;
 
-	private TelaVotacao telaVotacao;
+    private TelaVotacao telaVotacao;
 
-	public ControladorUrna(ControladorPrincipal controladorPrincipal) {
+    public ControladorUrna(ControladorPrincipal controladorPrincipal) {
+            this.controladorPrincipal = controladorPrincipal;
+    }
 
-	}
+    public void cadastraUrna(Cidade cidade, int limiteDeVotos, int zonaEleitoral, int secaoEleitoral) {
 
-	public void votar(int titulo, int prefeito, int vereador, Urna urna) {
+    }
 
-	}
+    public void removeUrna(Urna urna) {
 
-	public void cadastraUrna(Cidade cidade, int limiteDeVotos, int zonaEleitoral, int secaoEleitoral) {
+    }
 
-	}
+    public ArrayList<Urna> getUrnas() {
+        return null;
+    }
 
-	public void removeUrna(Urna urna) {
-
-	}
-
-	public ArrayList<Urna> getUrnas() {
-		return null;
-	}
-
-	public void exibeTelaVotacao() {
-
-	}
-
-	public void exibeTelaUrna() {
-
-	}
+    public void exibeTelaUrna() {
+        TelaUrna tu = new TelaUrna(this);
+        tu.setVisible(true);
+    }
 
 }

@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class ControladorPartido {
 
-	private ControladorPrincipal controladorPrincipal;
+	public final ControladorPrincipal controladorPrincipal;
 
 	private Collection<Partido> partidos;
 
 	private TelaPartido telaPartido;
 
 	public ControladorPartido(ControladorPrincipal controladorPrincipal) {
-
+            this.controladorPrincipal = controladorPrincipal;
 	}
 
 	public void cadastraPartido(String nome, String sigla) {

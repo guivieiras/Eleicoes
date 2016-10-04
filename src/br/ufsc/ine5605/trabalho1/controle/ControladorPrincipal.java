@@ -9,20 +9,32 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipal;
  */
 public class ControladorPrincipal {
 
-	private ControladorCandidato controladorCandidato;
+	public final ControladorCandidato controladorCandidato;
 
-	private ControladorEleitor controladorEleitor;
+	public final ControladorEleitor controladorEleitor;
 
-	private ControladorUrna controladorUrna;
+	public final ControladorUrna controladorUrna;
 
-	private ControladorCidade controladorCidade;
+	public final ControladorCidade controladorCidade;
 
-	private TelaPrincipal telaPrincipal;
+	public final ControladorPartido controladorPartido;
+        
+        public final TelaPrincipal telaPrincipal;
+        
+	
 
-	private ControladorPartido controladorPartido;
-
-	public void inicia() {
-
+	public ControladorPrincipal() {
+            
+            controladorCandidato =  new ControladorCandidato(this);
+            controladorCidade = new ControladorCidade(this);
+            controladorEleitor = new ControladorEleitor(this);
+            controladorPartido = new ControladorPartido(this);
+            controladorUrna = new ControladorUrna(this);
+            
+            telaPrincipal = new TelaPrincipal(this);    
+            telaPrincipal.setVisible(true);
 	}
+        
+        
 
 }

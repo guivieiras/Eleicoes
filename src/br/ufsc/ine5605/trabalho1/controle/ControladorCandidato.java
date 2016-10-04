@@ -1,23 +1,21 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaCandidato;
-import java.util.Collection;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 public class ControladorCandidato {
 
-	private ControladorPrincipal controladorPrincipal;
-
+	public final ControladorPrincipal controladorPrincipal;
 	private TelaCandidato telaCandidato;
-
-	private Collection<Candidato> candidatos;
+	private ArrayList<Candidato> candidatos;
 
 	public ControladorCandidato(ControladorPrincipal controladorPrincipal) {
-
+            this.controladorPrincipal = controladorPrincipal;
 	}
 
 	public void cadastraCandidato(int numero, String nome, Cargo cargo, Cidade cidade, Partido partido) {
@@ -40,8 +38,10 @@ public class ControladorCandidato {
 		return null;
 	}
 
+        //Não alterar
 	public void exibeTelaCandidatos() {
-
+            TelaCandidato tc = new TelaCandidato(this);
+            tc.setVisible(true);
 	}
 
 }
