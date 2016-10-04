@@ -1,2 +1,2 @@
-Controladores não tem mais atributo de suas respectivas telas
+Controladores devem ter mais o atributo de suas respectivas telas
 Atributos relacionados a controladores são todos public final
