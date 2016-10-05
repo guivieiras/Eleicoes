@@ -1,3 +1,0 @@
-Controladores não devem ter mais o atributo de suas respectivas telas
-Atributos relacionados a controladores são todos public final
-Atualizar TelaVotação de acordo com o UML
