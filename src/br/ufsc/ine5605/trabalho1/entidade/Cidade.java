@@ -3,6 +3,11 @@ package br.ufsc.ine5605.trabalho1.entidade;
 public class Cidade {
 
 	private String nome;
+        
+        public Cidade(String nome)
+        {
+            
+        }
 
 	public void getNome() {
 

@@ -10,18 +10,11 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipal;
 public class ControladorPrincipal {
 
 	public final ControladorCandidato controladorCandidato;
-
 	public final ControladorEleitor controladorEleitor;
-
 	public final ControladorUrna controladorUrna;
-
 	public final ControladorCidade controladorCidade;
-
-	public final ControladorPartido controladorPartido;
-        
+	public final ControladorPartido controladorPartido; 
         public final TelaPrincipal telaPrincipal;
-        
-	
 
 	public ControladorPrincipal() {
             

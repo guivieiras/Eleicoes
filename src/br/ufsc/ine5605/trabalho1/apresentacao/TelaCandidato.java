@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 public class TelaCandidato extends JFrame{
 
-	private ControladorCandidato controladorCandidato;
+	private final ControladorCandidato controladorCandidato;
 
 	public TelaCandidato(ControladorCandidato controladorCandidato) {
             this.controladorCandidato = controladorCandidato;
@@ -23,6 +23,11 @@ public class TelaCandidato extends JFrame{
 	public void removeCandidato() {
 
 	}
+        
+        public void modificaCandidato()
+        {
+            
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -1,6 +1,5 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
-import java.util.Collection;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartido;
 import java.util.ArrayList;
@@ -8,10 +7,7 @@ import java.util.ArrayList;
 public class ControladorPartido {
 
 	public final ControladorPrincipal controladorPrincipal;
-
-	private Collection<Partido> partidos;
-
-	private TelaPartido telaPartido;
+	private ArrayList<Partido> partidos;
 
 	public ControladorPartido(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
@@ -24,6 +20,9 @@ public class ControladorPartido {
 	public void removePartido(Partido partido) {
 
 	}
+        public void modificaPartido(Partido partido, String nome, String sigla){
+            
+        }
 
 	public ArrayList<Partido> getPartidos() {
 		return null;

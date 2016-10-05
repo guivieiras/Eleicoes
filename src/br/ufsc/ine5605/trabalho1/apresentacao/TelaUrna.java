@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 public class TelaUrna extends JFrame{
 
-	private ControladorUrna controladorUrna;
+	private final ControladorUrna controladorUrna;
 
 	public TelaUrna(ControladorUrna controladorUrna) {
             this.controladorUrna = controladorUrna;

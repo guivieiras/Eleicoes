@@ -11,7 +11,7 @@ import javax.swing.JFrame;
  */
 public class TelaEleitor extends JFrame{
 
-	private ControladorEleitor controladorEleitor;
+	private final ControladorEleitor controladorEleitor;
 
 	public TelaEleitor(ControladorEleitor controladorEleitor) {
             this.controladorEleitor = controladorEleitor;
@@ -29,6 +29,10 @@ public class TelaEleitor extends JFrame{
 	public void removeEleitor() {
 
 	}
+        public void modificaEleitor()
+        {
+            
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 public class ControladorCandidato {
 
 	public final ControladorPrincipal controladorPrincipal;
-	private TelaCandidato telaCandidato;
 	private ArrayList<Candidato> candidatos;
 
 	public ControladorCandidato(ControladorPrincipal controladorPrincipal) {
@@ -25,6 +24,10 @@ public class ControladorCandidato {
 	public void removeCandidato(int codigo) {
 
 	}
+        
+        public void modificaCandidato(Candidato candidato, int numero, String nome, Cargo cargo, Cidade cidade, Partido partido){
+            
+        }
 
 	public ArrayList<Candidato> getCandidatos() {
 		return null;
@@ -38,10 +41,8 @@ public class ControladorCandidato {
 		return null;
 	}
 
-        //Não alterar
 	public void exibeTelaCandidatos() {
-            TelaCandidato tc = new TelaCandidato(this);
-            tc.setVisible(true);
+
 	}
 
 }

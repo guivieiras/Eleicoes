@@ -28,8 +28,12 @@ public class Urna {
 		return null;
 	}
 
-	public void getCidade() {
-
+	public Cidade getCidade() {
+                return null;
 	}
+        
+        public void exibeTelaVotacao() {
+        
+        }
 
 }

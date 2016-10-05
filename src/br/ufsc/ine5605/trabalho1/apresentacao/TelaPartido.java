@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 public class TelaPartido extends JFrame{
 
-	private ControladorPartido controladorPartido;
+	private final ControladorPartido controladorPartido;
 
 	public TelaPartido(ControladorPartido controladorPartido) {
             this.controladorPartido = controladorPartido;
@@ -23,6 +23,10 @@ public class TelaPartido extends JFrame{
 	public void removePartido() {
 
 	}
+        public void modificaPartido()
+        {
+            
+        }
 
 
     /**

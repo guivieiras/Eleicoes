@@ -13,10 +13,7 @@ import javax.swing.JPanel;
  */
 public class TelaPrincipal extends JFrame{
 
-	private ControladorPrincipal controladorPrincipal;
-	//JPanel panelSecond = new JPanel();
-
-        
+	private final ControladorPrincipal controladorPrincipal;        
 	public TelaPrincipal(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
             initComponents();
@@ -41,10 +38,11 @@ public class TelaPrincipal extends JFrame{
             setEnabled(false);
             controladorPrincipal.controladorUrna.exibeTelaUrna();
 	}
-
-	public void iniciaVotacao() {
-
-        }
+        
+        public void mostraTelaPartido() {
+            setEnabled(false);
+            controladorPrincipal.controladorPartido.exibeTelaPartido();
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,14 +53,46 @@ public class TelaPrincipal extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btn_TelaCandidato = new javax.swing.JButton();
+        btn_TelaCidade = new javax.swing.JButton();
+        btn_TelaEleitor = new javax.swing.JButton();
+        btn_TelaPartido = new javax.swing.JButton();
+        btn_TelaUrna = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Tela Candidatos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_TelaCandidato.setText("Tela Candidato");
+        btn_TelaCandidato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_TelaCandidatoActionPerformed(evt);
+            }
+        });
+
+        btn_TelaCidade.setText("Tela Cidade");
+        btn_TelaCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TelaCidadeActionPerformed(evt);
+            }
+        });
+
+        btn_TelaEleitor.setText("Tela Eleitor");
+        btn_TelaEleitor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TelaEleitorActionPerformed(evt);
+            }
+        });
+
+        btn_TelaPartido.setText("Tela Partido");
+        btn_TelaPartido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TelaPartidoActionPerformed(evt);
+            }
+        });
+
+        btn_TelaUrna.setText("Tela Urna");
+        btn_TelaUrna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TelaUrnaActionPerformed(evt);
             }
         });
 
@@ -71,27 +101,60 @@ public class TelaPrincipal extends JFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addGap(134, 134, 134)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_TelaCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_TelaEleitor, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_TelaPartido, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_TelaUrna, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_TelaCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(btn_TelaCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_TelaCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_TelaEleitor, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_TelaPartido, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_TelaUrna, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_TelaCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TelaCandidatoActionPerformed
         mostraTelaCandidatos();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_TelaCandidatoActionPerformed
+
+    private void btn_TelaCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TelaCidadeActionPerformed
+        mostraTelaCidade();
+    }//GEN-LAST:event_btn_TelaCidadeActionPerformed
+
+    private void btn_TelaEleitorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TelaEleitorActionPerformed
+        mostraTelaEleitor();
+    }//GEN-LAST:event_btn_TelaEleitorActionPerformed
+
+    private void btn_TelaPartidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TelaPartidoActionPerformed
+        mostraTelaPartido();
+    }//GEN-LAST:event_btn_TelaPartidoActionPerformed
+
+    private void btn_TelaUrnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TelaUrnaActionPerformed
+        mostraTelaUrna();
+    }//GEN-LAST:event_btn_TelaUrnaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btn_TelaCandidato;
+    private javax.swing.JButton btn_TelaCidade;
+    private javax.swing.JButton btn_TelaEleitor;
+    private javax.swing.JButton btn_TelaPartido;
+    private javax.swing.JButton btn_TelaUrna;
     // End of variables declaration//GEN-END:variables
 }

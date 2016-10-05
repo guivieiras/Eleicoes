@@ -1,6 +1,5 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
-import java.util.Collection;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitor;
 import java.util.ArrayList;
@@ -12,11 +11,8 @@ import java.util.ArrayList;
  */
 public class ControladorEleitor {
 
-	private ArrayList<Eleitor> eleitores;
-        
-	private TelaEleitor telaEleitor;
-
-	public final ControladorPrincipal controladorPrincipal;
+        public final ControladorPrincipal controladorPrincipal;
+        private ArrayList<Eleitor> eleitores;    
 
 	public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
@@ -29,6 +25,9 @@ public class ControladorEleitor {
 	public void removeEleitor(int titulo) {
 
 	}
+        public void modificaEleitor(Eleitor eleitor, int titulo, String nome){
+            
+        }
 
 	public ArrayList<Eleitor> getEleitores() {
 		return null;
@@ -39,8 +38,7 @@ public class ControladorEleitor {
 	}
 
 	public void exibeTelaEleitor() {
-            TelaEleitor te = new TelaEleitor(this);
-            te.setVisible(true);
+
 	}
 
 }

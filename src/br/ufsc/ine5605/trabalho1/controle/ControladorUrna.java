@@ -1,7 +1,6 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipal;
-import java.util.Collection;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
@@ -11,12 +10,7 @@ import java.util.ArrayList;
 public class ControladorUrna {
 
     public final ControladorPrincipal controladorPrincipal;
-
-    private Collection<Urna> urnas;
-
-    private TelaUrna telaUrna;
-
-    private TelaVotacao telaVotacao;
+    private ArrayList<Urna> urnas;
 
     public ControladorUrna(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
@@ -35,8 +29,6 @@ public class ControladorUrna {
     }
 
     public void exibeTelaUrna() {
-        TelaUrna tu = new TelaUrna(this);
-        tu.setVisible(true);
-    }
 
+    }
 }

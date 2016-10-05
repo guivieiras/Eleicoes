@@ -5,9 +5,10 @@ import javax.swing.JFrame;
 
 public class TelaCidade extends JFrame{
 
-	private ControladorCidade controladorCidade;
+	private final ControladorCidade controladorCidade;
         
 	public TelaCidade(ControladorCidade controladorCidade) {
+            this.controladorCidade = controladorCidade;
             initComponents();
 	}
 
@@ -22,6 +23,10 @@ public class TelaCidade extends JFrame{
 	public void removeCidade() {
 
 	}
+        public void modificaCidade()
+        {
+            
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
