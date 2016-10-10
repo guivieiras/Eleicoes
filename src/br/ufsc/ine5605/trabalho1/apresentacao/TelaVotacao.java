@@ -6,12 +6,10 @@ import javax.swing.JFrame;
 
 public class TelaVotacao extends JFrame{
 
-	private ControladorUrna controladorUrna;
         private Urna urna;
 
-	public TelaVotacao(Urna urna, ControladorUrna controladorUrna) {
+	public TelaVotacao(Urna urna) {
             this.urna = urna;
-            this.controladorUrna = controladorUrna;
             initComponents();
 	}
 

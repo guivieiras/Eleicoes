@@ -18,6 +18,11 @@ public class TelaPrincipal extends JFrame{
             this.controladorPrincipal = controladorPrincipal;
             initComponents();
 	}
+        
+        public void unlockTelaPrincipal()
+        {
+            setEnabled(true);
+        }
 
 	public void mostraTelaCandidatos() {
             setEnabled(false);
@@ -60,6 +65,7 @@ public class TelaPrincipal extends JFrame{
         btn_TelaUrna = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Eleições");
 
         btn_TelaCandidato.setText("Tela Candidato");
         btn_TelaCandidato.addActionListener(new java.awt.event.ActionListener() {

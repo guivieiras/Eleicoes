@@ -2,38 +2,79 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import java.util.Scanner;
 import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
+import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 /**
- *  
- *  @author 10349509913 
- * 
+ *
+ * @author 10349509913
+ *
  */
-public class TelaEleitor extends JFrame{
+public class TelaEleitor extends JFrame {
 
-	private final ControladorEleitor controladorEleitor;
+    private final ControladorEleitor controladorEleitor;
 
-	public TelaEleitor(ControladorEleitor controladorEleitor) {
-            this.controladorEleitor = controladorEleitor;
-            initComponents();
-	}
+    public TelaEleitor(ControladorEleitor controladorEleitor) {
+        this.controladorEleitor = controladorEleitor;
+        initComponents();
 
-	public void cadastraEleitor() {
+        listaEleitores();
+    }
 
-	}
+    private void cadastraEleitor() {
+        Eleitor eleitor = new Eleitor(Long.parseLong(txt_Titulo.getText()), txt_Nome.getText());
+        controladorEleitor.cadastraEleitor(eleitor);
+        JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+    }
 
-	public void listaEleitores() {
+    private void listaEleitores() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        addRows(controladorEleitor.getEleitores(), model);
+    }
 
-	}
+    private void procuraEleitorPorNome() {
+        Eleitor eleitor = controladorEleitor.getEleitor(txt_Nome.getText());
+    }
 
-	public void removeEleitor() {
-
-	}
-        public void modificaEleitor()
-        {
-            
+    private void procuraEleitorPorTitulo() {
+        if (verificaTitulo(txt_Titulo.getText())) {
+            Eleitor eleitor = controladorEleitor.getEleitor(Long.parseLong(txt_Titulo.getText()));
         }
+    }
 
+    public void removeEleitor() {
+
+    }
+
+    public void modificaEleitor() {
+
+    }
+    
+    private void addRows(ArrayList<Eleitor> eleitores, DefaultTableModel model) {
+        for (Eleitor eleitor : eleitores) {
+            model.addRow(new Object[]{eleitor.getNome(), eleitor.getTitulo()});
+        }
+    }
+    
+    private boolean verificaTitulo(String titulo) {
+        if (titulo.length() != 12) {
+            JOptionPane.showMessageDialog(null, "Título inválido, o título tem de ter 12 números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            Long.parseLong(titulo);
+            return true;
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(null, "Título inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,23 +84,253 @@ public class TelaEleitor extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        panel_Lista = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        panel_Cadastro = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txt_Titulo = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btn_Cadastro = new javax.swing.JButton();
+        txt_Nome = new javax.swing.JTextField();
+        panel_Modifica = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txt_ModificaTitulo = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        btn_Modificar = new javax.swing.JButton();
+        txt_ModificaNome = new javax.swing.JTextField();
+        btn_ProcuraPorNome = new javax.swing.JButton();
+        btn_ProcuraPorTitulo = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Tela Eleitores");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nome", "Título"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Long.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        javax.swing.GroupLayout panel_ListaLayout = new javax.swing.GroupLayout(panel_Lista);
+        panel_Lista.setLayout(panel_ListaLayout);
+        panel_ListaLayout.setHorizontalGroup(
+            panel_ListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_ListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panel_ListaLayout.setVerticalGroup(
+            panel_ListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_ListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Lista", panel_Lista);
+
+        jLabel2.setText("Título");
+
+        jLabel1.setText("Nome");
+
+        btn_Cadastro.setText("Cadastrar");
+        btn_Cadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Cadastro_CadastroActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_CadastroLayout = new javax.swing.GroupLayout(panel_Cadastro);
+        panel_Cadastro.setLayout(panel_CadastroLayout);
+        panel_CadastroLayout.setHorizontalGroup(
+            panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CadastroLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_Nome, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(74, 74, 74))
+            .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CadastroLayout.createSequentialGroup()
+                    .addContainerGap(289, Short.MAX_VALUE)
+                    .addComponent(btn_Cadastro)
+                    .addGap(25, 25, 25)))
+        );
+        panel_CadastroLayout.setVerticalGroup(
+            panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_CadastroLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_Nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txt_Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(194, Short.MAX_VALUE))
+            .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_CadastroLayout.createSequentialGroup()
+                    .addContainerGap(219, Short.MAX_VALUE)
+                    .addComponent(btn_Cadastro)
+                    .addGap(30, 30, 30)))
+        );
+
+        jTabbedPane2.addTab("Cadastro", panel_Cadastro);
+
+        jLabel3.setText("Título");
+
+        jLabel4.setText("Nome");
+
+        btn_Modificar.setText("Modificar");
+        btn_Modificar.setEnabled(false);
+        btn_Modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Modificar_CadastroActionPerformed(evt);
+            }
+        });
+
+        btn_ProcuraPorNome.setText("Procurar");
+        btn_ProcuraPorNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ProcuraPorNomeActionPerformed(evt);
+            }
+        });
+
+        btn_ProcuraPorTitulo.setText("Procurar");
+        btn_ProcuraPorTitulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ProcuraPorTituloActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_ModificaLayout = new javax.swing.GroupLayout(panel_Modifica);
+        panel_Modifica.setLayout(panel_ModificaLayout);
+        panel_ModificaLayout.setHorizontalGroup(
+            panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_ModificaLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_ModificaLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_Modificar)
+                        .addGap(25, 25, 25))
+                    .addGroup(panel_ModificaLayout.createSequentialGroup()
+                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_ProcuraPorNome)
+                            .addComponent(btn_ProcuraPorTitulo, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())))
+        );
+        panel_ModificaLayout.setVerticalGroup(
+            panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_ModificaLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_ModificaNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(btn_ProcuraPorTitulo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(btn_ProcuraPorNome))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                .addComponent(btn_Modificar)
+                .addGap(30, 30, 30))
+        );
+
+        jTabbedPane2.addTab("Modifica", panel_Modifica);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        controladorEleitor.controladorPrincipal.telaPrincipal.unlockTelaPrincipal();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void btn_Cadastro_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cadastro_CadastroActionPerformed
+        cadastraEleitor();
+    }//GEN-LAST:event_btn_Cadastro_CadastroActionPerformed
+
+    private void btn_Modificar_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Modificar_CadastroActionPerformed
+        modificaEleitor();
+    }//GEN-LAST:event_btn_Modificar_CadastroActionPerformed
+
+    private void btn_ProcuraPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorTituloActionPerformed
+        procuraEleitorPorTitulo();
+    }//GEN-LAST:event_btn_ProcuraPorTituloActionPerformed
+
+    private void btn_ProcuraPorNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorNomeActionPerformed
+        procuraEleitorPorNome();
+    }//GEN-LAST:event_btn_ProcuraPorNomeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_Cadastro;
+    private javax.swing.JButton btn_Modificar;
+    private javax.swing.JButton btn_ProcuraPorNome;
+    private javax.swing.JButton btn_ProcuraPorTitulo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JPanel panel_Cadastro;
+    private javax.swing.JPanel panel_Lista;
+    private javax.swing.JPanel panel_Modifica;
+    private javax.swing.JTextField txt_ModificaNome;
+    private javax.swing.JTextField txt_ModificaTitulo;
+    private javax.swing.JTextField txt_Nome;
+    private javax.swing.JTextField txt_Titulo;
     // End of variables declaration//GEN-END:variables
 }

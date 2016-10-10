@@ -24,6 +24,8 @@ public class ControladorPrincipal {
             controladorPartido = new ControladorPartido(this);
             controladorUrna = new ControladorUrna(this);
             
+            controladorEleitor.cadastraEleitor(new br.ufsc.ine5605.trabalho1.entidade.Eleitor(50, "Nomebolado"));
+
             telaPrincipal = new TelaPrincipal(this);    
             telaPrincipal.setVisible(true);
 	}

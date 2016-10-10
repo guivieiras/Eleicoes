@@ -7,24 +7,25 @@ package br.ufsc.ine5605.trabalho1.entidade;
  */
 public class Eleitor {
 
-	private int titulo;
+	private long titulo;
 
 	private String nome;
 
-	public Eleitor(int titulo, String nome) {
-
+	public Eleitor(long titulo, String nome) {
+            this.titulo = titulo;
+            this.nome = nome;
 	}
 
-	public int getTitulo() {
-		return 0;
+	public long getTitulo() {
+		return titulo;
 	}
 
-	public void setTitulo(int titulo) {
+	public void setTitulo(long titulo) {
 
 	}
 
 	public String getNome() {
-		return null;
+		return nome;
 	}
 
 	public void setNome(String nome) {

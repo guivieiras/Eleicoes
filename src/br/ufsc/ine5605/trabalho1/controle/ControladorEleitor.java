@@ -12,33 +12,43 @@ import java.util.ArrayList;
 public class ControladorEleitor {
 
         public final ControladorPrincipal controladorPrincipal;
-        private ArrayList<Eleitor> eleitores;    
+        private  ArrayList<Eleitor> eleitores;    
 
 	public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
+            this.eleitores = new ArrayList<>();
 	}
 
 	public void cadastraEleitor(Eleitor eleitor) {
-
+            eleitores.add(eleitor);
 	}
 
-	public void removeEleitor(int titulo) {
+	public void removeEleitor(long titulo) {
 
 	}
-        public void modificaEleitor(Eleitor eleitor, int titulo, String nome){
+        public void modificaEleitor(Eleitor eleitor, long titulo, String nome){
             
         }
 
 	public ArrayList<Eleitor> getEleitores() {
-		return null;
+		return eleitores;
 	}
 
-	public Eleitor getEleitorPeloTitulo(int titulo) {
+	public Eleitor getEleitorPeloTitulo(long titulo) {
 		return null;
 	}
 
 	public void exibeTelaEleitor() {
-
+            TelaEleitor te = new TelaEleitor(this);
+            te.setVisible(true);
 	}
+
+    public Eleitor getEleitor(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Eleitor getEleitor(long parseLong) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
