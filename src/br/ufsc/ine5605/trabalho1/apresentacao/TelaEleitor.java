@@ -19,49 +19,88 @@ import javax.swing.table.TableModel;
 public class TelaEleitor extends JFrame {
 
     private final ControladorEleitor controladorEleitor;
+    private Eleitor eleitorModificado;
 
     public TelaEleitor(ControladorEleitor controladorEleitor) {
         this.controladorEleitor = controladorEleitor;
         initComponents();
-
         listaEleitores();
     }
 
     private void cadastraEleitor() {
-        Eleitor eleitor = new Eleitor(Long.parseLong(txt_Titulo.getText()), txt_Nome.getText());
-        controladorEleitor.cadastraEleitor(eleitor);
-        JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+        if (verificaTitulo(txt_Titulo.getText())) {
+            Eleitor eleitor = new Eleitor(Long.parseLong(txt_Titulo.getText()), txt_Nome.getText());
+            if (controladorEleitor.cadastraEleitor(eleitor)) {
+                JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar o eleitor", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
     private void listaEleitores() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        addRows(controladorEleitor.getEleitores(), model);
+        addRows(controladorEleitor.getEleitores());
     }
 
     private void procuraEleitorPorNome() {
-        Eleitor eleitor = controladorEleitor.getEleitor(txt_Nome.getText());
+        eleitorModificado = controladorEleitor.getEleitor(txt_ModificaNome.getText());
+        if (eleitorModificado != null) {
+            txt_ModificaNome.setText(eleitorModificado.getNome());
+            txt_ModificaTitulo.setText(String.valueOf(eleitorModificado.getTitulo()));
+
+            btn_Modificar.setEnabled(true);
+            btn_Remove.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Eleitor não encontrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            btn_Modificar.setEnabled(false);
+            btn_Remove.setEnabled(false);
+        }
     }
 
     private void procuraEleitorPorTitulo() {
-        if (verificaTitulo(txt_Titulo.getText())) {
-            Eleitor eleitor = controladorEleitor.getEleitor(Long.parseLong(txt_Titulo.getText()));
+        if (verificaTitulo(txt_ModificaTitulo.getText())) {
+            eleitorModificado = controladorEleitor.getEleitor(Long.parseLong(txt_ModificaTitulo.getText()));
+            if (eleitorModificado != null) {
+                txt_ModificaNome.setText(eleitorModificado.getNome());
+                txt_ModificaTitulo.setText(String.valueOf(eleitorModificado.getTitulo()));
+
+                btn_Modificar.setEnabled(true);
+                btn_Remove.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Eleitor não encontrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                btn_Modificar.setEnabled(false);
+                btn_Remove.setEnabled(false);
+            }
         }
     }
 
     public void removeEleitor() {
-
+        controladorEleitor.removeEleitor(eleitorModificado);
     }
 
     public void modificaEleitor() {
-
+        if (verificaTitulo(txt_ModificaTitulo.getText())) {
+            eleitorModificado.setNome(txt_ModificaNome.getText());
+            eleitorModificado.setTitulo(Long.parseLong(txt_ModificaTitulo.getText()));
+        }
     }
-    
-    private void addRows(ArrayList<Eleitor> eleitores, DefaultTableModel model) {
+
+    private void addRows(ArrayList<Eleitor> eleitores) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        removeAllRows();
         for (Eleitor eleitor : eleitores) {
             model.addRow(new Object[]{eleitor.getNome(), eleitor.getTitulo()});
         }
     }
-    
+
+    private void removeAllRows() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowCount = model.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+    }
+
     private boolean verificaTitulo(String titulo) {
         if (titulo.length() != 12) {
             JOptionPane.showMessageDialog(null, "Título inválido, o título tem de ter 12 números.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -75,6 +114,7 @@ public class TelaEleitor extends JFrame {
             return false;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -102,12 +142,20 @@ public class TelaEleitor extends JFrame {
         txt_ModificaNome = new javax.swing.JTextField();
         btn_ProcuraPorNome = new javax.swing.JButton();
         btn_ProcuraPorTitulo = new javax.swing.JButton();
+        btn_Remove = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Tela Eleitores");
+        setTitle("Eleitores");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+
+        jTabbedPane2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane2StateChanged(evt);
             }
         });
 
@@ -233,6 +281,14 @@ public class TelaEleitor extends JFrame {
             }
         });
 
+        btn_Remove.setText("Remover");
+        btn_Remove.setEnabled(false);
+        btn_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_RemoveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_ModificaLayout = new javax.swing.GroupLayout(panel_Modifica);
         panel_Modifica.setLayout(panel_ModificaLayout);
         panel_ModificaLayout.setHorizontalGroup(
@@ -241,7 +297,9 @@ public class TelaEleitor extends JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_ModificaLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(185, 185, 185)
+                        .addComponent(btn_Remove)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Modificar)
                         .addGap(25, 25, 25))
                     .addGroup(panel_ModificaLayout.createSequentialGroup()
@@ -254,8 +312,8 @@ public class TelaEleitor extends JFrame {
                             .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_ProcuraPorNome)
-                            .addComponent(btn_ProcuraPorTitulo, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(btn_ProcuraPorTitulo)
+                            .addComponent(btn_ProcuraPorNome))
                         .addContainerGap())))
         );
         panel_ModificaLayout.setVerticalGroup(
@@ -265,14 +323,16 @@ public class TelaEleitor extends JFrame {
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_ModificaNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(btn_ProcuraPorTitulo))
+                    .addComponent(btn_ProcuraPorNome))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(btn_ProcuraPorNome))
+                    .addComponent(btn_ProcuraPorTitulo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
-                .addComponent(btn_Modificar)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_Modificar)
+                    .addComponent(btn_Remove))
                 .addGap(30, 30, 30))
         );
 
@@ -312,12 +372,23 @@ public class TelaEleitor extends JFrame {
         procuraEleitorPorNome();
     }//GEN-LAST:event_btn_ProcuraPorNomeActionPerformed
 
+    private void btn_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RemoveActionPerformed
+        removeEleitor();
+    }//GEN-LAST:event_btn_RemoveActionPerformed
+
+    private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
+        if (jTabbedPane2.getSelectedIndex() == 0) {
+            listaEleitores();
+        }
+    }//GEN-LAST:event_jTabbedPane2StateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Cadastro;
     private javax.swing.JButton btn_Modificar;
     private javax.swing.JButton btn_ProcuraPorNome;
     private javax.swing.JButton btn_ProcuraPorTitulo;
+    private javax.swing.JButton btn_Remove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

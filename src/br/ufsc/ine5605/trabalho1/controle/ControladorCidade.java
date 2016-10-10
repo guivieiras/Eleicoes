@@ -12,10 +12,12 @@ public class ControladorCidade {
 
 	public ControladorCidade(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
+            this.cidades = new ArrayList<>();
 	}
 
-	public void cadastraCidade(String nome) {
-
+	public boolean cadastraCidade(Cidade cidade) {
+           cidades.add(cidade);
+           return true;
 	}
 
 	public void removeCidade(Cidade cidade) {
@@ -31,11 +33,13 @@ public class ControladorCidade {
 	}
 
 	public ArrayList<Cidade> getCidades() {
-		return null;
+		return cidades;
 	}
 
 	public void exibeTelaCidade() {
-
+            TelaCidade tc = new TelaCidade(this);
+            tc.setLocationRelativeTo(null);
+            tc.setVisible(true);
 	}
 
 }

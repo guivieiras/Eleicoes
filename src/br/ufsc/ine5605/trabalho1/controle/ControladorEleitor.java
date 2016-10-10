@@ -19,8 +19,9 @@ public class ControladorEleitor {
             this.eleitores = new ArrayList<>();
 	}
 
-	public void cadastraEleitor(Eleitor eleitor) {
+	public boolean cadastraEleitor(Eleitor eleitor) {
             eleitores.add(eleitor);
+            return true;
 	}
 
 	public void removeEleitor(long titulo) {
@@ -40,6 +41,7 @@ public class ControladorEleitor {
 
 	public void exibeTelaEleitor() {
             TelaEleitor te = new TelaEleitor(this);
+            te.setLocationRelativeTo(null);
             te.setVisible(true);
 	}
 
@@ -48,6 +50,10 @@ public class ControladorEleitor {
     }
 
     public Eleitor getEleitor(long parseLong) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeEleitor(Eleitor eleitorModificado) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
