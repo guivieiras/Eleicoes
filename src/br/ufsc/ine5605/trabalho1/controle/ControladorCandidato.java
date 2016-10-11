@@ -17,10 +17,6 @@ public class ControladorCandidato {
             this.controladorPrincipal = controladorPrincipal;
 	}
 
-	public void cadastraCandidato(int numero, String nome, Cargo cargo, Cidade cidade, Partido partido) {
-
-	}
-
 	public void removeCandidato(int codigo) {
 
 	}
@@ -44,5 +40,9 @@ public class ControladorCandidato {
 	public void exibeTelaCandidatos() {
 
 	}
+
+    public void cadastraCandidato(Candidato candidato) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

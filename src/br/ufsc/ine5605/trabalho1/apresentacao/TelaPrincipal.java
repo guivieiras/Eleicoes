@@ -63,6 +63,7 @@ public class TelaPrincipal extends JFrame{
         btn_TelaEleitor = new javax.swing.JButton();
         btn_TelaPartido = new javax.swing.JButton();
         btn_TelaUrna = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eleições");
@@ -103,6 +104,8 @@ public class TelaPrincipal extends JFrame{
             }
         });
 
+        jButton1.setText("Iniciar Eleições");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,6 +120,9 @@ public class TelaPrincipal extends JFrame{
                         .addComponent(btn_TelaUrna, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btn_TelaCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(150, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,7 +137,8 @@ public class TelaPrincipal extends JFrame{
                 .addComponent(btn_TelaPartido, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(btn_TelaUrna, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
 
         pack();
@@ -164,5 +171,6 @@ public class TelaPrincipal extends JFrame{
     private javax.swing.JButton btn_TelaEleitor;
     private javax.swing.JButton btn_TelaPartido;
     private javax.swing.JButton btn_TelaUrna;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

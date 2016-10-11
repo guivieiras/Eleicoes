@@ -5,7 +5,7 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaCidade;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
-public class ControladorCidade {
+public class ControladorCidade implements IControlador<Cidade> {
 
 	public final ControladorPrincipal controladorPrincipal;
 	private ArrayList<Cidade> cidades;
@@ -41,5 +41,15 @@ public class ControladorCidade {
             tc.setLocationRelativeTo(null);
             tc.setVisible(true);
 	}
+
+    @Override
+    public boolean cadastra(Cidade classe) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<Cidade> getArray() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

@@ -4,6 +4,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
+import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import java.util.ArrayList;
 
 public class ControladorUrna {
@@ -35,4 +36,6 @@ public class ControladorUrna {
     	TelaUrna tela = new TelaUrna(this);
     	tela.setVisible(true);
     }
+
+ 
 }

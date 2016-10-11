@@ -83,4 +83,8 @@ public class Urna {
     	}
     	return false;
     }
+
+    public boolean verificaEleitor(Eleitor eleitor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

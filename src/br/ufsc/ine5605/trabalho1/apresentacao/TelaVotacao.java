@@ -1,8 +1,8 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
-import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class TelaVotacao extends JFrame{
 
@@ -14,8 +14,24 @@ public class TelaVotacao extends JFrame{
 	}
 
 	public void votar() {
-            
+            if (verificaNumeros())           
+                urna.contabilizaVoto(Integer.parseInt(txt_VotoPrefeito.getText()), Integer.parseInt(txt_VotoVereador.getText()));
 	}
+        
+        public boolean verificaNumeros()
+        {
+            try {
+                if (txt_VotoPrefeito.getText().length() > 0)
+                    Integer.parseInt(txt_VotoPrefeito.getText());
+                if (txt_VotoVereador.getText().length() > 0)
+                    Integer.parseInt(txt_VotoVereador.getText());
+            } catch (NumberFormatException numberFormatException) {
+                JOptionPane.showMessageDialog(null, "Insira apenas numeros. Se deseja votar em branco, deixe em branco :)", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+            return true;
+            
+        }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -25,17 +41,63 @@ public class TelaVotacao extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lbl_Secao = new javax.swing.JLabel();
+        lbl_Zona = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txt_VotoPrefeito = new javax.swing.JTextField();
+        txt_VotoVereador = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel5.setText("Voto para prefeito:");
+
+        jLabel6.setText("Voto para vereador:");
+
+        jButton1.setText("Votar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(lbl_Secao)
+                        .addGap(51, 51, 51)
+                        .addComponent(lbl_Zona))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_VotoVereador, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                            .addComponent(txt_VotoPrefeito)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txt_VotoPrefeito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txt_VotoVereador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lbl_Secao)
+                        .addComponent(lbl_Zona)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -43,5 +105,12 @@ public class TelaVotacao extends JFrame{
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel lbl_Secao;
+    private javax.swing.JLabel lbl_Zona;
+    private javax.swing.JTextField txt_VotoPrefeito;
+    private javax.swing.JTextField txt_VotoVereador;
     // End of variables declaration//GEN-END:variables
 }
