@@ -26,17 +26,17 @@ public class TelaPrincipal extends JFrame{
 
 	public void mostraTelaCandidatos() {
             setEnabled(false);
-            controladorPrincipal.controladorCandidato.exibeTelaCandidatos();
+            controladorPrincipal.controladorCandidato.exibeTela();
 	}
 
 	public void mostraTelaEleitor() {
             setEnabled(false);
-            controladorPrincipal.controladorEleitor.exibeTelaEleitor();
+            controladorPrincipal.controladorEleitor.exibeTela();
 	}
 
 	public void mostraTelaCidade() {
             setEnabled(false);
-            controladorPrincipal.controladorCidade.exibeTelaCidade();
+            controladorPrincipal.controladorCidade.exibeTela();
 	}
 
 	public void mostraTelaUrna() {
@@ -46,7 +46,7 @@ public class TelaPrincipal extends JFrame{
         
         public void mostraTelaPartido() {
             setEnabled(false);
-            controladorPrincipal.controladorPartido.exibeTelaPartido();
+            controladorPrincipal.controladorPartido.exibeTela();
 	}
 
     /**

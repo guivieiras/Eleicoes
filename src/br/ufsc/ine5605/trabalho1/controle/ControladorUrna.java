@@ -4,7 +4,6 @@ import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
-import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import java.util.ArrayList;
 
 public class ControladorUrna {
@@ -14,15 +13,16 @@ public class ControladorUrna {
 
     public ControladorUrna(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
+            this.urnas = new ArrayList<>();
     }
-
-    public boolean cadastraUrna(int numeroEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos){
-    	try{
-    		urnas.add(new Urna(numeroEleitores, secaoEleitoral, zonaEleitoral, cidade, candidatos));
+    public boolean cadastraUrna(Urna novaUrna){
+        for(Urna urna: this.urnas){
+            if(!(novaUrna.getCidade()==urna.getCidade()&&novaUrna.getZonaEleitoral()==urna.getZonaEleitoral()&&novaUrna.getSecaoEleitoral()==urna.getSecaoEleitoral())){
+                urnas.add(urna);
     		return true;
-    	}catch(Exception e){
-    		return false;
-    	}
+            }
+        }
+        return false;
     }
     public void removeUrna(Urna urna) {
     	urnas.remove(urna);
@@ -36,6 +36,4 @@ public class ControladorUrna {
     	TelaUrna tela = new TelaUrna(this);
     	tela.setVisible(true);
     }
-
- 
 }

@@ -2,59 +2,83 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitor;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import java.util.ArrayList;
 
 /**
- *  
- *  @author 10349509913 
- * 
+ *
+ * @author 10349509913
+ *
  */
-public class ControladorEleitor {
+public class ControladorEleitor implements IControlador<Eleitor> {
 
-        public final ControladorPrincipal controladorPrincipal;
-        private  ArrayList<Eleitor> eleitores;    
+    public final ControladorPrincipal controladorPrincipal;
+    private ArrayList<Eleitor> eleitores;
 
-	public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
-            this.controladorPrincipal = controladorPrincipal;
-            this.eleitores = new ArrayList<>();
-	}
+    public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
+        this.controladorPrincipal = controladorPrincipal;
+        this.eleitores = new ArrayList<>();
+    }
 
-	public boolean cadastraEleitor(Eleitor eleitor) {
-            eleitores.add(eleitor);
-            return true;
-	}
-
-	public void removeEleitor(long titulo) {
-
-	}
-        public void modificaEleitor(Eleitor eleitor, long titulo, String nome){
-            
+    @Override
+    public boolean cadastra(Eleitor eleitor) {
+        for (Eleitor eleitorCadastrado : eleitores) {
+            if (eleitorCadastrado.getTitulo() == eleitor.getTitulo()) {
+                return false;
+            }
         }
 
-	public ArrayList<Eleitor> getEleitores() {
-		return eleitores;
-	}
-
-	public Eleitor getEleitorPeloTitulo(long titulo) {
-		return null;
-	}
-
-	public void exibeTelaEleitor() {
-            TelaEleitor te = new TelaEleitor(this);
-            te.setLocationRelativeTo(null);
-            te.setVisible(true);
-	}
-
-    public Eleitor getEleitor(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return eleitores.add(eleitor);     
     }
 
-    public Eleitor getEleitor(long parseLong) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public boolean remove(Eleitor eleitor) {    
+        return eleitores.remove(eleitor);
     }
 
-    public void removeEleitor(Eleitor eleitorModificado) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public boolean modifica(Eleitor antigo, Eleitor novo) {
+        if (eleitores.contains(antigo)) {
+            antigo.setNome(novo.getNome());
+            antigo.setTitulo(novo.getTitulo());
+            antigo.setSecaoEleitoral(novo.getSecaoEleitoral());
+            antigo.setZonaEleitoral(novo.getZonaEleitoral());
+            return true;
+        }
+        return false;
     }
+
+    @Override
+    public ArrayList<Eleitor> getLista() {
+        return eleitores;
+    }
+
+    public Eleitor getEleitor(long titulo) {
+        for (Eleitor eleitor : eleitores) {
+            if (eleitor.getTitulo() == titulo) {
+                return eleitor;
+            }
+        }
+
+        return null;
+    }
+
+    public Eleitor getEleitor(String nome) {
+        for (Eleitor eleitor : eleitores) {
+            if (eleitor.getNome().equals(nome)) {
+                return eleitor;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void exibeTela() {
+        TelaEleitor tela = new TelaEleitor(this);
+        tela.setVisible(true);
+
+    }
+
 
 }

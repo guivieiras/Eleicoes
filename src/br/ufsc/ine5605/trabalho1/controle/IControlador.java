@@ -12,8 +12,14 @@ import java.util.ArrayList;
  * @author The Gui
  */
 public interface IControlador<T> {
-    public boolean cadastra(T classe);
+    public boolean cadastra(T item);
     
-    public ArrayList<T> getArray ();
+    public boolean remove(T item);
+    
+    public boolean modifica(T old, T novo);
+    
+    public ArrayList<T> getLista ();
+    
+    public void exibeTela();
     
 }

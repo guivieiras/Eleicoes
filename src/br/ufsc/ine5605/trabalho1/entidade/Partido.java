@@ -9,7 +9,6 @@ public class Partido {
 		setSigla(sigla);
 		setNome(nome);
 	}
-
 	public String getNome() {
 		return this.nome;
 	}

@@ -1,64 +1,75 @@
 package br.ufsc.ine5605.trabalho1.entidade;
 
+import br.ufsc.ine5605.trabalho1.entidade.Cargo;
+import br.ufsc.ine5605.trabalho1.entidade.Partido;
+
 /**
- *  
- *  @author 10349509913 
- * 
+ *
+ * @author 10349509913
+ *
  */
 public class Candidato {
+    
+    private int numero;
+    private String nome;
+    private Cidade cidade;
+    private Cargo cargo;
+    private Partido partido;
 
-	private int numero;
+    public Candidato(int numero, String nome, Cargo cargo, Cidade cidade, Partido partido) {
+        this.numero = numero;
+        this.nome = nome;
+        this.cargo = cargo;
+        this.cidade = cidade;
+        this.partido = partido;
+    }
 
-	private String nome;
+    public int getNumero() {
+        return this.numero;
+    }
 
-	private Cidade cidade;
+    public void setNumero(int numero) {
+        try {
+            if (numero > 1 && numero < 99) {
+                this.numero = numero;
+            }
+        } catch (Exception e) {
+            
+        }
+    }
 
-	private Cargo cargo;
+    public String getNome() {
+        return this.nome;
+    }
 
-	private Partido partido;
+    public void setNome(String nome) {
+        this.nome = nome;
 
-	public Candidato(int numero, String nome, Cargo cargo, Cidade cidade, Partido partido) {
+    }
 
-	}
+    public Cargo getCargo() {
+        return this.cargo;
+    }
 
-	public int getNumero() {
-		return 0;
-	}
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
 
-	public void setNumero(int titulo) {
+    }
 
-	}
+    public Cidade getCidade() {
+        return this.cidade;
+    }
 
-	public String getNome() {
-		return null;
-	}
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
 
-	public void setNome(String nome) {
+    public Partido getPartido() {
+        return this.partido;
+    }
 
-	}
-
-	public Cargo getCargo() {
-		return null;
-	}
-
-	public void setCargo(Cargo cargo) {
-
-	}
-
-	public Cidade getCidade() {
-		return null;
-	}
-
-	public void setCidade(Cidade cidade) {
-
-	}
-
-	public Partido getPartido() {
-		return null;
-	}
-
-	public void setPartido(Partido partido) {
-
-	}
+    public void setPartido(Partido partido) {
+        this.partido = partido;
+    }
 
 }

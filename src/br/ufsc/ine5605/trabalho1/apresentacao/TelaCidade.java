@@ -3,7 +3,10 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
+import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -19,25 +22,41 @@ public class TelaCidade extends JFrame {
     }
 
     public void cadastraCidade() {
-        Cidade cidade = new Cidade(txt_Nome.getText());
-        if (controladorCidade.cadastraCidade(cidade)) {
-            JOptionPane.showMessageDialog(null, "Cidade cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar a cidade", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            Cidade cidade = new Cidade(verificaNome(txt_Nome.getText()));
+            if (controladorCidade.cadastra(cidade)) {
+                JOptionPane.showMessageDialog(null, "Cidade cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar a cidade", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NomeVazio ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     public void listaCidades() {
-        addRows(controladorCidade.getCidades());
+        addRows(controladorCidade.getLista());
     }
 
-    public void removeCidade() {        
-        controladorCidade.removeCidade(cidadeModificada);
+    public void removeCidade() {
+        int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover a cidade?", "Aviso", JOptionPane.YES_NO_OPTION);
+        if (x == JOptionPane.YES_OPTION) {
+            if (controladorCidade.remove(cidadeModificada)) {
+                btn_Modificar.setEnabled(false);
+                btn_Remove.setEnabled(false);
+            }
+        }
     }
 
     public void modificaCidade() {
-        cidadeModificada.setNome(txt_ModificaNome.getText());
+        int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar a cidade?", "Aviso", JOptionPane.YES_NO_OPTION);
+        if (x == JOptionPane.YES_OPTION) {
+            try {
+                controladorCidade.modifica(cidadeModificada, new Cidade(verificaNome(txt_ModificaNome.getText())));
+            } catch (NomeVazio ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private void procuraCidade() {
@@ -51,6 +70,14 @@ public class TelaCidade extends JFrame {
             JOptionPane.showMessageDialog(null, "Cidade não encontrada", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             btn_Modificar.setEnabled(false);
             btn_Remove.setEnabled(false);
+        }
+    }
+
+    private String verificaNome(String nome) throws NomeVazio {
+        if (nome.length() == 0) {
+            throw new NomeVazio();
+        } else {
+            return nome;
         }
     }
 
@@ -69,6 +96,7 @@ public class TelaCidade extends JFrame {
             model.removeRow(i);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -292,10 +320,9 @@ public class TelaCidade extends JFrame {
     }//GEN-LAST:event_btn_RemoveActionPerformed
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
-         if (jTabbedPane2.getSelectedIndex() == 0)
-         {
-             listaCidades();
-         }
+        if (jTabbedPane2.getSelectedIndex() == 0) {
+            listaCidades();
+        }
     }//GEN-LAST:event_jTabbedPane2StateChanged
 
 

@@ -5,11 +5,18 @@ import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
+import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class TelaCandidato extends JFrame {
 
     private final ControladorCandidato controladorCandidato;
+    private Candidato candidatoModificado;
 
     public TelaCandidato(ControladorCandidato controladorCandidato) {
         this.controladorCandidato = controladorCandidato;
@@ -18,45 +25,132 @@ public class TelaCandidato extends JFrame {
     }
 
     public void cadastraCandidato() {
-        Cargo cargo = Cargo.valueOf(cBox_Cargo.getSelectedItem().toString());
-        Partido partido = controladorCandidato.controladorPrincipal.controladorPartido.getPartido(cBox_Partido.getSelectedItem().toString());
-        Cidade cidade = controladorCandidato.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
-        
-        Candidato candidato = new Candidato(Integer.parseInt(txt_Numero.getText()), txt_Nome.getText(), Cargo.Vereador, cidade, partido);
-        controladorCandidato.cadastraCandidato(candidato);
+        if (verificaNumero(txt_Numero.getText())) {
+            try {
+                Cargo cargo = Cargo.valueOf(cBox_Cargo.getSelectedItem().toString());
+                Partido partido = controladorCandidato.controladorPrincipal.controladorPartido.getPartidoPorNome(cBox_Partido.getSelectedItem().toString());
+                Cidade cidade = controladorCandidato.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
+
+                Candidato candidato = new Candidato(Integer.parseInt(txt_Numero.getText()), verificaNome(txt_Nome.getText()), cargo, cidade, partido);
+                controladorCandidato.cadastra(candidato);
+            } catch (NullPointerException nullPointerException) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (NomeVazio ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
-    
-    
 
     public void listaCandidatos() {
-
+        addRows(controladorCandidato.getLista());
     }
 
     public void removeCandidato() {
-
+        int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover o candidato?", "Aviso", JOptionPane.YES_NO_OPTION);
+        if (x == JOptionPane.YES_OPTION) {
+            if (controladorCandidato.remove(candidatoModificado)) {
+                btn_Modificar.setEnabled(false);
+                btn_Remove.setEnabled(false);
+            }
+        }
     }
 
     public void modificaCandidato() {
+        int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar o candidato?", "Aviso", JOptionPane.YES_NO_OPTION);
+        if (x == JOptionPane.YES_OPTION && verificaNumero(txt_ModificaNumero.getText())) {
+            try {
+                Cargo cargo = Cargo.valueOf(cBox_ModificaCargo.getSelectedItem().toString());
+                Partido partido = controladorCandidato.controladorPrincipal.controladorPartido.getPartidoPorNome(cBox_ModificaPartido.getSelectedItem().toString());
+                Cidade cidade = controladorCandidato.controladorPrincipal.controladorCidade.getCidade(cBox_ModificaCidade.getSelectedItem().toString());
 
+                Candidato candidato = new Candidato(Integer.parseInt(txt_ModificaNumero.getText()), verificaNome(txt_ModificaNome.getText()), cargo, cidade, partido);
+                controladorCandidato.modifica(candidatoModificado, candidato);
+            } catch (NullPointerException nullPointerException) {
+                JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (NomeVazio ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
-    private void procuraCandidatoPorNome() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void procuraCandidatoPorNumero() {
+        if (verificaNumero(txt_ModificaNumero.getText())) {
+            candidatoModificado = controladorCandidato.getCandidato(Integer.parseInt(txt_ModificaNumero.getText()));
+            if (candidatoModificado != null) {
+                txt_ModificaNome.setText(candidatoModificado.getNome());
+                cBox_ModificaCargo.setSelectedItem(candidatoModificado.getCargo().toString());
+                cBox_ModificaCidade.setSelectedItem(candidatoModificado.getCidade().getNome());
+                cBox_ModificaPartido.setSelectedItem(candidatoModificado.getPartido().getNome());
+
+                btn_Modificar.setEnabled(true);
+                btn_Remove.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Candidato não encontrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                btn_Modificar.setEnabled(false);
+                btn_Remove.setEnabled(false);
+            }
+        }
     }
-    
-    private void popularCheckBoxes(){
-        for (Cargo cargo : Cargo.values())
+
+    private boolean verificaNumero(String numero) {
+        try {
+            Integer.parseInt(numero);
+            return true;
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Numero inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private String verificaNome(String nome) throws NomeVazio {
+        if (nome.length() == 0) {
+            throw new NomeVazio();
+        } else {
+            return nome;
+        }
+    }
+
+    private void popularCheckBoxes() {
+        for (Cargo cargo : Cargo.values()) {
             cBox_Cargo.addItem(cargo.toString());
-        for (Partido partido : controladorCandidato.controladorPrincipal.controladorPartido.getPartidos())
+            cBox_ModificaCargo.addItem(cargo.toString());
+        }
+        for (Partido partido : controladorCandidato.controladorPrincipal.controladorPartido.getLista()) {
             cBox_Partido.addItem(partido.getNome());
-        for (Cidade cidade : controladorCandidato.controladorPrincipal.controladorCidade.getCidades())
+            cBox_ModificaPartido.addItem(partido.getNome());
+        }
+        for (Cidade cidade : controladorCandidato.controladorPrincipal.controladorCidade.getLista()) {
             cBox_Cidade.addItem(cidade.getNome());
+            cBox_ModificaCidade.addItem(cidade.getNome());
+        }
+        cBox_Cargo.setSelectedIndex(-1);
+        cBox_ModificaCargo.setSelectedIndex(-1);
+        cBox_Cidade.setSelectedIndex(-1);
+        cBox_ModificaCidade.setSelectedIndex(-1);
+        cBox_Partido.setSelectedIndex(-1);
+        cBox_ModificaPartido.setSelectedIndex(-1);
     }
-/*
+
+    private void addRows(ArrayList<Candidato> candidatos) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        removeAllRows();
+        for (Candidato candidato : candidatos) {
+            model.addRow(new Object[]{candidato.getNome(), candidato.getNumero(), candidato.getPartido().getNome(), candidato.getCargo().toString(), candidato.getCidade().getNome()});
+        }
+    }
+
+    private void removeAllRows() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowCount = model.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+    }
+
+    /*
     totalizar eleicao por cidade
     mostrar votos de cada urna e quais vereadores/prefeitos eleitos
-    */
-    
+     */
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,14 +177,19 @@ public class TelaCandidato extends JFrame {
         cBox_Cidade = new javax.swing.JComboBox<>();
         cBox_Partido = new javax.swing.JComboBox<>();
         panel_Modifica = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        txt_ModificaTitulo = new javax.swing.JTextField();
+        jLabel99 = new javax.swing.JLabel();
+        txt_ModificaNumero = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         btn_Modificar = new javax.swing.JButton();
         txt_ModificaNome = new javax.swing.JTextField();
-        btn_ProcuraPorNome = new javax.swing.JButton();
-        btn_ProcuraPorTitulo = new javax.swing.JButton();
+        btn_ProcuraPorNumero = new javax.swing.JButton();
         btn_Remove = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        cBox_ModificaCargo = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        cBox_ModificaCidade = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        cBox_ModificaPartido = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -110,14 +209,14 @@ public class TelaCandidato extends JFrame {
 
             },
             new String [] {
-                "Nome", "Título"
+                "Nome", "Numero", "Partido", "Cargo", "Cidade"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -226,7 +325,7 @@ public class TelaCandidato extends JFrame {
 
         jTabbedPane2.addTab("Cadastro", panel_Cadastro);
 
-        jLabel3.setText("Título");
+        jLabel99.setText("Número");
 
         jLabel4.setText("Nome");
 
@@ -238,17 +337,10 @@ public class TelaCandidato extends JFrame {
             }
         });
 
-        btn_ProcuraPorNome.setText("Procurar");
-        btn_ProcuraPorNome.addActionListener(new java.awt.event.ActionListener() {
+        btn_ProcuraPorNumero.setText("Procurar");
+        btn_ProcuraPorNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_ProcuraPorNomeActionPerformed(evt);
-            }
-        });
-
-        btn_ProcuraPorTitulo.setText("Procurar");
-        btn_ProcuraPorTitulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_ProcuraPorTituloActionPerformed(evt);
+                btn_ProcuraPorNumeroActionPerformed(evt);
             }
         });
 
@@ -259,6 +351,12 @@ public class TelaCandidato extends JFrame {
                 btn_RemoveActionPerformed(evt);
             }
         });
+
+        jLabel8.setText("Cargo");
+
+        jLabel9.setText("Cidade");
+
+        jLabel10.setText("Partido");
 
         javax.swing.GroupLayout panel_ModificaLayout = new javax.swing.GroupLayout(panel_Modifica);
         panel_Modifica.setLayout(panel_ModificaLayout);
@@ -274,33 +372,56 @@ public class TelaCandidato extends JFrame {
                         .addComponent(btn_Modificar)
                         .addGap(25, 25, 25))
                     .addGroup(panel_ModificaLayout.createSequentialGroup()
-                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                         .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_ProcuraPorTitulo)
-                            .addComponent(btn_ProcuraPorNome))
+                            .addGroup(panel_ModificaLayout.createSequentialGroup()
+                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel99)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txt_ModificaNumero, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_ProcuraPorNumero))
+                            .addGroup(panel_ModificaLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel10))
+                                .addGap(68, 68, 68)
+                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(cBox_ModificaCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cBox_ModificaPartido, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cBox_ModificaCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         panel_ModificaLayout.setVerticalGroup(
             panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_ModificaLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(29, 29, 29)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_ModificaNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(btn_ProcuraPorNome))
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(btn_ProcuraPorTitulo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                    .addComponent(txt_ModificaNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel99)
+                    .addComponent(btn_ProcuraPorNumero))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(cBox_ModificaCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(cBox_ModificaCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(cBox_ModificaPartido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Modificar)
                     .addComponent(btn_Remove))
@@ -335,13 +456,9 @@ public class TelaCandidato extends JFrame {
         modificaCandidato();
     }//GEN-LAST:event_btn_Modificar_CadastroActionPerformed
 
-    private void btn_ProcuraPorNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorNomeActionPerformed
-        procuraCandidatoPorNome();
-    }//GEN-LAST:event_btn_ProcuraPorNomeActionPerformed
-
-    private void btn_ProcuraPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorTituloActionPerformed
-        // procuraEleitorPorTitulo();
-    }//GEN-LAST:event_btn_ProcuraPorTituloActionPerformed
+    private void btn_ProcuraPorNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorNumeroActionPerformed
+        procuraCandidatoPorNumero();
+    }//GEN-LAST:event_btn_ProcuraPorNumeroActionPerformed
 
     private void btn_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RemoveActionPerformed
         removeCandidato();
@@ -357,19 +474,24 @@ public class TelaCandidato extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Cadastro;
     private javax.swing.JButton btn_Modificar;
-    private javax.swing.JButton btn_ProcuraPorNome;
-    private javax.swing.JButton btn_ProcuraPorTitulo;
+    private javax.swing.JButton btn_ProcuraPorNumero;
     private javax.swing.JButton btn_Remove;
     private javax.swing.JComboBox<String> cBox_Cargo;
     private javax.swing.JComboBox<String> cBox_Cidade;
+    private javax.swing.JComboBox<String> cBox_ModificaCargo;
+    private javax.swing.JComboBox<String> cBox_ModificaCidade;
+    private javax.swing.JComboBox<String> cBox_ModificaPartido;
     private javax.swing.JComboBox<String> cBox_Partido;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel99;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
@@ -377,7 +499,7 @@ public class TelaCandidato extends JFrame {
     private javax.swing.JPanel panel_Lista;
     private javax.swing.JPanel panel_Modifica;
     private javax.swing.JTextField txt_ModificaNome;
-    private javax.swing.JTextField txt_ModificaTitulo;
+    private javax.swing.JTextField txt_ModificaNumero;
     private javax.swing.JTextField txt_Nome;
     private javax.swing.JTextField txt_Numero;
     // End of variables declaration//GEN-END:variables
