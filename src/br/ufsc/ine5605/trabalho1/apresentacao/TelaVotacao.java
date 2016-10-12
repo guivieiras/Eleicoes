@@ -1,37 +1,45 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
+import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class TelaVotacao extends JFrame{
+public class TelaVotacao extends JFrame {
 
-        private Urna urna;
+    private Urna urna;
+    private Eleitor eleitor;
 
-	public TelaVotacao(Urna urna) {
-            this.urna = urna;
-            initComponents();
-	}
+    public TelaVotacao(Urna urna, Eleitor eleitor) {
+        this.urna = urna;
+        this.eleitor = eleitor;
+        initComponents();
+        setLocationRelativeTo(null);
 
-	public void votar() {
-            if (verificaNumeros())           
-                urna.contabilizaVoto(Integer.parseInt(txt_VotoPrefeito.getText()), Integer.parseInt(txt_VotoVereador.getText()));
-	}
-        
-        public boolean verificaNumeros()
-        {
-            try {
-                if (txt_VotoPrefeito.getText().length() > 0)
-                    Integer.parseInt(txt_VotoPrefeito.getText());
-                if (txt_VotoVereador.getText().length() > 0)
-                    Integer.parseInt(txt_VotoVereador.getText());
-            } catch (NumberFormatException numberFormatException) {
-                JOptionPane.showMessageDialog(null, "Insira apenas numeros. Se deseja votar em branco, deixe em branco :)", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
-            return true;
-            
+    }
+
+    public void votar() {
+        if (verificaNumeros()) {
+            urna.contabilizaVoto(Integer.parseInt(txt_VotoPrefeito.getText()), Integer.parseInt(txt_VotoVereador.getText()));
         }
+    }
+
+    public boolean verificaNumeros() {
+        try {
+            if (txt_VotoPrefeito.getText().length() > 0) {
+                Integer.parseInt(txt_VotoPrefeito.getText());
+            }
+            if (txt_VotoVereador.getText().length() > 0) {
+                Integer.parseInt(txt_VotoVereador.getText());
+            }
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Insira apenas numeros. Se deseja votar em branco, deixe em branco :)", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

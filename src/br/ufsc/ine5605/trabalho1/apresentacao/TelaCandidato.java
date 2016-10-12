@@ -33,7 +33,12 @@ public class TelaCandidato extends JFrame {
                 Cidade cidade = controladorCandidato.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
 
                 Candidato candidato = new Candidato(Integer.parseInt(txt_Numero.getText()), verificaNome(txt_Nome.getText()), cargo, cidade, partido);
-                controladorCandidato.cadastra(candidato);
+                if (controladorCandidato.cadastra(candidato)) {
+
+                    JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                }
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, númeor de candidato já em uso.", "Erro", JOptionPane.ERROR_MESSAGE);
+
             } catch (NullPointerException nullPointerException) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (NomeVazio ex) {

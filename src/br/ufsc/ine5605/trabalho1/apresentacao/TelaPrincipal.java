@@ -42,7 +42,7 @@ public class TelaPrincipal extends JFrame{
 
 	public void mostraTelaUrna() {
             setEnabled(false);
-            controladorPrincipal.controladorUrna.exibeTelaUrna();
+            controladorPrincipal.controladorUrna.exibeTela();
 	}
         
         public void mostraTelaPartido() {

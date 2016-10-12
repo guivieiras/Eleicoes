@@ -20,20 +20,20 @@ public class TelaMesario extends javax.swing.JFrame {
      */
     private ControladorUrna controladorUrna;
     private Urna urna;
-    
+
     public TelaMesario(ControladorUrna controlador, Urna urna) {
         this.controladorUrna = controlador;
         this.urna = urna;
         initComponents();
+        setLocationRelativeTo(null);
+
     }
-    public void exibirTelaVotacao()
-    {
+
+    public void exibirTelaVotacao() {
         long titulo = Long.parseLong(txt_Titulo.getText());
         Eleitor eleitor = controladorUrna.controladorPrincipal.controladorEleitor.getEleitor(titulo);
-        if (urna.verificaEleitor(eleitor))
-        {
-            TelaVotacao tv = new TelaVotacao(urna);
-            tv.setLocationRelativeTo(null);
+        if (urna.verificaEleitor(eleitor)) {
+            TelaVotacao tv = new TelaVotacao(urna, eleitor);
             tv.setVisible(true);
         }
     }

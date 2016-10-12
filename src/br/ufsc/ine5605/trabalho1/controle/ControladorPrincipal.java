@@ -38,7 +38,7 @@ public class ControladorPrincipal {
         controladorCandidato.cadastra(new Candidato(25, "Zeee", Cargo.Prefeito, controladorCidade.getCidade("Florianópolis"), controladorPartido.getPartidoPorNome("Partido dos Anonimos Vagabundos")));
         controladorCandidato.cadastra(new Candidato(26, "Pedr", Cargo.Vereador, controladorCidade.getCidade("Florianópolis"), controladorPartido.getPartidoPorNome("Partido Verde")));
         controladorCandidato.cadastra(new Candidato(27, "Juca", Cargo.Prefeito, controladorCidade.getCidade("Florianópolis"), controladorPartido.getPartidoPorNome("Partido Verde")));
-        controladorUrna.cadastraUrna(new Urna(5, 1, 1, controladorCidade.getCidade("Florianopolis"), controladorCandidato.getLista(controladorCidade.getCidade("Florianópolis")), controladorPartido.getLista()));
+        controladorUrna.cadastra(new Urna(5, 1, 1, controladorCidade.getCidade("Florianópolis"), controladorCandidato.getLista(controladorCidade.getCidade("Florianópolis")), controladorPartido.getLista()));
        
         telaPrincipal = new TelaPrincipal(this);
         telaPrincipal.setVisible(true);

@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.trabalho1.entidade;
 
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesario;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -73,8 +74,8 @@ public class Urna {
         return null;
     }
 
-    public void TelaVotacao() {
-        TelaVotacao tela = new TelaVotacao(this);
+    public void exibeTelaMesario() {
+        TelaMesario tela = new TelaMesario(this);
         tela.setVisible(true);
     }
 

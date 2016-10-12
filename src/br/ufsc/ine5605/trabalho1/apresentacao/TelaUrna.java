@@ -1,29 +1,104 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
+import br.ufsc.ine5605.trabalho1.entidade.Cidade;
+import br.ufsc.ine5605.trabalho1.entidade.Urna;
+import java.awt.HeadlessException;
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
-public class TelaUrna extends JFrame{
+public class TelaUrna extends JFrame {
 
-	private final ControladorUrna controladorUrna;
+    private final ControladorUrna controladorUrna;
 
-	public TelaUrna(ControladorUrna controladorUrna) {
-            this.controladorUrna = controladorUrna;
-            initComponents();
-            setLocationRelativeTo(null);
-	}
+    public TelaUrna(ControladorUrna controladorUrna) {
+        this.controladorUrna = controladorUrna;
+        initComponents();
+        setLocationRelativeTo(null);
+        popularCheckBoxes();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-	public void cadastraUrna() {
+    }
 
-	}
+    public void cadastraUrna() {
 
-	public void listaUrnas() {
+        String secao = txt_Secao.getText();
+        String zona = txt_Zona.getText();
+        String limite = txt_Limite.getText();
+        
 
-	}
+        if (verficaNumeros(secao, zona, limite)) {
+            try {
+                Cidade cidade = controladorUrna.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
+                if (controladorUrna.cadastra(cidade, Integer.parseInt(secao), Integer.parseInt(zona), Integer.parseInt(limite))) {
+                    JOptionPane.showMessageDialog(null, "Urna cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar. Urna da mesma seção, zona eleitoral e cidade já está cadastrada.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
 
-	public void removeUrna() {
+            }
+        }
+    }
 
-	}
+    public void listaUrnas() {
+        addRows(controladorUrna.getLista());
+    }
+
+    public void removeUrna() {
+
+    }
+
+    private void popularCheckBoxes() {
+        for (Cidade cidade : controladorUrna.controladorPrincipal.controladorCidade.getLista()) {
+            cBox_Cidade.addItem(cidade.getNome());
+        }
+
+        cBox_Cidade.setSelectedIndex(-1);
+    }
+
+    private boolean verficaNumeros(String secao, String zona, String limite) {
+        try {
+            Integer.parseInt(secao);
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Seção invalida, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            Integer.parseInt(zona);
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Zona eleitoral inválida, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            Integer.parseInt(limite);
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Limite de eleitores inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    private void addRows(ArrayList<Urna> urnas) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        removeAllRows();
+        for (Urna urna : urnas) {
+            model.addRow(new Object[]{urna.getCidade().getNome(), urna.getSecaoEleitoral(), urna.getZonaEleitoral()});
+        }
+    }
+
+    private void removeAllRows() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowCount = model.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,6 +108,21 @@ public class TelaUrna extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        panel_Lista = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        panel_Cadastro = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txt_Zona = new javax.swing.JTextField();
+        txt_Secao = new javax.swing.JTextField();
+        btn_Cadastro = new javax.swing.JButton();
+        cBox_Cidade = new javax.swing.JComboBox<>();
+        txt_Limite = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -40,15 +130,133 @@ public class TelaUrna extends JFrame{
             }
         });
 
+        jTabbedPane2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane2StateChanged(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Cidade", "Seção", "Zona"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        javax.swing.GroupLayout panel_ListaLayout = new javax.swing.GroupLayout(panel_Lista);
+        panel_Lista.setLayout(panel_ListaLayout);
+        panel_ListaLayout.setHorizontalGroup(
+            panel_ListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_ListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panel_ListaLayout.setVerticalGroup(
+            panel_ListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_ListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Lista", panel_Lista);
+
+        jLabel1.setText("Seção");
+
+        jLabel2.setText("Zona");
+
+        jLabel5.setText("Cidade");
+
+        btn_Cadastro.setText("Cadastrar");
+        btn_Cadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Cadastro_CadastroActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Limite de eleitores");
+
+        javax.swing.GroupLayout panel_CadastroLayout = new javax.swing.GroupLayout(panel_Cadastro);
+        panel_Cadastro.setLayout(panel_CadastroLayout);
+        panel_CadastroLayout.setHorizontalGroup(
+            panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CadastroLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_Secao, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_Zona, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cBox_Cidade, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_Limite, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(74, 74, 74))
+            .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CadastroLayout.createSequentialGroup()
+                    .addContainerGap(289, Short.MAX_VALUE)
+                    .addComponent(btn_Cadastro)
+                    .addGap(25, 25, 25)))
+        );
+        panel_CadastroLayout.setVerticalGroup(
+            panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_CadastroLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_Secao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txt_Zona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txt_Limite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cBox_Cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(116, Short.MAX_VALUE))
+            .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_CadastroLayout.createSequentialGroup()
+                    .addContainerGap(219, Short.MAX_VALUE)
+                    .addComponent(btn_Cadastro)
+                    .addGap(30, 30, 30)))
+        );
+
+        jTabbedPane2.addTab("Cadastro", panel_Cadastro);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
 
         pack();
@@ -58,6 +266,31 @@ public class TelaUrna extends JFrame{
         controladorUrna.controladorPrincipal.telaPrincipal.setEnabled(true);
     }//GEN-LAST:event_formWindowClosing
 
+    private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
+        if (jTabbedPane2.getSelectedIndex() == 0) {
+            listaUrnas();
+        }
+    }//GEN-LAST:event_jTabbedPane2StateChanged
+
+    private void btn_Cadastro_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cadastro_CadastroActionPerformed
+        cadastraUrna();
+    }//GEN-LAST:event_btn_Cadastro_CadastroActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_Cadastro;
+    private javax.swing.JComboBox<String> cBox_Cidade;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JPanel panel_Cadastro;
+    private javax.swing.JPanel panel_Lista;
+    private javax.swing.JTextField txt_Limite;
+    private javax.swing.JTextField txt_Secao;
+    private javax.swing.JTextField txt_Zona;
     // End of variables declaration//GEN-END:variables
+
 }
