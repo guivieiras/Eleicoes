@@ -10,6 +10,7 @@ public class TelaUrna extends JFrame{
 	public TelaUrna(ControladorUrna controladorUrna) {
             this.controladorUrna = controladorUrna;
             initComponents();
+            setLocationRelativeTo(null);
 	}
 
 	public void cadastraUrna() {

@@ -16,6 +16,7 @@ public class TelaPartido extends JFrame {
     public TelaPartido(ControladorPartido controladorPartido) {
         this.controladorPartido = controladorPartido;
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public void cadastraPartido() {

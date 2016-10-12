@@ -28,6 +28,7 @@ public class TelaEleitor extends JFrame {
         this.controladorEleitor = controladorEleitor;
         initComponents();
         listaEleitores();
+        setLocationRelativeTo(null);
     }
 
     private void cadastraEleitor() {

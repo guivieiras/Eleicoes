@@ -21,6 +21,7 @@ public class TelaCandidato extends JFrame {
     public TelaCandidato(ControladorCandidato controladorCandidato) {
         this.controladorCandidato = controladorCandidato;
         initComponents();
+        setLocationRelativeTo(null);
         popularCheckBoxes();
     }
 

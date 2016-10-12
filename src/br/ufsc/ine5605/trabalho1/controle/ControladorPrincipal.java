@@ -30,7 +30,6 @@ public class ControladorPrincipal {
         controladorPartido = new ControladorPartido(this);
         controladorUrna = new ControladorUrna(this);
 
-        // controladorEleitor.cadastraEleitor(new br.ufsc.ine5605.trabalho1.entidade.Eleitor(50, "Nomebolado"));
         controladorCidade.cadastra(new Cidade("Florianópolis"));
         controladorEleitor.cadastra(new Eleitor(1, 1, 123456789888l, "Gui"));
         controladorPartido.cadastra(new Partido("Partido dos Anonimos Vagabundos", "PAV"));
@@ -42,7 +41,6 @@ public class ControladorPrincipal {
         controladorUrna.cadastraUrna(new Urna(5, 1, 1, controladorCidade.getCidade("Florianopolis"), controladorCandidato.getLista(controladorCidade.getCidade("Florianópolis")), controladorPartido.getLista()));
        
         telaPrincipal = new TelaPrincipal(this);
-        telaPrincipal.setLocationRelativeTo(null);
         telaPrincipal.setVisible(true);
     }
 

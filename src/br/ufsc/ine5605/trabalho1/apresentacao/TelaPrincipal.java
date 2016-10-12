@@ -17,6 +17,7 @@ public class TelaPrincipal extends JFrame{
 	public TelaPrincipal(ControladorPrincipal controladorPrincipal) {
             this.controladorPrincipal = controladorPrincipal;
             initComponents();
+            setLocationRelativeTo(null);
 	}
         
         public void unlockTelaPrincipal()

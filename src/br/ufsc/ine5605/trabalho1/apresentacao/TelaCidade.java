@@ -19,6 +19,7 @@ public class TelaCidade extends JFrame {
     public TelaCidade(ControladorCidade controladorCidade) {
         this.controladorCidade = controladorCidade;
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public void cadastraCidade() {
