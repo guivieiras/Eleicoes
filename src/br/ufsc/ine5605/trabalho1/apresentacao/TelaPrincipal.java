@@ -51,7 +51,7 @@ public class TelaPrincipal extends JFrame {
         controladorPrincipal.controladorPartido.exibeTela();
     }
 
-    private void iniciaEleições() {
+    private void iniciaEleicoes() {
         btn_TelaCandidato.setEnabled(false);
         btn_TelaEleitor.setEnabled(false);
         btn_TelaCidade.setEnabled(false);
@@ -200,7 +200,7 @@ public class TelaPrincipal extends JFrame {
     }//GEN-LAST:event_btn_TelaUrnaActionPerformed
 
     private void btn_IniciarEleicoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IniciarEleicoesActionPerformed
-        iniciaEleições();
+        iniciaEleicoes();
     }//GEN-LAST:event_btn_IniciarEleicoesActionPerformed
 
     private void btn_TelaResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TelaResultadosActionPerformed

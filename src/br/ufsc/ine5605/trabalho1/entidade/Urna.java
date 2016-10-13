@@ -1,8 +1,6 @@
 package br.ufsc.ine5605.trabalho1.entidade;
 
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesario;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
@@ -62,6 +60,10 @@ public class Urna {
         return executando;
     }
 
+	public boolean isExecutando() {
+		return executando;
+	}
+	
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
         Candidato prefeito = getPrefeitoPorCodigo(codigoPrefeito);
         Candidato vereador = getVereadorPorCodigo(codigoVereador);
@@ -107,6 +109,7 @@ public class Urna {
     //
     //      Aqui comecam os get and setters da classe
     //
+    
     public int getVotosPorPartido(Partido partido) {
         if (totalDeVotosPorPartidoParaVereador.containsKey(partido)) {
             return totalDeVotosPorPartidoParaVereador.get(partido);
@@ -151,13 +154,49 @@ public class Urna {
     public Cidade getCidade() {
         return cidade;
     }
+    
+    public int getVotosValidosParaVerador() {
+        return (-getVotosNulosParaVereador() + getVotosEfetuadosParaVereador() -getVotosBrancosParaVereador());
+    }
+    
+    public int getVotosEfetuadosParaPrefeito() {
+		return votosEfetuadosParaPrefeito;
+	}
 
-    public int getVotosInvalidosParaVerador() {
+	public int getVotosBrancosParaPrefeito() {
+		return votosBrancosParaPrefeito;
+	}
+
+	public int getVotosNulosParaPrefeito() {
+		return votosNulosParaPrefeito;
+	}
+
+	public int getVotosEfetuadosParaVereador() {
+		return votosEfetuadosParaVereador;
+	}
+
+	public int getVotosBrancosParaVereador() {
+		return votosBrancosParaVereador;
+	}
+
+	public int getVotosNulosParaVereador() {
+		return votosNulosParaVereador;
+	}
+
+	public int getVotosInvalidosParaVerador() {
         return (this.votosNulosParaVereador - this.votosEfetuadosParaVereador + (this.limiteDeEleitores) + this.votosBrancosParaVereador);
+    }
+
+    public int getTotalDeVotosEfetuados() {
+        return votosEfetuadosParaPrefeito;
     }
 
     public int getVotosInvalidosParaPrefeito() {
         return (this.votosNulosParaPrefeito - this.votosEfetuadosParaPrefeito + (this.limiteDeEleitores) + this.votosBrancosParaPrefeito);
+    }
+
+    public int getLimiteDeEleitores() {
+        return limiteDeEleitores;
     }
 
     private void setZonaEleitoral(int zonaEleitoral) {
@@ -172,15 +211,7 @@ public class Urna {
         this.limiteDeEleitores = limiteDeEleitores;
     }
 
-    public int getLimiteDeEleitores() {
-        return limiteDeEleitores;
-    }
-
     private void setSecaoEleitoral(int secaoEleitoral) {
         this.secaoEleitoral = secaoEleitoral;
-    }
-
-    public int getTotalDeVotosEfetuados() {
-        return votosEfetuadosParaPrefeito;
     }
 }

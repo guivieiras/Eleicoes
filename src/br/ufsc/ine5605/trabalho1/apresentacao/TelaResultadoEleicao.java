@@ -7,6 +7,7 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
+import br.ufsc.ine5605.trabalho1.entidade.Tupla;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -51,9 +52,14 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
 
         }
         insereTexto("-------------- Vencedores ----------------\n");
-        insereTexto(String.format("Prefeito vencedor: %1$s\n", (controlador.prefeitoVencedor().value1.getNome() + " (" + controlador.prefeitoVencedor().value2 + " votos)")));
-        insereTexto("Vereadores: %1$s\n");
-        System.out.println(controlador.prefeitoVencedor().value1.getNome() + " " + controlador.prefeitoVencedor().value2);
+        Tupla<Candidato,Integer> prefeitoVotos = controlador.prefeitoVencedor();
+        insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.value1.getNome(), prefeitoVotos.value2));
+        insereTexto("Vereadores:\n");
+      
+        /*LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor();
+        for (Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
+        insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+        }*/
     }
 
     public void insereTexto(String txt) {
