@@ -4,7 +4,9 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesario;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaResultadoEleicao;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
+import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
+import br.ufsc.ine5605.trabalho1.entidade.Tupla;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -75,6 +77,26 @@ public class ControladorUrna implements IControlador<Urna> {
             variavelOrdenada.put(variavel, votos);
         }
         return variavelOrdenada;
+    }
+
+    public Tupla<Candidato, Integer> prefeitoVencedor() {
+        LinkedHashMap<Candidato, Integer> lhm = new LinkedHashMap<>();
+        LinkedHashMap<Candidato, Integer> finale = new LinkedHashMap<>();
+        for (Urna urna : urnas) {
+            lhm = urna.getTotalDeVotosPorPrefeito();
+            for (Entry<Candidato, Integer> dup : lhm.entrySet()) {
+                if (!finale.containsKey(dup.getKey())) {
+                    finale.put(dup.getKey(), dup.getValue());
+                } else {
+                    finale.put(dup.getKey(), lhm.get(dup.getKey()) + dup.getValue());
+                }
+            }
+        }
+        finale = getVariavelMaisVotada(finale);
+
+        ArrayList<Entry<Candidato, Integer>> l = new ArrayList<>(finale.entrySet());
+
+        return new Tupla(l.get(0).getKey(), l.get(0).getValue());
     }
 
     public void iniciaEleicoes() {

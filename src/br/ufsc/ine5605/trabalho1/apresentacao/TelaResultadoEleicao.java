@@ -40,15 +40,20 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
             for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
                 insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
             }
-            
+
             insereTexto("--------------- Prefeitos  ---------------\n");
             LinkedHashMap<Candidato, Integer> prefeitos = controlador.getVariavelMaisVotada(urna.getTotalDeVotosPorPrefeito());
             for (Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
                 insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
             }
-            
+
             insereTexto("------------------------------------------\n");
+
         }
+        insereTexto("-------------- Vencedores ----------------\n");
+        insereTexto(String.format("Prefeito vencedor: %1$s\n", (controlador.prefeitoVencedor().value1.getNome() + " (" + controlador.prefeitoVencedor().value2 + " votos)")));
+        insereTexto("Vereadores: %1$s\n");
+        System.out.println(controlador.prefeitoVencedor().value1.getNome() + " " + controlador.prefeitoVencedor().value2);
     }
 
     public void insereTexto(String txt) {
