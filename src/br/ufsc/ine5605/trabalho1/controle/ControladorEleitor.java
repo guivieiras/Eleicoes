@@ -2,18 +2,12 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitor;
-import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import java.util.ArrayList;
 
-/**
- *
- * @author 10349509913
- *
- */
 public class ControladorEleitor implements IControlador<Eleitor> {
 
     public final ControladorPrincipal controladorPrincipal;
-    private ArrayList<Eleitor> eleitores;
+    private final ArrayList<Eleitor> eleitores;
 
     public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
         this.controladorPrincipal = controladorPrincipal;

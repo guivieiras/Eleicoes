@@ -1,18 +1,14 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaCandidato;
-import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
-import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
-import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 
 public class ControladorCandidato implements IControlador<Candidato> {
 
     public final ControladorPrincipal controladorPrincipal;
-    private ArrayList<Candidato> candidatos;
+    private final ArrayList<Candidato> candidatos;
 
     public ControladorCandidato(ControladorPrincipal controladorPrincipal) {
         this.controladorPrincipal = controladorPrincipal;
@@ -54,16 +50,6 @@ public class ControladorCandidato implements IControlador<Candidato> {
         return candidatos;
     }
 
-    public Candidato getCandidato(int codigo) {
-        for (Candidato candidato : candidatos) {
-            if (candidato.getNumero() == codigo) {
-                return candidato;
-            }
-        }
-
-        return null;
-    }
-
     public ArrayList<Candidato> getLista(Cidade cidade) {
         ArrayList<Candidato> candidatosPorCidade = new ArrayList<>();
 
@@ -74,6 +60,16 @@ public class ControladorCandidato implements IControlador<Candidato> {
         }
 
         return candidatosPorCidade;
+    }
+    
+    public Candidato getCandidato(int codigo) {
+        for (Candidato candidato : candidatos) {
+            if (candidato.getNumero() == codigo) {
+                return candidato;
+            }
+        }
+
+        return null;
     }
 
     @Override

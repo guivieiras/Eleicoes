@@ -3,7 +3,6 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,7 +32,8 @@ public class TelaUrna extends JFrame {
         if (verficaNumeros(secao, zona, limite)) {
             try {
                 Cidade cidade = controladorUrna.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
-                if (controladorUrna.cadastra(cidade, Integer.parseInt(secao), Integer.parseInt(zona), Integer.parseInt(limite))) {
+                Urna urna = new Urna(Integer.parseInt(limite), Integer.parseInt(secao), Integer.parseInt(zona),  cidade, controladorUrna.controladorPrincipal.controladorCandidato.getLista(cidade));
+                if (controladorUrna.cadastra(urna)) {
                     JOptionPane.showMessageDialog(null, "Urna cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Erro ao cadastrar. Urna da mesma seção, zona eleitoral e cidade já está cadastrada.", "Erro", JOptionPane.ERROR_MESSAGE);

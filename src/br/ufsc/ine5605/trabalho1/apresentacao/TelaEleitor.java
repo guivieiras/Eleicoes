@@ -1,19 +1,13 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
-import java.util.Scanner;
 import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 
 /**
  *

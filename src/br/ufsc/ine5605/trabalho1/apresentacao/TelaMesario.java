@@ -5,7 +5,6 @@
  */
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
-import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
@@ -20,8 +19,8 @@ public class TelaMesario extends javax.swing.JFrame {
     /**
      * Creates new form TelaMesarios
      */
-    private ControladorUrna controladorUrna;
-    private Urna urna;
+    private final ControladorUrna controladorUrna;
+    private final Urna urna;
 
     public TelaMesario(ControladorUrna controladorUrna, Urna urna) {
         this.controladorUrna = controladorUrna;
@@ -36,10 +35,19 @@ public class TelaMesario extends javax.swing.JFrame {
     public void exibirTelaVotacao() {
         if (verificaTitulo(txt_Titulo.getText())) {
             Eleitor eleitor = controladorUrna.controladorPrincipal.controladorEleitor.getEleitor(Long.parseLong(txt_Titulo.getText()));
-            if (eleitor != null && controladorUrna.verificaEleitor(urna, eleitor)) {
-                TelaVotacao tv = new TelaVotacao(urna, eleitor, this);
-                this.setEnabled(false);
-                tv.setVisible(true);
+            if (eleitor != null) {
+                int magicNumber = controladorUrna.verificaEleitor(urna, eleitor);
+                if (magicNumber == 0) {
+                    TelaVotacao tv = new TelaVotacao(urna, eleitor, this);
+                    this.setEnabled(false);
+                    tv.setVisible(true);
+                }
+                if (magicNumber == 1) {
+                    JOptionPane.showMessageDialog(null, "Eleitor não pode votar pois a urna atingiu seu limite.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
+                if (magicNumber == 2) {
+                    JOptionPane.showMessageDialog(null, "Eleitor está votando na urna errada.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Eleitor não encontrado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -171,6 +179,7 @@ public class TelaMesario extends javax.swing.JFrame {
         urna.encerra();
         if (controladorUrna.urnasEmExecucao() == 0) {
             controladorUrna.controladorPrincipal.telaPrincipal.unlockTelaPrincipal();
+            controladorUrna.controladorPrincipal.telaPrincipal.unlockBotaoResultado();
         }
 
     }//GEN-LAST:event_formWindowClosing

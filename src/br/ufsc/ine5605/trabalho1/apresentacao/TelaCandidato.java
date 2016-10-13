@@ -7,8 +7,6 @@ import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;

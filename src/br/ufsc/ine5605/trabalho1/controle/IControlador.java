@@ -7,10 +7,6 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author The Gui
- */
 public interface IControlador<T> {
     public boolean cadastra(T item);
     

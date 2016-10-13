@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
+import java.util.LinkedHashMap;
 
 public class Urna {
 
-    private final HashMap<Candidato, Integer> totalDeVotosPorPrefeito;
-    private final HashMap<Partido, Integer> totalDeVotosPorPartidoParaVereador;
+    private final LinkedHashMap<Candidato, Integer> totalDeVotosPorPrefeito;
+    private final LinkedHashMap<Candidato, Integer> totalDeVotosPorVereador;
+    private final LinkedHashMap<Partido, Integer> totalDeVotosPorPartidoParaVereador;
     private int secaoEleitoral;
     private int zonaEleitoral;
     private Cidade cidade;
@@ -21,10 +23,10 @@ public class Urna {
     private int votosEfetuadosParaVereador;
     private int votosBrancosParaVereador;
     private int votosNulosParaVereador;
-    
+
     private boolean executando;
 
-    public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, ArrayList<Partido> partidos) {
+    public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos) {
         votosEfetuadosParaPrefeito = 0;
         votosEfetuadosParaVereador = 0;
         votosBrancosParaPrefeito = 0;
@@ -35,32 +37,34 @@ public class Urna {
         setLimiteDeEleitores(limiteDeEleitores);
         setZonaEleitoral(zonaEleitoral);
         setCidade(cidade);
-        totalDeVotosPorPrefeito = new HashMap<>();
+        totalDeVotosPorPrefeito = new LinkedHashMap<>();
+        totalDeVotosPorVereador = new LinkedHashMap<>();
+        totalDeVotosPorPartidoParaVereador = new LinkedHashMap<>();
         for (Candidato candidato : candidatos) {
-            totalDeVotosPorPrefeito.put(candidato, 0);
-        }
-        totalDeVotosPorPartidoParaVereador = new HashMap<>();
-        for (Partido partido : partidos) {
-            totalDeVotosPorPartidoParaVereador.put(partido, 0);
+            if (candidato.getCargo() == Cargo.Prefeito) {
+                totalDeVotosPorPrefeito.put(candidato, 0);
+            } else if (candidato.getCargo() == Cargo.Vereador) {
+                totalDeVotosPorPartidoParaVereador.put(candidato.getPartido(), 0);
+                totalDeVotosPorVereador.put(candidato, 0);
+            }
         }
     }
-    
-    public void inicia()
-    {
+
+    public void inicia() {
         executando = true;
     }
-    public void encerra()
-    {
+
+    public void encerra() {
         executando = false;
     }
-    public boolean estaExecutando()
-    {
+
+    public boolean estaExecutando() {
         return executando;
     }
 
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
-        Candidato prefeito = getCandidatoPorCodigo(codigoPrefeito);
-        Candidato vereador = getCandidatoPorCodigo(codigoVereador);
+        Candidato prefeito = getPrefeitoPorCodigo(codigoPrefeito);
+        Candidato vereador = getVereadorPorCodigo(codigoVereador);
         votosEfetuadosParaPrefeito++;
         if (codigoPrefeito == 00) {
             votosBrancosParaPrefeito++;
@@ -74,12 +78,13 @@ public class Urna {
             votosBrancosParaVereador++;
         } else if (vereador != null) {
             totalDeVotosPorPartidoParaVereador.put(vereador.getPartido(), totalDeVotosPorPartidoParaVereador.get(vereador) + 1);
+            totalDeVotosPorVereador.put(vereador, totalDeVotosPorVereador.get(vereador) + 1);
         } else {
             votosNulosParaVereador++;
         }
     }
 
-    public Candidato getCandidatoPorCodigo(int codigo) {
+    public Candidato getPrefeitoPorCodigo(int codigo) {
         for (Entry<Candidato, Integer> entry : totalDeVotosPorPrefeito.entrySet()) {
             Candidato key = entry.getKey();
             if (key.getNumero() == codigo) {
@@ -88,12 +93,20 @@ public class Urna {
         }
         return null;
     }
- 
+
+    public Candidato getVereadorPorCodigo(int codigo) {
+        for (Entry<Candidato, Integer> entry : totalDeVotosPorVereador.entrySet()) {
+            Candidato key = entry.getKey();
+            if (key.getNumero() == codigo) {
+                return key;
+            }
+        }
+        return null;
+    }
 
     //
-    //      Aqui começam os get and setters da classe
+    //      Aqui comecam os get and setters da classe
     //
-    
     public int getVotosPorPartido(Partido partido) {
         if (totalDeVotosPorPartidoParaVereador.containsKey(partido)) {
             return totalDeVotosPorPartidoParaVereador.get(partido);
@@ -106,6 +119,25 @@ public class Urna {
             return totalDeVotosPorPrefeito.get(prefeito);
         }
         return -1;
+    }
+
+    public int getVotosPorVereador(Candidato vereador) {
+        if (totalDeVotosPorVereador.containsKey(vereador)) {
+            return totalDeVotosPorVereador.get(vereador);
+        }
+        return -1;
+    }
+
+    public LinkedHashMap<Candidato, Integer> getTotalDeVotosPorPrefeito() {
+        return totalDeVotosPorPrefeito;
+    }
+
+    public LinkedHashMap<Candidato, Integer> getTotalDeVotosPorVereador() {
+        return totalDeVotosPorVereador;
+    }
+
+    public LinkedHashMap<Partido, Integer> getTotalDeVotosPorPartidoParaVereador() {
+        return totalDeVotosPorPartidoParaVereador;
     }
 
     public int getSecaoEleitoral() {
@@ -139,6 +171,7 @@ public class Urna {
     private void setLimiteDeEleitores(int limiteDeEleitores) {
         this.limiteDeEleitores = limiteDeEleitores;
     }
+
     public int getLimiteDeEleitores() {
         return limiteDeEleitores;
     }
@@ -146,9 +179,8 @@ public class Urna {
     private void setSecaoEleitoral(int secaoEleitoral) {
         this.secaoEleitoral = secaoEleitoral;
     }
-    
-    public int getTotalDeVotosEfetuados()
-    {
-        return votosEfetuadosParaPrefeito + votosEfetuadosParaVereador;
+
+    public int getTotalDeVotosEfetuados() {
+        return votosEfetuadosParaPrefeito;
     }
 }

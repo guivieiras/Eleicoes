@@ -8,9 +8,9 @@ import javax.swing.JOptionPane;
 
 public class TelaVotacao extends JFrame {
 
-    private Urna urna;
-    private Eleitor eleitor;
-    private TelaMesario telaMesario;
+    private final Urna urna;
+    private final Eleitor eleitor;
+    private final TelaMesario telaMesario;
 
     public TelaVotacao(Urna urna, Eleitor eleitor, TelaMesario telaMesario) {
         this.urna = urna;

@@ -2,14 +2,12 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaCidade;
-import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 
 public class ControladorCidade implements IControlador<Cidade> {
 
     public final ControladorPrincipal controladorPrincipal;
-    private ArrayList<Cidade> cidades;
+    private final ArrayList<Cidade> cidades;
 
     public ControladorCidade(ControladorPrincipal controladorPrincipal) {
         this.controladorPrincipal = controladorPrincipal;
@@ -42,6 +40,11 @@ public class ControladorCidade implements IControlador<Cidade> {
         return false;
     }
 
+    @Override
+    public ArrayList<Cidade> getLista() {
+        return cidades;
+    }
+    
     public Cidade getCidade(String nome) {
         for (Cidade cidade : cidades) {
             if (cidade.getNome().equals(nome)) {
@@ -50,12 +53,7 @@ public class ControladorCidade implements IControlador<Cidade> {
         }
 
         return null;
-    }
-
-    @Override
-    public ArrayList<Cidade> getLista() {
-        return cidades;
-    }
+    } 
 
     @Override
     public void exibeTela() {

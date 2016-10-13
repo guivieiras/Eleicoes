@@ -27,20 +27,16 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btn_TelaCidade" min="-2" pref="131" max="-2" attributes="0"/>
-                      <Component id="btn_TelaEleitor" min="-2" pref="131" max="-2" attributes="0"/>
-                      <Component id="btn_TelaPartido" min="-2" pref="131" max="-2" attributes="0"/>
-                      <Component id="btn_TelaUrna" min="-2" pref="131" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="btn_TelaCandidato" min="-2" pref="131" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="btn_TelaResultados" pref="131" max="32767" attributes="0"/>
+                  <Component id="btn_IniciarEleicoes" max="32767" attributes="0"/>
+                  <Component id="btn_TelaCidade" alignment="0" pref="131" max="32767" attributes="0"/>
+                  <Component id="btn_TelaEleitor" alignment="0" pref="131" max="32767" attributes="0"/>
+                  <Component id="btn_TelaPartido" alignment="0" pref="131" max="32767" attributes="0"/>
+                  <Component id="btn_TelaUrna" alignment="0" pref="131" max="32767" attributes="0"/>
+                  <Component id="btn_TelaCandidato" alignment="0" pref="131" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="150" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -57,8 +53,11 @@
               <Component id="btn_TelaPartido" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Component id="btn_TelaUrna" min="-2" pref="38" max="-2" attributes="0"/>
-              <EmptySpace pref="12" max="32767" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <Component id="btn_IniciarEleicoes" min="-2" pref="38" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <Component id="btn_TelaResultados" min="-2" pref="43" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -104,12 +103,21 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_TelaUrnaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="btn_IniciarEleicoes">
       <Properties>
         <Property name="text" type="java.lang.String" value="Iniciar Elei&#xe7;&#xf5;es"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_IniciarEleicoesActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_TelaResultados">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Resultados"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_TelaResultadosActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
