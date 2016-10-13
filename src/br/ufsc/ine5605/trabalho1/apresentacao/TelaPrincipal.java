@@ -7,48 +7,59 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- *  
- *  @author 10349509913 
- * 
+ *
+ * @author 10349509913
+ *
  */
-public class TelaPrincipal extends JFrame{
+public class TelaPrincipal extends JFrame {
 
-	private final ControladorPrincipal controladorPrincipal;        
-	public TelaPrincipal(ControladorPrincipal controladorPrincipal) {
-            this.controladorPrincipal = controladorPrincipal;
-            initComponents();
-            setLocationRelativeTo(null);
-	}
-        
-        public void unlockTelaPrincipal()
-        {
-            setEnabled(true);
-        }
+    private final ControladorPrincipal controladorPrincipal;
 
-	public void mostraTelaCandidatos() {
-            setEnabled(false);
-            controladorPrincipal.controladorCandidato.exibeTela();
-	}
+    public TelaPrincipal(ControladorPrincipal controladorPrincipal) {
+        this.controladorPrincipal = controladorPrincipal;
+        initComponents();
+        setLocationRelativeTo(null);
+    }
 
-	public void mostraTelaEleitor() {
-            setEnabled(false);
-            controladorPrincipal.controladorEleitor.exibeTela();
-	}
+    public void unlockTelaPrincipal() {
+        setEnabled(true);
+    }
 
-	public void mostraTelaCidade() {
-            setEnabled(false);
-            controladorPrincipal.controladorCidade.exibeTela();
-	}
+    public void mostraTelaCandidatos() {
+        setEnabled(false);
+        controladorPrincipal.controladorCandidato.exibeTela();
+    }
 
-	public void mostraTelaUrna() {
-            setEnabled(false);
-            controladorPrincipal.controladorUrna.exibeTela();
-	}
-        
-        public void mostraTelaPartido() {
-            setEnabled(false);
-            controladorPrincipal.controladorPartido.exibeTela();
-	}
+    public void mostraTelaEleitor() {
+        setEnabled(false);
+        controladorPrincipal.controladorEleitor.exibeTela();
+    }
+
+    public void mostraTelaCidade() {
+        setEnabled(false);
+        controladorPrincipal.controladorCidade.exibeTela();
+    }
+
+    public void mostraTelaUrna() {
+        setEnabled(false);
+        controladorPrincipal.controladorUrna.exibeTela();
+    }
+
+    public void mostraTelaPartido() {
+        setEnabled(false);
+        controladorPrincipal.controladorPartido.exibeTela();
+    }
+
+    private void iniciaEleições() {
+        btn_TelaCandidato.setEnabled(false);
+        btn_TelaEleitor.setEnabled(false);
+        btn_TelaCidade.setEnabled(false);
+        btn_TelaPartido.setEnabled(false);
+        btn_TelaUrna.setEnabled(false);
+        setEnabled(false);
+
+        controladorPrincipal.controladorUrna.iniciaEleicoes();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,6 +117,11 @@ public class TelaPrincipal extends JFrame{
         });
 
         jButton1.setText("Iniciar Eleições");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,6 +181,10 @@ public class TelaPrincipal extends JFrame{
         mostraTelaUrna();
     }//GEN-LAST:event_btn_TelaUrnaActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        iniciaEleições();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_TelaCandidato;
@@ -174,4 +194,5 @@ public class TelaPrincipal extends JFrame{
     private javax.swing.JButton btn_TelaUrna;
     private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
+
 }

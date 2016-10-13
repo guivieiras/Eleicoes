@@ -14,15 +14,17 @@ public class Urna {
     private int secaoEleitoral;
     private int zonaEleitoral;
     private Cidade cidade;
-    private int numeroEleitores;
+    private int limiteDeEleitores;
     private int votosEfetuadosParaPrefeito;
     private int votosBrancosParaPrefeito;
     private int votosNulosParaPrefeito;
     private int votosEfetuadosParaVereador;
     private int votosBrancosParaVereador;
     private int votosNulosParaVereador;
+    
+    private boolean executando;
 
-    public Urna(int numeroEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, ArrayList<Partido> partidos) {
+    public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, ArrayList<Partido> partidos) {
         votosEfetuadosParaPrefeito = 0;
         votosEfetuadosParaVereador = 0;
         votosBrancosParaPrefeito = 0;
@@ -30,7 +32,7 @@ public class Urna {
         votosNulosParaPrefeito = 0;
         votosNulosParaVereador = 0;
         setSecaoEleitoral(secaoEleitoral);
-        setNumeroEleitores(numeroEleitores);
+        setLimiteDeEleitores(limiteDeEleitores);
         setZonaEleitoral(zonaEleitoral);
         setCidade(cidade);
         totalDeVotosPorPrefeito = new HashMap<>();
@@ -41,6 +43,19 @@ public class Urna {
         for (Partido partido : partidos) {
             totalDeVotosPorPartidoParaVereador.put(partido, 0);
         }
+    }
+    
+    public void inicia()
+    {
+        executando = true;
+    }
+    public void encerra()
+    {
+        executando = false;
+    }
+    public boolean estaExecutando()
+    {
+        return executando;
     }
 
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
@@ -73,24 +88,12 @@ public class Urna {
         }
         return null;
     }
-
-    public void exibeTelaMesario() {
-        TelaMesario tela = new TelaMesario(this);
-        tela.setVisible(true);
-    }
-
-    public boolean verificaEleitor(Eleitor eleitor) {
-        if (numeroEleitores < votosEfetuadosParaVereador) {
-            if (eleitor.getZonaEleitoral() == this.zonaEleitoral && eleitor.getSecaoEleitoral() == this.secaoEleitoral) {
-                return true;
-            }
-        }
-        return false;
-    }
+ 
 
     //
     //      Aqui começam os get and setters da classe
     //
+    
     public int getVotosPorPartido(Partido partido) {
         if (totalDeVotosPorPartidoParaVereador.containsKey(partido)) {
             return totalDeVotosPorPartidoParaVereador.get(partido);
@@ -118,11 +121,11 @@ public class Urna {
     }
 
     public int getVotosInvalidosParaVerador() {
-        return (this.votosNulosParaVereador - this.votosEfetuadosParaVereador + (this.numeroEleitores) + this.votosBrancosParaVereador);
+        return (this.votosNulosParaVereador - this.votosEfetuadosParaVereador + (this.limiteDeEleitores) + this.votosBrancosParaVereador);
     }
 
     public int getVotosInvalidosParaPrefeito() {
-        return (this.votosNulosParaPrefeito - this.votosEfetuadosParaPrefeito + (this.numeroEleitores) + this.votosBrancosParaPrefeito);
+        return (this.votosNulosParaPrefeito - this.votosEfetuadosParaPrefeito + (this.limiteDeEleitores) + this.votosBrancosParaPrefeito);
     }
 
     private void setZonaEleitoral(int zonaEleitoral) {
@@ -133,11 +136,19 @@ public class Urna {
         this.cidade = cidade;
     }
 
-    private void setNumeroEleitores(int numeroEleitores) {
-        this.numeroEleitores = numeroEleitores;
+    private void setLimiteDeEleitores(int limiteDeEleitores) {
+        this.limiteDeEleitores = limiteDeEleitores;
+    }
+    public int getLimiteDeEleitores() {
+        return limiteDeEleitores;
     }
 
     private void setSecaoEleitoral(int secaoEleitoral) {
         this.secaoEleitoral = secaoEleitoral;
+    }
+    
+    public int getTotalDeVotosEfetuados()
+    {
+        return votosEfetuadosParaPrefeito + votosEfetuadosParaVereador;
     }
 }

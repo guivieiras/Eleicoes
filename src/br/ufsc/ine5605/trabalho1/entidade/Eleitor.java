@@ -11,13 +11,22 @@ public class Eleitor {
     private int secaoEleitoral;
     private long titulo;
     private String nome;
+    private Cidade cidade;
 
-    public Eleitor(int zonaEleitoral, int secaoEleitoral, long titulo, String nome) {
+    public Eleitor(int zonaEleitoral, int secaoEleitoral, long titulo, String nome, Cidade cidade) {
         this.zonaEleitoral = zonaEleitoral;
         this.secaoEleitoral = secaoEleitoral;
         this.titulo = titulo;
         this.nome = nome;
+        this.cidade = cidade;
+    }
 
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
     }
 
     public int getZonaEleitoral() {

@@ -1,9 +1,11 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesario;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
+import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -63,8 +65,36 @@ public class ControladorUrna implements IControlador<Urna> {
         return urnas;
     }
 
+    public boolean verificaEleitor(Urna urna, Eleitor eleitor) {
+        if (urna.getLimiteDeEleitores() > urna.getTotalDeVotosEfetuados()) {
+            if (eleitor.getZonaEleitoral() == urna.getZonaEleitoral() && eleitor.getSecaoEleitoral() == urna.getSecaoEleitoral() && eleitor.getCidade() == urna.getCidade()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void iniciaEleicoes() {
+        for (Urna urna : urnas) {
+            urna.inicia();
+            TelaMesario tela = new TelaMesario(this, urna);
+            tela.setVisible(true);
+        }
+    }
+
     public void exibeTela() {
         TelaUrna tela = new TelaUrna(this);
         tela.setVisible(true);
+    }
+    
+    public int urnasEmExecucao()
+    {
+        int qtdUrnas = 0;
+        for (Urna urna : urnas)
+        {
+            if (urna.estaExecutando())
+                qtdUrnas++;
+        }
+        return qtdUrnas;
     }
 }

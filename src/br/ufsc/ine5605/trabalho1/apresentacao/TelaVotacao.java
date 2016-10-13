@@ -2,6 +2,7 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -9,10 +10,12 @@ public class TelaVotacao extends JFrame {
 
     private Urna urna;
     private Eleitor eleitor;
+    private TelaMesario telaMesario;
 
-    public TelaVotacao(Urna urna, Eleitor eleitor) {
+    public TelaVotacao(Urna urna, Eleitor eleitor, TelaMesario telaMesario) {
         this.urna = urna;
         this.eleitor = eleitor;
+        this.telaMesario = telaMesario;
         initComponents();
         setLocationRelativeTo(null);
 
@@ -21,6 +24,7 @@ public class TelaVotacao extends JFrame {
     public void votar() {
         if (verificaNumeros()) {
             urna.contabilizaVoto(Integer.parseInt(txt_VotoPrefeito.getText()), Integer.parseInt(txt_VotoVereador.getText()));
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
 
@@ -28,12 +32,16 @@ public class TelaVotacao extends JFrame {
         try {
             if (txt_VotoPrefeito.getText().length() > 0) {
                 Integer.parseInt(txt_VotoPrefeito.getText());
+            } else {
+                txt_VotoPrefeito.setText("00");
             }
             if (txt_VotoVereador.getText().length() > 0) {
                 Integer.parseInt(txt_VotoVereador.getText());
+            } else {
+                txt_VotoVereador.setText("00");
             }
         } catch (NumberFormatException numberFormatException) {
-            JOptionPane.showMessageDialog(null, "Insira apenas numeros. Se deseja votar em branco, deixe em branco :)", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Insira apenas numeros. Se deseja votar em branco, deixe em branco.", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
         return true;
@@ -57,13 +65,24 @@ public class TelaVotacao extends JFrame {
         txt_VotoVereador = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Votar");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel5.setText("Voto para prefeito:");
 
         jLabel6.setText("Voto para vereador:");
 
         jButton1.setText("Votar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,6 +129,14 @@ public class TelaVotacao extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        telaMesario.unlockTela();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        votar();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

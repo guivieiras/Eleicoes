@@ -2,6 +2,7 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import java.util.Scanner;
 import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
+import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class TelaEleitor extends JFrame {
         this.controladorEleitor = controladorEleitor;
         initComponents();
         listaEleitores();
+        popularCheckBoxes();
         setLocationRelativeTo(null);
     }
 
@@ -36,7 +38,9 @@ public class TelaEleitor extends JFrame {
             try {
                 int secao = Integer.parseInt(txt_Secao.getText());
                 int zona = Integer.parseInt(txt_Zona.getText());
-                Eleitor eleitor = new Eleitor(zona, secao, Long.parseLong(txt_Titulo.getText()), verificaNome(txt_Nome.getText()));
+                Cidade cidade = controladorEleitor.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
+
+                Eleitor eleitor = new Eleitor(zona, secao, Long.parseLong(txt_Titulo.getText()), verificaNome(txt_Nome.getText()), cidade);
                 if (controladorEleitor.cadastra(eleitor)) {
                     JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                 } else {
@@ -44,6 +48,8 @@ public class TelaEleitor extends JFrame {
                 }
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -70,6 +76,7 @@ public class TelaEleitor extends JFrame {
             txt_ModificaTitulo.setText(String.valueOf(eleitorModificado.getTitulo()));
             txt_ModificaSecao.setText(String.valueOf(eleitorModificado.getSecaoEleitoral()));
             txt_ModificaZona.setText(String.valueOf(eleitorModificado.getZonaEleitoral()));
+            cBox_ModificaCidade.setSelectedItem(eleitorModificado.getCidade().getNome());
 
             btn_Modificar.setEnabled(true);
             btn_Remove.setEnabled(true);
@@ -98,11 +105,23 @@ public class TelaEleitor extends JFrame {
                         Integer.parseInt(txt_ModificaZona.getText()),
                         Integer.parseInt(txt_ModificaSecao.getText()),
                         Long.parseLong(txt_ModificaTitulo.getText()),
-                        verificaNome(txt_ModificaNome.getText())));
+                        verificaNome(txt_ModificaNome.getText()), controladorEleitor.controladorPrincipal.controladorCidade.getCidade(
+                        cBox_ModificaCidade.getSelectedItem().toString())));
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void popularCheckBoxes() {
+        for (Cidade cidade : controladorEleitor.controladorPrincipal.controladorCidade.getLista()) {
+            cBox_Cidade.addItem(cidade.getNome());
+            cBox_ModificaCidade.addItem(cidade.getNome());
+        }
+
+        cBox_Cidade.setSelectedIndex(-1);
+        cBox_ModificaCidade.setSelectedIndex(-1);
+
     }
 
     public String verificaNome(String nome) throws NomeVazio {
@@ -117,7 +136,7 @@ public class TelaEleitor extends JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         removeAllRows();
         for (Eleitor eleitor : eleitores) {
-            model.addRow(new Object[]{eleitor.getNome(), eleitor.getTitulo(), eleitor.getZonaEleitoral(), eleitor.getSecaoEleitoral()});
+            model.addRow(new Object[]{eleitor.getNome(), eleitor.getTitulo(), eleitor.getCidade().getNome(), eleitor.getZonaEleitoral(), eleitor.getSecaoEleitoral()});
         }
     }
 
@@ -177,6 +196,8 @@ public class TelaEleitor extends JFrame {
         txt_Zona = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txt_Secao = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        cBox_Cidade = new javax.swing.JComboBox<>();
         panel_Modifica = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txt_ModificaTitulo = new javax.swing.JTextField();
@@ -190,6 +211,8 @@ public class TelaEleitor extends JFrame {
         txt_ModificaSecao = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        cBox_ModificaCidade = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Eleitores");
@@ -211,14 +234,14 @@ public class TelaEleitor extends JFrame {
 
             },
             new String [] {
-                "Nome", "Título", "Zona", "Seção"
+                "Nome", "Título", "Cidade", "Zona", "Seção"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -265,6 +288,8 @@ public class TelaEleitor extends JFrame {
 
         jLabel6.setText("Seção");
 
+        jLabel9.setText("Cidade");
+
         javax.swing.GroupLayout panel_CadastroLayout = new javax.swing.GroupLayout(panel_Cadastro);
         panel_Cadastro.setLayout(panel_CadastroLayout);
         panel_CadastroLayout.setHorizontalGroup(
@@ -275,13 +300,15 @@ public class TelaEleitor extends JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_Nome, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_Secao, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_Zona, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txt_Nome, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addComponent(txt_Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addComponent(txt_Secao, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addComponent(txt_Zona, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addComponent(cBox_Cidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(74, 74, 74))
             .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CadastroLayout.createSequentialGroup()
@@ -302,13 +329,17 @@ public class TelaEleitor extends JFrame {
                     .addComponent(txt_Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(cBox_Cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_Secao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txt_Zona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
             .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_CadastroLayout.createSequentialGroup()
                     .addContainerGap(219, Short.MAX_VALUE)
@@ -362,6 +393,8 @@ public class TelaEleitor extends JFrame {
 
         jLabel8.setText("Zona");
 
+        jLabel10.setText("Cidade");
+
         javax.swing.GroupLayout panel_ModificaLayout = new javax.swing.GroupLayout(panel_Modifica);
         panel_Modifica.setLayout(panel_ModificaLayout);
         panel_ModificaLayout.setHorizontalGroup(
@@ -380,11 +413,17 @@ public class TelaEleitor extends JFrame {
                             .addGroup(panel_ModificaLayout.createSequentialGroup()
                                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel10))
                                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(panel_ModificaLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(panel_ModificaLayout.createSequentialGroup()
+                                        .addGap(83, 83, 83)
+                                        .addComponent(cBox_ModificaCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addGroup(panel_ModificaLayout.createSequentialGroup()
                                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
@@ -414,13 +453,17 @@ public class TelaEleitor extends JFrame {
                     .addComponent(btn_ProcuraPorTitulo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(cBox_ModificaCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_ModificaSecao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txt_ModificaZona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Modificar)
                     .addComponent(btn_Remove))
@@ -484,7 +527,10 @@ public class TelaEleitor extends JFrame {
     private javax.swing.JButton btn_ProcuraPorNome;
     private javax.swing.JButton btn_ProcuraPorTitulo;
     private javax.swing.JButton btn_Remove;
+    private javax.swing.JComboBox<String> cBox_Cidade;
+    private javax.swing.JComboBox<String> cBox_ModificaCidade;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -492,6 +538,7 @@ public class TelaEleitor extends JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
