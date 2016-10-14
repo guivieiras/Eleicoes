@@ -27,9 +27,19 @@ public class ControladorPrincipal {
 
         controladorCidade.cadastra(new Cidade("Florianópolis"));
         controladorCidade.cadastra(new Cidade("São José"));
-        controladorEleitor.cadastra(new Eleitor(1, 1, 123456789888l, "Gui", controladorCidade.getCidade("Florianópolis")));
-        controladorEleitor.cadastra(new Eleitor(1, 1, 123456789887l, "Laa", controladorCidade.getCidade("Florianópolis")));
-        controladorEleitor.cadastra(new Eleitor(1, 2, 123456789886l, "Lee", controladorCidade.getCidade("Florianópolis")));
+        controladorEleitor.cadastra(new Eleitor(1, 1, 1111111111110l, "A", controladorCidade.getCidade("Florianópolis")));
+        controladorEleitor.cadastra(new Eleitor(1, 1, 111111111111l, "B", controladorCidade.getCidade("Florianópolis")));
+        controladorEleitor.cadastra(new Eleitor(1, 2, 111111111112l, "C", controladorCidade.getCidade("Florianópolis")));
+        controladorEleitor.cadastra(new Eleitor(1, 2, 111111111113l, "D", controladorCidade.getCidade("Florianópolis")));
+        controladorEleitor.cadastra(new Eleitor(1, 2, 111111111114l, "E", controladorCidade.getCidade("Florianópolis")));
+        
+        controladorEleitor.cadastra(new Eleitor(1, 2, 111111111115l, "A", controladorCidade.getCidade("São José")));
+        controladorEleitor.cadastra(new Eleitor(1, 2, 111111111116l, "B", controladorCidade.getCidade("São José")));
+        controladorEleitor.cadastra(new Eleitor(1, 1, 111111111117l, "C", controladorCidade.getCidade("São José")));
+        controladorEleitor.cadastra(new Eleitor(1, 1, 111111111118l, "D", controladorCidade.getCidade("São José")));
+        controladorEleitor.cadastra(new Eleitor(1, 2, 111111111119l, "E", controladorCidade.getCidade("São José")));
+        
+        
         controladorPartido.cadastra(new Partido("Partido A", "PA"));
         controladorPartido.cadastra(new Partido("Partido B", "PB"));
 
@@ -51,9 +61,11 @@ public class ControladorPrincipal {
         controladorCandidato.cadastra(new Candidato(51, "Candidato M", Cargo.Prefeito, controladorCidade.getCidade("São José"), controladorPartido.getPartidoPorNome("Partido B")));
         controladorCandidato.cadastra(new Candidato(50, "Candidato N", Cargo.Prefeito, controladorCidade.getCidade("São José"), controladorPartido.getPartidoPorNome("Partido A")));
 
-        controladorUrna.cadastra(new Urna(10, 1, 1, controladorCidade.getCidade("Florianópolis"), controladorCandidato.getLista(controladorCidade.getCidade("Florianópolis")), Urna.Turno.Primeiro));
+        controladorUrna.cadastra(new Urna(5, 1, 1, controladorCidade.getCidade("Florianópolis"), controladorCandidato.getLista(controladorCidade.getCidade("Florianópolis")), Urna.Turno.Primeiro));
         controladorUrna.cadastra(new Urna(5, 2, 1, controladorCidade.getCidade("Florianópolis"), controladorCandidato.getLista(controladorCidade.getCidade("Florianópolis")), Urna.Turno.Primeiro));
-        controladorUrna.cadastra(new Urna(12, 1, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
+
+        controladorUrna.cadastra(new Urna(5, 1, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
+        controladorUrna.cadastra(new Urna(5, 2, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
 
         telaPrincipal = new TelaPrincipal(this);
         telaPrincipal.setVisible(true);

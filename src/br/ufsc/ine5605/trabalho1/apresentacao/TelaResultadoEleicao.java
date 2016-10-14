@@ -24,29 +24,20 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
 
     public void teste() {
 
-        controlador.getLista().get(0).contabilizaVoto(20, 20);
-        controlador.getLista().get(0).contabilizaVoto(21, 21);
-        controlador.getLista().get(0).contabilizaVoto(22, 22);
-        controlador.getLista().get(0).contabilizaVoto(23, 23);
-        controlador.getLista().get(0).contabilizaVoto(24, 24);
+        controlador.getLista().get(0).contabilizaVoto(30, 20);
+        controlador.getLista().get(0).contabilizaVoto(30, 21);
+        controlador.getLista().get(0).contabilizaVoto(31, 22);    
+        
+        controlador.getLista().get(1).contabilizaVoto(31, 24);
+        controlador.getLista().get(1).contabilizaVoto(31, 24);
+        
+        controlador.getLista().get(2).contabilizaVoto(50, 40);
+        controlador.getLista().get(2).contabilizaVoto(51, 42);
+        controlador.getLista().get(2).contabilizaVoto(51, 44);
+        
+        controlador.getLista().get(3).contabilizaVoto(51, 42);
+        controlador.getLista().get(3).contabilizaVoto(50, 41);
 
-        controlador.getLista().get(0).contabilizaVoto(30, 24);
-        controlador.getLista().get(0).contabilizaVoto(31, 24);
-        controlador.getLista().get(1).contabilizaVoto(30, 24);
-        controlador.getLista().get(1).contabilizaVoto(387219, 657657);
-
-        controlador.getLista().get(2).contabilizaVoto(40, 40);
-        controlador.getLista().get(2).contabilizaVoto(40, 40);
-        controlador.getLista().get(2).contabilizaVoto(40, 40);
-        controlador.getLista().get(2).contabilizaVoto(40, 40);
-        controlador.getLista().get(2).contabilizaVoto(41, 41);
-        controlador.getLista().get(2).contabilizaVoto(41, 41);
-        controlador.getLista().get(2).contabilizaVoto(41, 41);
-        controlador.getLista().get(2).contabilizaVoto(42, 42);
-        controlador.getLista().get(2).contabilizaVoto(42, 42);
-        controlador.getLista().get(2).contabilizaVoto(43, 43);
-        controlador.getLista().get(2).contabilizaVoto(44, 44);
-        controlador.getLista().get(2).contabilizaVoto(51, 9238102);
 
         //controlador.getLista().get(0).contabilizaVoto(21, 20);
         // controlador.getLista().get(0).contabilizaVoto(21, 20);
@@ -75,7 +66,8 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
                         insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                     }
                     insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos\n");
-                    insereTexto("-------------- " + urna.getAbstencoes() + " abstenções --------------\n");
+                    //insereTexto("-------------- " + urna.getAbstencoes() + " abstenções --------------\n");
+                    insereTexto("-----------------------------------------\n");
 
                     insereTexto("\n\n");
                 }
@@ -95,7 +87,7 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
             }
 
             insereTexto("------------------------------------------\n");
-            insereTexto("\n__________________________________________________________________________________________________\n\n");
+            insereTexto("\n--------------------------------------------------------------------------------------------------\n\n");
         }
     }
 

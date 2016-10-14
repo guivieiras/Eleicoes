@@ -221,7 +221,7 @@ public class ControladorUrna implements IControlador<Urna> {
             }
             i++;
         }
-        return vereadoresEleitos;
+        return ordenaHashMap(vereadoresEleitos);
     }
 
     public void iniciaEleicoes() {
