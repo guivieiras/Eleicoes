@@ -22,7 +22,7 @@ public class ControladorCandidato implements IControlador<Candidato> {
                 return false;
             }
         }
-        if (candidato.getNumero() > 98 || candidato.getNumero() < 2)
+        if (candidato.getNumero() > 98 || candidato.getNumero() < 1)
             return false;
 
         return candidatos.add(candidato);
