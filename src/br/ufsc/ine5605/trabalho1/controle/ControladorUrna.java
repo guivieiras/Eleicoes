@@ -112,20 +112,6 @@ public class ControladorUrna implements IControlador<Urna> {
         return variavelOrdenada;
     }
 
-    /*
-    public <T> LinkedHashMap<T, Integer> somaVotos(LinkedHashMap<T, Integer> listaParaOrdenar ){
-    	for (Urna urna : urnas) {
-        	LinkedHashMap<T, Integer> listaVotosUrna = urna.getTotalDeVotosPorPrefeito();
-            for (Entry<Candidato, Integer> entry : listaVotosPrefeitos.entrySet()) {
-                if (!votosOrdenados.containsKey(entry.getKey())) {
-                    votosOrdenados.put(entry.getKey(), entry.getValue());
-                } else {
-                    votosOrdenados.put(entry.getKey(), votosOrdenados.get(entry.getKey()) + entry.getValue());
-                }
-            }
-        }
-    }
-     */
     public Tupla<Candidato, Integer> prefeitoVencedor(Cidade cidade) {
         LinkedHashMap<Candidato, Integer> listaVotosPrefeitos = new LinkedHashMap<>();
         LinkedHashMap<Candidato, Integer> votosOrdenados = new LinkedHashMap<>();
@@ -148,43 +134,7 @@ public class ControladorUrna implements IControlador<Urna> {
         return new Tupla(lista.get(0).getKey(), lista.get(0).getValue());
     }
 
-    /*
-    public Tupla<Candidato, Integer> vereadorVencedorX(Cidade cidade) {
-    ArrayList<Tupla<Candidato, Integer>> vereadores = new ArrayList<>();
     
-    for (Urna urna : getLista(cidade)) {
-    for (Entry<Candidato,Integer> entry : urna.getTotalDeVotosPorVereador().entrySet())
-    {
-    vereadores.add(new Tupla(entry.getKey(), entry.getValue()));
-    }
-    }
-    
-    Collections.sort(vereadores, new Comparator<Tupla<Candidato,Integer>>() {
-    
-    
-    @Override
-    public int compare(Tupla<Candidato, Integer> o2, Tupla<Candidato, Integer> o1) {
-    return o1.value2.compareTo(o2.value2);
-    }
-    });
-    
-    int quoeficienteEleitoral =
-    
-    ArrayList<Tupla<Partido, Integer>> partidos = new ArrayList<>();
-    for (Urna urna : getLista(cidade)) {
-    for (Entry<Partido,Integer> entry : urna.getTotalDeVotosPorPartidoParaVereador().entrySet())
-    {
-    partidos.add(new Tupla(entry.getKey(), entry.getValue()));
-    }
-    }
-    
-    
-    for (Tupla<Candidato,Integer> c : vereadores)
-    {
-    System.out.println(c.value1 + " " + c.value2);
-    }
-    return null;
-    }*/
     public LinkedHashMap<Candidato, Integer> vereadorVencedor(Cidade cidade) {
 
         LinkedHashMap<Candidato, Integer> listaVotosVereadores = new LinkedHashMap<>();
@@ -239,10 +189,13 @@ public class ControladorUrna implements IControlador<Urna> {
         }
         while (soma < getVagasParaVereadores())
         {
-            List<Integer> medias = Arrays.asList(quocientePartidario);
+            ArrayList<Double> medias = new ArrayList<>();
+            
+            
             int j = 0;
             for (Entry<Partido, Integer> entry :  votosOrdenadosPartidos.entrySet())
             {
+                medias.add(0d);
                 medias.set(j , (double)entry.getValue() / quocientePartidario[j] + 1);
                 j++;
             }
