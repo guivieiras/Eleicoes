@@ -22,23 +22,7 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
 
     }
 
-    //Metodo para simular uma votação automaticamente, sem nenhum tipo de verificação
-    public void votaçãoTeste(){
-        controlador.getLista().get(0).contabilizaVoto(30, 20);
-        controlador.getLista().get(0).contabilizaVoto(30, 21);
-        controlador.getLista().get(0).contabilizaVoto(31, 22);    
-        
-        controlador.getLista().get(1).contabilizaVoto(31, 24);
-        controlador.getLista().get(1).contabilizaVoto(31, 24);
-        
-        
-        controlador.getLista().get(2).contabilizaVoto(50, 40);
-        controlador.getLista().get(2).contabilizaVoto(51, 42);
-        controlador.getLista().get(2).contabilizaVoto(51, 44);
-        
-        controlador.getLista().get(3).contabilizaVoto(51, 42);
-        controlador.getLista().get(3).contabilizaVoto(50, 41);
-    }
+    
 
     public void imprimeResultado() {
         for (Cidade cidade : controlador.controladorPrincipal.controladorCidade.getLista()) {
@@ -50,14 +34,14 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
                     for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
                         insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                     }
-                    insereTexto(urna.getVotosInvalidosParaVerador() + " votos inválidos\n");
+                    insereTexto(urna.getVotosInvalidosParaVerador()+ " votos inválidos ("+urna.getVotosBrancosParaVereador()+ " brancos e "+urna.getVotosNulosParaVereador()+" nulos)\n");
 
                     insereTexto("--------------- Prefeitos  ---------------\n");
                     LinkedHashMap<Candidato, Integer> prefeitos = controlador.ordenaHashMap(urna.getTotalDeVotosPorPrefeito());
                     for (Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
                         insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                     }
-                    insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos\n");
+                    insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos ("+urna.getVotosBrancosParaPrefeito() + " brancos e "+urna.getVotosNulosParaPrefeito()+" nulos)\n");
                     //insereTexto("-------------- " + urna.getAbstencoes() + " abstenções --------------\n");
                     insereTexto("-----------------------------------------\n");
 

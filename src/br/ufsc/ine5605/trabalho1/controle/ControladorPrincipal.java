@@ -26,6 +26,7 @@ public class ControladorPrincipal {
         controladorUrna = new ControladorUrna(this);
 
         //inicializaVariaveis();
+        //votacaoTeste();
 
         telaPrincipal = new TelaPrincipal(this);
         telaPrincipal.setVisible(true);
@@ -74,6 +75,25 @@ public class ControladorPrincipal {
 
         controladorUrna.cadastra(new Urna(5, 1, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
         controladorUrna.cadastra(new Urna(5, 2, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
+    }
+    
+    //Metodo para simular uma votação automaticamente, sem nenhum tipo de verificação
+    public void votacaoTeste(){
+        controladorUrna.getLista().get(0).contabilizaVoto(30, 20);
+        controladorUrna.getLista().get(0).contabilizaVoto(30, 21);
+        controladorUrna.getLista().get(0).contabilizaVoto(31, 22);    
+        
+        controladorUrna.getLista().get(1).contabilizaVoto(31, 24);
+        controladorUrna.getLista().get(1).contabilizaVoto(31, 24);
+        
+        
+        controladorUrna.getLista().get(2).contabilizaVoto(50, 40);
+        controladorUrna.getLista().get(2).contabilizaVoto(51, 42);
+        controladorUrna.getLista().get(2).contabilizaVoto(51, 44);
+        
+        controladorUrna.getLista().get(3).contabilizaVoto(51, 42);
+        controladorUrna.getLista().get(3).contabilizaVoto(50, 41);
+        
     }
 
 }

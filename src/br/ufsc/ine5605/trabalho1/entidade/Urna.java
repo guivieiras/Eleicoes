@@ -65,10 +65,6 @@ public class Urna {
         return executando;
     }
 
-    public boolean isExecutando() {
-        return executando;
-    }
-
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
         Candidato prefeito = getPrefeitoPorCodigo(codigoPrefeito);
         Candidato vereador = getVereadorPorCodigo(codigoVereador);
@@ -125,27 +121,7 @@ public class Urna {
     public Turno getTurno() {
         return turno;
     }
-    
-    public int getVotosPorPartido(Partido partido) {
-        if (totalDeVotosPorPartidoParaVereador.containsKey(partido)) {
-            return totalDeVotosPorPartidoParaVereador.get(partido);
-        }
-        return -1;
-    }
 
-    public int getVotosPorPrefeito(Candidato prefeito) {
-        if (totalDeVotosPorPrefeito.containsKey(prefeito)) {
-            return totalDeVotosPorPrefeito.get(prefeito);
-        }
-        return -1;
-    }
-
-    public int getVotosPorVereador(Candidato vereador) {
-        if (totalDeVotosPorVereador.containsKey(vereador)) {
-            return totalDeVotosPorVereador.get(vereador);
-        }
-        return -1;
-    }
 
     public LinkedHashMap<Candidato, Integer> getTotalDeVotosPorPrefeito() {
         return totalDeVotosPorPrefeito;
@@ -173,10 +149,6 @@ public class Urna {
 
     public int getVotosValidosParaVerador() {
         return (-getVotosNulosParaVereador() + getVotosEfetuadosParaVereador() - getVotosBrancosParaVereador());
-    }
-
-    public int getVotosEfetuadosParaPrefeito() {
-        return votosEfetuadosParaPrefeito;
     }
 
     public int getVotosBrancosParaPrefeito() {
