@@ -36,6 +36,9 @@ public class TelaMesario extends javax.swing.JFrame {
                 if (magicNumber == 2) {
                     JOptionPane.showMessageDialog(null, "Eleitor está votando na urna errada.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 }
+                if (magicNumber == 3) {
+                    JOptionPane.showMessageDialog(null, "Eleitor já votou.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Eleitor não encontrado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }

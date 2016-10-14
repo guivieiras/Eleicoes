@@ -24,6 +24,7 @@ public class TelaVotacao extends JFrame {
     public void votar() {
         if (verificaNumeros()) {
             urna.contabilizaVoto(Integer.parseInt(txt_VotoPrefeito.getText()), Integer.parseInt(txt_VotoVereador.getText()));
+            eleitor.votar();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }

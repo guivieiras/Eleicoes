@@ -82,6 +82,8 @@ public class ControladorUrna implements IControlador<Urna> {
     }
 
     public int verificaEleitor(Urna urna, Eleitor eleitor) {
+        if (eleitor.jaVotou())
+            return 3;
         if (urna.getLimiteDeEleitores() > urna.getTotalDeVotosEfetuados()) {
             if (eleitor.getZonaEleitoral() == urna.getZonaEleitoral()
                     && eleitor.getSecaoEleitoral() == urna.getSecaoEleitoral()
@@ -113,10 +115,10 @@ public class ControladorUrna implements IControlador<Urna> {
     }
 
     public KeyValue<Candidato, Integer> prefeitoVencedor(Cidade cidade) {
-        LinkedHashMap<Candidato, Integer> listaVotosPrefeitos = new LinkedHashMap<>();
+        LinkedHashMap<Candidato, Integer> listaVotosPrefeitos;
         LinkedHashMap<Candidato, Integer> votosOrdenados = new LinkedHashMap<>();
-        for (Urna urna : urnas) {
-            if (urna.getCidade() == cidade) {
+        
+        for (Urna urna : getLista(cidade)) {
                 listaVotosPrefeitos = urna.getTotalDeVotosPorPrefeito();
                 for (Entry<Candidato, Integer> entry : listaVotosPrefeitos.entrySet()) {
                     if (!votosOrdenados.containsKey(entry.getKey())) {
@@ -125,12 +127,15 @@ public class ControladorUrna implements IControlador<Urna> {
                         votosOrdenados.put(entry.getKey(), votosOrdenados.get(entry.getKey()) + entry.getValue());
                     }
                 }
-            }
+            
         }
         votosOrdenados = ordenaHashMap(votosOrdenados);
 
         ArrayList<Entry<Candidato, Integer>> lista = new ArrayList<>(votosOrdenados.entrySet());
 
+        if (lista.isEmpty())
+            throw new RuntimeException("Está cidade não possui candidatos à prefeito.");
+        
         return new KeyValue(lista.get(0).getKey(), lista.get(0).getValue());
     }
 
