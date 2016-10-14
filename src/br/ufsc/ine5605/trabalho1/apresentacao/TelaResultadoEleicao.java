@@ -3,7 +3,7 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
-import br.ufsc.ine5605.trabalho1.entidade.Tupla;
+import br.ufsc.ine5605.trabalho1.entidade.KeyValue;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import java.awt.Font;
 import java.util.LinkedHashMap;
@@ -22,8 +22,8 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
 
     }
 
-    public void teste() {
-
+    //Metodo para simular uma votação automaticamente, sem nenhum tipo de verificação
+    public void votaçãoTeste(){
         controlador.getLista().get(0).contabilizaVoto(30, 20);
         controlador.getLista().get(0).contabilizaVoto(30, 21);
         controlador.getLista().get(0).contabilizaVoto(31, 22);    
@@ -31,25 +31,17 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
         controlador.getLista().get(1).contabilizaVoto(31, 24);
         controlador.getLista().get(1).contabilizaVoto(31, 24);
         
+        
         controlador.getLista().get(2).contabilizaVoto(50, 40);
         controlador.getLista().get(2).contabilizaVoto(51, 42);
         controlador.getLista().get(2).contabilizaVoto(51, 44);
         
         controlador.getLista().get(3).contabilizaVoto(51, 42);
         controlador.getLista().get(3).contabilizaVoto(50, 41);
-
-
-        //controlador.getLista().get(0).contabilizaVoto(21, 20);
-        // controlador.getLista().get(0).contabilizaVoto(21, 20);
-        //      controlador.getLista().get(0).contabilizaVoto(20, 50);
-        //      controlador.getLista().get(0).contabilizaVoto(20, 50);
-        //      controlador.getLista().get(0).contabilizaVoto(20, 50);
     }
 
     public void imprimeResultado() {
-        teste();
         for (Cidade cidade : controlador.controladorPrincipal.controladorCidade.getLista()) {
-            //controlador.vereadorVencedorX(cidade);
             for (Urna urna : controlador.getLista()) {
                 if (urna.getCidade() == cidade) {
                     insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));
@@ -73,8 +65,8 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
                 }
             }
             insereTexto("--------- Vencedores " + cidade.getNome() + " --------\n");
-            Tupla<Candidato, Integer> prefeitoVotos = controlador.prefeitoVencedor(cidade);
-            insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.value1.getNome(), prefeitoVotos.value2));
+            KeyValue<Candidato, Integer> prefeitoVotos = controlador.prefeitoVencedor(cidade);
+            insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.key.getNome(), prefeitoVotos.value));
             insereTexto("Vereadores:\n");
 
             LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor(cidade);

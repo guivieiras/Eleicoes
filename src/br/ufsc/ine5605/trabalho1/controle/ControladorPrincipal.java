@@ -25,6 +25,14 @@ public class ControladorPrincipal {
         controladorPartido = new ControladorPartido(this);
         controladorUrna = new ControladorUrna(this);
 
+        //inicializaVariaveis();
+
+        telaPrincipal = new TelaPrincipal(this);
+        telaPrincipal.setVisible(true);
+    }
+    
+    public void inicializaVariaveis()
+    {
         controladorCidade.cadastra(new Cidade("Florianópolis"));
         controladorCidade.cadastra(new Cidade("São José"));
         controladorEleitor.cadastra(new Eleitor(1, 1, 1111111111110l, "A", controladorCidade.getCidade("Florianópolis")));
@@ -66,9 +74,6 @@ public class ControladorPrincipal {
 
         controladorUrna.cadastra(new Urna(5, 1, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
         controladorUrna.cadastra(new Urna(5, 2, 1, controladorCidade.getCidade("São José"), controladorCandidato.getLista(controladorCidade.getCidade("São José")), Urna.Turno.Primeiro));
-
-        telaPrincipal = new TelaPrincipal(this);
-        telaPrincipal.setVisible(true);
     }
 
 }

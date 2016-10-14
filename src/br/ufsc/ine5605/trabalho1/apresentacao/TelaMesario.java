@@ -18,7 +18,6 @@ public class TelaMesario extends javax.swing.JFrame {
         lbl_Secao.setText(String.valueOf(urna.getSecaoEleitoral()));
         lbl_Zona.setText(String.valueOf(urna.getZonaEleitoral()));
         lbl_Cidade.setText(urna.getCidade().getNome());
-      //  setLocationRelativeTo(null);
     }
 
     public void exibirTelaVotacao() {

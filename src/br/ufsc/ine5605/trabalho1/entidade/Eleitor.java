@@ -7,6 +7,8 @@ public class Eleitor {
     private long titulo;
     private String nome;
     private Cidade cidade;
+    
+    private boolean jaVotou = false;
 
     public Eleitor(int zonaEleitoral, int secaoEleitoral, long titulo, String nome, Cidade cidade) {
         this.zonaEleitoral = zonaEleitoral;
@@ -14,6 +16,14 @@ public class Eleitor {
         this.titulo = titulo;
         this.nome = nome;
         this.cidade = cidade;
+    }
+
+    public boolean jaVotou() {
+        return jaVotou;
+    }
+
+    public void votar() {
+        this.jaVotou = true;
     }
 
     public Cidade getCidade() {

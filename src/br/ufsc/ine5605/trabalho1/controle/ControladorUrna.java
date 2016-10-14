@@ -8,7 +8,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
-import br.ufsc.ine5605.trabalho1.entidade.Tupla;
+import br.ufsc.ine5605.trabalho1.entidade.KeyValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -94,8 +94,8 @@ public class ControladorUrna implements IControlador<Urna> {
     }
 
     public <T> LinkedHashMap<T, Integer> ordenaHashMap(LinkedHashMap<T, Integer> totalDeVotosDoHashMap) {
-        LinkedHashMap<T, Integer> temp = new LinkedHashMap<T, Integer>(totalDeVotosDoHashMap);
-        LinkedHashMap<T, Integer> variavelOrdenada = new LinkedHashMap<T, Integer>();
+        LinkedHashMap<T, Integer> temp = new LinkedHashMap<>(totalDeVotosDoHashMap);
+        LinkedHashMap<T, Integer> variavelOrdenada = new LinkedHashMap<>();
         int tamanhoInicial = temp.size();
         for (int i = 0; i < tamanhoInicial; i++) {
             T variavel = null;
@@ -112,7 +112,7 @@ public class ControladorUrna implements IControlador<Urna> {
         return variavelOrdenada;
     }
 
-    public Tupla<Candidato, Integer> prefeitoVencedor(Cidade cidade) {
+    public KeyValue<Candidato, Integer> prefeitoVencedor(Cidade cidade) {
         LinkedHashMap<Candidato, Integer> listaVotosPrefeitos = new LinkedHashMap<>();
         LinkedHashMap<Candidato, Integer> votosOrdenados = new LinkedHashMap<>();
         for (Urna urna : urnas) {
@@ -131,7 +131,7 @@ public class ControladorUrna implements IControlador<Urna> {
 
         ArrayList<Entry<Candidato, Integer>> lista = new ArrayList<>(votosOrdenados.entrySet());
 
-        return new Tupla(lista.get(0).getKey(), lista.get(0).getValue());
+        return new KeyValue(lista.get(0).getKey(), lista.get(0).getValue());
     }
 
     
@@ -170,14 +170,14 @@ public class ControladorUrna implements IControlador<Urna> {
                 totalDeVotosValidos += urna.getVotosValidosParaVerador();
             
         }
-        double quocienteEleitoral = (double)totalDeVotosValidos / getVagasParaVereadores();
+        int quocienteEleitoral = Math.round((float)totalDeVotosValidos / getVagasParaVereadores());
         votosOrdenadosVereadores = ordenaHashMap(votosOrdenadosVereadores);
         votosOrdenadosPartidos = ordenaHashMap(votosOrdenadosPartidos);
         int[] quocientePartidario = new int[votosOrdenadosPartidos.size()];
         int i = 0;
 
         for (Entry<Partido, Integer> entry : votosOrdenadosPartidos.entrySet()) {
-            quocientePartidario[i] = (int)(entry.getValue() / quocienteEleitoral);
+            quocientePartidario[i] = (entry.getValue() / quocienteEleitoral);
             i++;
         }
         

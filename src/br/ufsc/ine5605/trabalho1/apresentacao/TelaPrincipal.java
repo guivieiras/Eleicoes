@@ -2,6 +2,7 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class TelaPrincipal extends JFrame {
 
@@ -47,6 +48,11 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void iniciaEleicoes() {
+        if (controladorPrincipal.controladorUrna.getLista().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há como iniciar as eleições, não há urnas cadastradas", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
         btn_TelaCandidato.setEnabled(false);
         btn_TelaEleitor.setEnabled(false);
         btn_TelaCidade.setEnabled(false);
@@ -127,6 +133,7 @@ public class TelaPrincipal extends JFrame {
         });
 
         btn_TelaResultados.setText("Resultados");
+        btn_TelaResultados.setEnabled(false);
         btn_TelaResultados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_TelaResultadosActionPerformed(evt);
