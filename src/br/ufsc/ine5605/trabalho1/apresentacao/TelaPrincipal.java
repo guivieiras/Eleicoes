@@ -3,11 +3,6 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import javax.swing.JFrame;
 
-/**
- *
- * @author 10349509913
- *
- */
 public class TelaPrincipal extends JFrame {
 
     private final ControladorPrincipal controladorPrincipal;
@@ -132,7 +127,6 @@ public class TelaPrincipal extends JFrame {
         });
 
         btn_TelaResultados.setText("Resultados");
-        btn_TelaResultados.setEnabled(false);
         btn_TelaResultados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_TelaResultadosActionPerformed(evt);
@@ -147,13 +141,12 @@ public class TelaPrincipal extends JFrame {
                 .addGap(150, 150, 150)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btn_TelaResultados, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btn_IniciarEleicoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_TelaCidade, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addComponent(btn_TelaEleitor, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addComponent(btn_TelaPartido, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addComponent(btn_TelaUrna, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addComponent(btn_TelaCandidato, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)))
+                    .addComponent(btn_IniciarEleicoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_TelaCidade, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .addComponent(btn_TelaEleitor, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .addComponent(btn_TelaPartido, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .addComponent(btn_TelaUrna, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .addComponent(btn_TelaCandidato, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                 .addContainerGap(150, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

@@ -3,12 +3,9 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
-import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-public class TelaCidade extends JFrame {
+public class TelaCidade extends Tela<Cidade> {
 
     private final ControladorCidade controladorCidade;
     private Cidade cidadeModificada;
@@ -19,7 +16,7 @@ public class TelaCidade extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void cadastraCidade() {
+    private void cadastraCidade() {
         try {
             Cidade cidade = new Cidade(verificaNome(txt_Nome.getText()));
             if (controladorCidade.cadastra(cidade)) {
@@ -32,11 +29,11 @@ public class TelaCidade extends JFrame {
         }
     }
 
-    public void listaCidades() {
-        addRows(controladorCidade.getLista());
+    private void listaCidades() {
+        addRows(controladorCidade.getLista(), jTable1);
     }
 
-    public void removeCidade() {
+    private void removeCidade() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover a cidade?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             if (controladorCidade.remove(cidadeModificada)) {
@@ -46,7 +43,7 @@ public class TelaCidade extends JFrame {
         }
     }
 
-    public void modificaCidade() {
+    private void modificaCidade() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar a cidade?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             try {
@@ -71,28 +68,9 @@ public class TelaCidade extends JFrame {
         }
     }
 
-    private String verificaNome(String nome) throws NomeVazio {
-        if (nome.length() == 0) {
-            throw new NomeVazio();
-        } else {
-            return nome;
-        }
-    }
-
-    private void addRows(ArrayList<Cidade> cidades) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        removeAllRows();
-        for (Cidade cidade : cidades) {
-            model.addRow(new Object[]{cidade.getNome()});
-        }
-    }
-
-    private void removeAllRows() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowCount = model.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            model.removeRow(i);
-        }
+    @Override
+    Object[] atributosParaArray(Cidade cidade) {
+        return new Object[]{cidade.getNome()};
     }
 
     /**

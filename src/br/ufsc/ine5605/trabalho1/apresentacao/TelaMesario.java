@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
@@ -10,15 +5,9 @@ import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author The Gui
- */
+
 public class TelaMesario extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TelaMesarios
-     */
     private final ControladorUrna controladorUrna;
     private final Urna urna;
 
@@ -29,7 +18,7 @@ public class TelaMesario extends javax.swing.JFrame {
         lbl_Secao.setText(String.valueOf(urna.getSecaoEleitoral()));
         lbl_Zona.setText(String.valueOf(urna.getZonaEleitoral()));
         lbl_Cidade.setText(urna.getCidade().getNome());
-        setLocationRelativeTo(null);
+      //  setLocationRelativeTo(null);
     }
 
     public void exibirTelaVotacao() {

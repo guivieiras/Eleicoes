@@ -1,10 +1,5 @@
 package br.ufsc.ine5605.trabalho1.entidade;
 
-/**
- *
- * @author 10349509913
- *
- */
 public class Eleitor {
 
     private int zonaEleitoral;

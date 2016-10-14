@@ -5,11 +5,16 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaResultadoEleicao;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
+import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.entidade.Tupla;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class ControladorUrna implements IControlador<Urna> {
@@ -19,14 +24,13 @@ public class ControladorUrna implements IControlador<Urna> {
     private int vagasParaVereadores;
 
     public int getVagasParaVereadores() {
-		return vagasParaVereadores;
-	}
+        return vagasParaVereadores;
+    }
 
-
-	public ControladorUrna(ControladorPrincipal controladorPrincipal) {
+    public ControladorUrna(ControladorPrincipal controladorPrincipal) {
         this.controladorPrincipal = controladorPrincipal;
         this.urnas = new ArrayList<>();
-        this.vagasParaVereadores=3;
+        this.vagasParaVereadores = 3;
     }
 
     @Override
@@ -54,6 +58,27 @@ public class ControladorUrna implements IControlador<Urna> {
     @Override
     public ArrayList<Urna> getLista() {
         return urnas;
+    }
+
+    public ArrayList<Urna> getLista(Cidade cidade) {
+        ArrayList<Urna> temp = new ArrayList<>();
+
+        for (Urna urna : urnas) {
+            if (urna.getCidade() == cidade) {
+                temp.add(urna);
+            }
+        }
+
+        return temp;
+    }
+
+    public Urna getUrna(int secao, int zona, Cidade cidade) {
+        for (Urna urna : urnas) {
+            if (urna.getSecaoEleitoral() == secao && urna.getZonaEleitoral() == zona && urna.getCidade() == cidade) {
+                return urna;
+            }
+        }
+        return null;
     }
 
     public int verificaEleitor(Urna urna, Eleitor eleitor) {
@@ -86,6 +111,7 @@ public class ControladorUrna implements IControlador<Urna> {
         }
         return variavelOrdenada;
     }
+
     /*
     public <T> LinkedHashMap<T, Integer> somaVotos(LinkedHashMap<T, Integer> listaParaOrdenar ){
     	for (Urna urna : urnas) {
@@ -99,17 +125,19 @@ public class ControladorUrna implements IControlador<Urna> {
             }
         }
     }
-    */
-    public Tupla<Candidato, Integer> prefeitoVencedor() {
+     */
+    public Tupla<Candidato, Integer> prefeitoVencedor(Cidade cidade) {
         LinkedHashMap<Candidato, Integer> listaVotosPrefeitos = new LinkedHashMap<>();
         LinkedHashMap<Candidato, Integer> votosOrdenados = new LinkedHashMap<>();
         for (Urna urna : urnas) {
-            listaVotosPrefeitos = urna.getTotalDeVotosPorPrefeito();
-            for (Entry<Candidato, Integer> entry : listaVotosPrefeitos.entrySet()) {
-                if (!votosOrdenados.containsKey(entry.getKey())) {
-                    votosOrdenados.put(entry.getKey(), entry.getValue());
-                } else {
-                    votosOrdenados.put(entry.getKey(), votosOrdenados.get(entry.getKey()) + entry.getValue());
+            if (urna.getCidade() == cidade) {
+                listaVotosPrefeitos = urna.getTotalDeVotosPorPrefeito();
+                for (Entry<Candidato, Integer> entry : listaVotosPrefeitos.entrySet()) {
+                    if (!votosOrdenados.containsKey(entry.getKey())) {
+                        votosOrdenados.put(entry.getKey(), entry.getValue());
+                    } else {
+                        votosOrdenados.put(entry.getKey(), votosOrdenados.get(entry.getKey()) + entry.getValue());
+                    }
                 }
             }
         }
@@ -119,13 +147,53 @@ public class ControladorUrna implements IControlador<Urna> {
 
         return new Tupla(lista.get(0).getKey(), lista.get(0).getValue());
     }
+
+    /*
+    public Tupla<Candidato, Integer> vereadorVencedorX(Cidade cidade) {
+    ArrayList<Tupla<Candidato, Integer>> vereadores = new ArrayList<>();
     
-    public LinkedHashMap<Candidato, Integer> vereadorVencedor() {
+    for (Urna urna : getLista(cidade)) {
+    for (Entry<Candidato,Integer> entry : urna.getTotalDeVotosPorVereador().entrySet())
+    {
+    vereadores.add(new Tupla(entry.getKey(), entry.getValue()));
+    }
+    }
+    
+    Collections.sort(vereadores, new Comparator<Tupla<Candidato,Integer>>() {
+    
+    
+    @Override
+    public int compare(Tupla<Candidato, Integer> o2, Tupla<Candidato, Integer> o1) {
+    return o1.value2.compareTo(o2.value2);
+    }
+    });
+    
+    int quoeficienteEleitoral =
+    
+    ArrayList<Tupla<Partido, Integer>> partidos = new ArrayList<>();
+    for (Urna urna : getLista(cidade)) {
+    for (Entry<Partido,Integer> entry : urna.getTotalDeVotosPorPartidoParaVereador().entrySet())
+    {
+    partidos.add(new Tupla(entry.getKey(), entry.getValue()));
+    }
+    }
+    
+    
+    for (Tupla<Candidato,Integer> c : vereadores)
+    {
+    System.out.println(c.value1 + " " + c.value2);
+    }
+    return null;
+    }*/
+    public LinkedHashMap<Candidato, Integer> vereadorVencedor(Cidade cidade) {
+
         LinkedHashMap<Candidato, Integer> listaVotosVereadores = new LinkedHashMap<>();
         LinkedHashMap<Partido, Integer> listaVotosPorPartido = new LinkedHashMap<>();
         LinkedHashMap<Candidato, Integer> votosOrdenadosVereadores = new LinkedHashMap<>();
         LinkedHashMap<Partido, Integer> votosOrdenadosPartidos = new LinkedHashMap<>();
-        for (Urna urna : urnas) {
+
+        for (Urna urna : getLista(cidade)) {
+
             listaVotosVereadores = urna.getTotalDeVotosPorVereador();
             for (Entry<Candidato, Integer> entry : listaVotosVereadores.entrySet()) {
                 if (!votosOrdenadosVereadores.containsKey(entry.getKey())) {
@@ -135,52 +203,82 @@ public class ControladorUrna implements IControlador<Urna> {
                 }
             }
         }
-        for (Urna urna : urnas) {
-            listaVotosPorPartido = urna.getTotalDeVotosPorPartidoParaVereador();
-            for (Entry<Partido, Integer> entry : listaVotosPorPartido.entrySet()) {
-                if (!votosOrdenadosPartidos.containsKey(entry.getKey())) {
-                    votosOrdenadosPartidos.put(entry.getKey(), entry.getValue());
-                } else {
-                    votosOrdenadosPartidos.put(entry.getKey(), votosOrdenadosPartidos.get(entry.getKey()) + entry.getValue());
+
+        for (Urna urna : getLista(cidade)) {
+                listaVotosPorPartido = urna.getTotalDeVotosPorPartidoParaVereador();
+                for (Entry<Partido, Integer> entry : listaVotosPorPartido.entrySet()) {
+                    if (!votosOrdenadosPartidos.containsKey(entry.getKey())) {
+                        votosOrdenadosPartidos.put(entry.getKey(), entry.getValue());
+                    } else {
+                        votosOrdenadosPartidos.put(entry.getKey(), votosOrdenadosPartidos.get(entry.getKey()) + entry.getValue());
+                    }
                 }
             }
+        
+        int totalDeVotosValidos = 0;
+        for (Urna urna : getLista(cidade)) {
+                totalDeVotosValidos += urna.getVotosValidosParaVerador();
+            
         }
-        int totalDeVotosValidos=0;
-        for(Urna urna: urnas){
-        	totalDeVotosValidos+=urna.getVotosValidosParaVerador();
-        }
-        int quocienteEleitoral=totalDeVotosValidos/getVagasParaVereadores(); 
+        double quocienteEleitoral = (double)totalDeVotosValidos / getVagasParaVereadores();
         votosOrdenadosVereadores = ordenaHashMap(votosOrdenadosVereadores);
         votosOrdenadosPartidos = ordenaHashMap(votosOrdenadosPartidos);
         int[] quocientePartidario = new int[votosOrdenadosPartidos.size()];
-        int i=0;
+        int i = 0;
+
         for (Entry<Partido, Integer> entry : votosOrdenadosPartidos.entrySet()) {
-            quocientePartidario[i]=entry.getValue()/quocienteEleitoral;
+            quocientePartidario[i] = (int)(entry.getValue() / quocienteEleitoral);
             i++;
         }
-        i=0;
+        
+        
+        int soma = 0;
+        for (int qp : quocientePartidario)
+        {
+            soma += qp;
+        }
+        while (soma < getVagasParaVereadores())
+        {
+            List<Integer> medias = Arrays.asList(quocientePartidario);
+            int j = 0;
+            for (Entry<Partido, Integer> entry :  votosOrdenadosPartidos.entrySet())
+            {
+                medias.set(j , (double)entry.getValue() / quocientePartidario[j] + 1);
+                j++;
+            }
+            double maior  = Collections.max(medias);
+            quocientePartidario[medias.indexOf(maior)]++;
+            
+            soma++;
+        }
+        
+        i = 0;
         LinkedHashMap<Candidato, Integer> vereadoresEleitos = new LinkedHashMap<>();
-        for(Entry<Partido, Integer> entryPartido : votosOrdenadosPartidos.entrySet()){
-        	if(quocientePartidario[i]==0){
-        		break;
-        	}
-        	for(Entry<Candidato, Integer> entryVereador : listaVotosVereadores.entrySet()){
-        		if(entryVereador.getKey().getPartido()==entryPartido.getKey()){
-        			if(quocientePartidario[i]>0){
-        				vereadoresEleitos.put(entryVereador.getKey(), entryVereador.getValue());
-        				quocientePartidario[i]--;
-        			}
-        		}
-        	}
-        	i++;
+        for (Entry<Partido, Integer> entryPartido : votosOrdenadosPartidos.entrySet()) {
+            if (quocientePartidario[i] == 0) {
+                break;
+            }
+            for (Entry<Candidato, Integer> entryVereador : votosOrdenadosVereadores.entrySet()) {
+                if (entryVereador.getKey().getPartido() == entryPartido.getKey()) {
+                    if (quocientePartidario[i] > 0) {
+                        vereadoresEleitos.put(entryVereador.getKey(), entryVereador.getValue());
+                        quocientePartidario[i]--;
+                    }
+                }
+            }
+            i++;
         }
         return vereadoresEleitos;
     }
 
     public void iniciaEleicoes() {
+        int i = 50;
         for (Urna urna : urnas) {
             urna.inicia();
             TelaMesario tela = new TelaMesario(this, urna);
+
+            tela.setLocation(i, 200);
+            i += 340;
             tela.setVisible(true);
         }
     }

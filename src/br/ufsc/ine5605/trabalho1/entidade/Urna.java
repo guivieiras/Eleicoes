@@ -7,6 +7,9 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
 import java.util.LinkedHashMap;
 
 public class Urna {
+    public enum Turno{
+        Primeiro, Segundo
+    }
 
     private final LinkedHashMap<Candidato, Integer> totalDeVotosPorPrefeito;
     private final LinkedHashMap<Candidato, Integer> totalDeVotosPorVereador;
@@ -23,8 +26,10 @@ public class Urna {
     private int votosNulosParaVereador;
 
     private boolean executando;
+    private Turno turno;
 
-    public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos) {
+    public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, Turno turno) {
+        this.turno = turno;
         votosEfetuadosParaPrefeito = 0;
         votosEfetuadosParaVereador = 0;
         votosBrancosParaPrefeito = 0;
@@ -60,13 +65,21 @@ public class Urna {
         return executando;
     }
 
-	public boolean isExecutando() {
-		return executando;
-	}
-	
+    public boolean isExecutando() {
+        return executando;
+    }
+
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
         Candidato prefeito = getPrefeitoPorCodigo(codigoPrefeito);
         Candidato vereador = getVereadorPorCodigo(codigoVereador);
+
+        if (prefeito != null && (prefeito.getCargo() == Cargo.Vereador || prefeito.getCidade() != getCidade())) {
+            prefeito = null;
+        }
+        if (vereador != null && (vereador.getCargo() == Cargo.Prefeito|| vereador.getCidade() != getCidade())) {
+            vereador = null;
+        }
+
         votosEfetuadosParaPrefeito++;
         if (codigoPrefeito == 00) {
             votosBrancosParaPrefeito++;
@@ -79,7 +92,7 @@ public class Urna {
         if (codigoVereador == 00) {
             votosBrancosParaVereador++;
         } else if (vereador != null) {
-            totalDeVotosPorPartidoParaVereador.put(vereador.getPartido(), totalDeVotosPorPartidoParaVereador.get(vereador) + 1);
+            totalDeVotosPorPartidoParaVereador.put(vereador.getPartido(), totalDeVotosPorPartidoParaVereador.get(vereador.getPartido()) + 1);
             totalDeVotosPorVereador.put(vereador, totalDeVotosPorVereador.get(vereador) + 1);
         } else {
             votosNulosParaVereador++;
@@ -109,6 +122,9 @@ public class Urna {
     //
     //      Aqui comecam os get and setters da classe
     //
+    public Turno getTurno() {
+        return turno;
+    }
     
     public int getVotosPorPartido(Partido partido) {
         if (totalDeVotosPorPartidoParaVereador.containsKey(partido)) {
@@ -154,37 +170,37 @@ public class Urna {
     public Cidade getCidade() {
         return cidade;
     }
-    
+
     public int getVotosValidosParaVerador() {
-        return (-getVotosNulosParaVereador() + getVotosEfetuadosParaVereador() -getVotosBrancosParaVereador());
+        return (-getVotosNulosParaVereador() + getVotosEfetuadosParaVereador() - getVotosBrancosParaVereador());
     }
-    
+
     public int getVotosEfetuadosParaPrefeito() {
-		return votosEfetuadosParaPrefeito;
-	}
+        return votosEfetuadosParaPrefeito;
+    }
 
-	public int getVotosBrancosParaPrefeito() {
-		return votosBrancosParaPrefeito;
-	}
+    public int getVotosBrancosParaPrefeito() {
+        return votosBrancosParaPrefeito;
+    }
 
-	public int getVotosNulosParaPrefeito() {
-		return votosNulosParaPrefeito;
-	}
+    public int getVotosNulosParaPrefeito() {
+        return votosNulosParaPrefeito;
+    }
 
-	public int getVotosEfetuadosParaVereador() {
-		return votosEfetuadosParaVereador;
-	}
+    public int getVotosEfetuadosParaVereador() {
+        return votosEfetuadosParaVereador;
+    }
 
-	public int getVotosBrancosParaVereador() {
-		return votosBrancosParaVereador;
-	}
+    public int getVotosBrancosParaVereador() {
+        return votosBrancosParaVereador;
+    }
 
-	public int getVotosNulosParaVereador() {
-		return votosNulosParaVereador;
-	}
+    public int getVotosNulosParaVereador() {
+        return votosNulosParaVereador;
+    }
 
-	public int getVotosInvalidosParaVerador() {
-        return (this.votosNulosParaVereador - this.votosEfetuadosParaVereador + (this.limiteDeEleitores) + this.votosBrancosParaVereador);
+    public int getVotosInvalidosParaVerador() {
+        return (this.votosNulosParaVereador + this.votosBrancosParaVereador);
     }
 
     public int getTotalDeVotosEfetuados() {
@@ -192,7 +208,12 @@ public class Urna {
     }
 
     public int getVotosInvalidosParaPrefeito() {
-        return (this.votosNulosParaPrefeito - this.votosEfetuadosParaPrefeito + (this.limiteDeEleitores) + this.votosBrancosParaPrefeito);
+        return (this.votosNulosParaPrefeito  + this.votosBrancosParaPrefeito);
+    }
+    
+    public int getAbstencoes()
+    {
+        return limiteDeEleitores - votosEfetuadosParaPrefeito;
     }
 
     public int getLimiteDeEleitores() {

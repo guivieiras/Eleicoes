@@ -4,17 +4,9 @@ import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
-import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author 10349509913
- *
- */
-public class TelaEleitor extends JFrame {
+public class TelaEleitor extends Tela<Eleitor> {
 
     private final ControladorEleitor controladorEleitor;
     private Eleitor eleitorModificado;
@@ -49,7 +41,7 @@ public class TelaEleitor extends JFrame {
     }
 
     private void listaEleitores() {
-        addRows(controladorEleitor.getLista());
+        addRows(controladorEleitor.getLista(),jTable1);
     }
 
     private void procuraEleitorPorNome() {
@@ -81,7 +73,7 @@ public class TelaEleitor extends JFrame {
         }
     }
 
-    public void removeEleitor() {
+    private void removeEleitor() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover o eleitor?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             if (controladorEleitor.remove(eleitorModificado)) {
@@ -91,7 +83,7 @@ public class TelaEleitor extends JFrame {
         }
     }
 
-    public void modificaEleitor() {
+    private void modificaEleitor() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar o eleitor?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION && verificaTitulo(txt_ModificaTitulo.getText()) && verificaSecaoZona(txt_ModificaSecao.getText(), txt_ModificaZona.getText())) {
             try {
@@ -118,30 +110,6 @@ public class TelaEleitor extends JFrame {
 
     }
 
-    public String verificaNome(String nome) throws NomeVazio {
-        if (nome.length() == 0) {
-            throw new NomeVazio();
-        } else {
-            return nome;
-        }
-    }
-
-    private void addRows(ArrayList<Eleitor> eleitores) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        removeAllRows();
-        for (Eleitor eleitor : eleitores) {
-            model.addRow(new Object[]{eleitor.getNome(), eleitor.getTitulo(), eleitor.getCidade().getNome(), eleitor.getZonaEleitoral(), eleitor.getSecaoEleitoral()});
-        }
-    }
-
-    private void removeAllRows() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowCount = model.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            model.removeRow(i);
-        }
-    }
-
     private boolean verificaTitulo(String titulo) {
         if (titulo.length() != 12) {
             JOptionPane.showMessageDialog(null, "Título inválido, o título tem de ter 12 números.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -166,6 +134,12 @@ public class TelaEleitor extends JFrame {
         }
         return true;
     }
+    
+    @Override
+    Object[] atributosParaArray(Eleitor eleitor) {
+        return new Object[]{eleitor.getNome(), eleitor.getTitulo(), eleitor.getCidade().getNome(), eleitor.getZonaEleitoral(), eleitor.getSecaoEleitoral()};
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -548,4 +522,6 @@ public class TelaEleitor extends JFrame {
     private javax.swing.JTextField txt_Titulo;
     private javax.swing.JTextField txt_Zona;
     // End of variables declaration//GEN-END:variables
+
+    
 }

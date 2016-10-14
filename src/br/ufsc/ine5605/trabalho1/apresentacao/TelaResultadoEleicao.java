@@ -1,24 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
+import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Tupla;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
-/**
- *
- * @author Guilherme
- */
 public class TelaResultadoEleicao extends javax.swing.JFrame {
 
     private ControladorUrna controlador;
@@ -32,34 +22,81 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
 
     }
 
+    public void teste() {
+
+        controlador.getLista().get(0).contabilizaVoto(20, 20);
+        controlador.getLista().get(0).contabilizaVoto(21, 21);
+        controlador.getLista().get(0).contabilizaVoto(22, 22);
+        controlador.getLista().get(0).contabilizaVoto(23, 23);
+        controlador.getLista().get(0).contabilizaVoto(24, 24);
+
+        controlador.getLista().get(0).contabilizaVoto(30, 24);
+        controlador.getLista().get(0).contabilizaVoto(31, 24);
+        controlador.getLista().get(1).contabilizaVoto(30, 24);
+        controlador.getLista().get(1).contabilizaVoto(387219, 657657);
+
+        controlador.getLista().get(2).contabilizaVoto(40, 40);
+        controlador.getLista().get(2).contabilizaVoto(40, 40);
+        controlador.getLista().get(2).contabilizaVoto(40, 40);
+        controlador.getLista().get(2).contabilizaVoto(40, 40);
+        controlador.getLista().get(2).contabilizaVoto(41, 41);
+        controlador.getLista().get(2).contabilizaVoto(41, 41);
+        controlador.getLista().get(2).contabilizaVoto(41, 41);
+        controlador.getLista().get(2).contabilizaVoto(42, 42);
+        controlador.getLista().get(2).contabilizaVoto(42, 42);
+        controlador.getLista().get(2).contabilizaVoto(43, 43);
+        controlador.getLista().get(2).contabilizaVoto(44, 44);
+        controlador.getLista().get(2).contabilizaVoto(51, 9238102);
+
+        //controlador.getLista().get(0).contabilizaVoto(21, 20);
+        // controlador.getLista().get(0).contabilizaVoto(21, 20);
+        //      controlador.getLista().get(0).contabilizaVoto(20, 50);
+        //      controlador.getLista().get(0).contabilizaVoto(20, 50);
+        //      controlador.getLista().get(0).contabilizaVoto(20, 50);
+    }
+
     public void imprimeResultado() {
+        teste();
+        for (Cidade cidade : controlador.controladorPrincipal.controladorCidade.getLista()) {
+            //controlador.vereadorVencedorX(cidade);
+            for (Urna urna : controlador.getLista()) {
+                if (urna.getCidade() == cidade) {
+                    insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));
+                    insereTexto("--------------- Vereadores ---------------\n");
+                    LinkedHashMap<Candidato, Integer> vereadores = controlador.ordenaHashMap(urna.getTotalDeVotosPorVereador());
+                    for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
+                        insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+                    }
+                    insereTexto(urna.getVotosInvalidosParaVerador() + " votos inválidos\n");
 
-        for (Urna urna : controlador.getLista()) {
-            insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));
-            insereTexto("--------------- Vereadores ---------------\n");
-            LinkedHashMap<Candidato, Integer> vereadores = controlador.getVariavelMaisVotada(urna.getTotalDeVotosPorVereador());
-            for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
-                insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+                    insereTexto("--------------- Prefeitos  ---------------\n");
+                    LinkedHashMap<Candidato, Integer> prefeitos = controlador.ordenaHashMap(urna.getTotalDeVotosPorPrefeito());
+                    for (Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
+                        insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+                    }
+                    insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos\n");
+                    insereTexto("-------------- " + urna.getAbstencoes() + " abstenções --------------\n");
+
+                    insereTexto("\n\n");
+                }
             }
+            insereTexto("--------- Vencedores " + cidade.getNome() + " --------\n");
+            Tupla<Candidato, Integer> prefeitoVotos = controlador.prefeitoVencedor(cidade);
+            insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.value1.getNome(), prefeitoVotos.value2));
+            insereTexto("Vereadores:\n");
 
-            insereTexto("--------------- Prefeitos  ---------------\n");
-            LinkedHashMap<Candidato, Integer> prefeitos = controlador.getVariavelMaisVotada(urna.getTotalDeVotosPorPrefeito());
-            for (Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
-                insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+            LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor(cidade);
+            int vagas = 3;
+            for (Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
+                if (vagas > -100) {
+                    insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+                }
+                vagas--;
             }
 
             insereTexto("------------------------------------------\n");
-
+            insereTexto("\n__________________________________________________________________________________________________\n\n");
         }
-        insereTexto("-------------- Vencedores ----------------\n");
-        Tupla<Candidato,Integer> prefeitoVotos = controlador.prefeitoVencedor();
-        insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.value1.getNome(), prefeitoVotos.value2));
-        insereTexto("Vereadores:\n");
-      
-        /*LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor();
-        for (Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
-        insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
-        }*/
     }
 
     public void insereTexto(String txt) {

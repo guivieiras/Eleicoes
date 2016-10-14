@@ -3,11 +3,6 @@ package br.ufsc.ine5605.trabalho1.entidade;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 
-/**
- *
- * @author 10349509913
- *
- */
 public class Candidato {
     
     private int numero;

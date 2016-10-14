@@ -3,12 +3,9 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
-import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-public class TelaPartido extends JFrame {
+public class TelaPartido extends Tela<Partido> {
 
     private final ControladorPartido controladorPartido;
     private Partido partidoModificado;
@@ -19,7 +16,7 @@ public class TelaPartido extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void cadastraPartido() {
+    private void cadastraPartido() {
         try {
             Partido partido = new Partido(verificaNome(txt_Nome.getText()), verificaNome(txt_Sigla.getText()));
             if (controladorPartido.cadastra(partido)) {
@@ -32,11 +29,11 @@ public class TelaPartido extends JFrame {
         }
     }
 
-    public void listaPartidos() {
-        addRows(controladorPartido.getLista());
+    private void listaPartidos() {
+        addRows(controladorPartido.getLista(),jTable1);
     }
 
-    public void removePartido() {
+    private void removePartido() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover o partido?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             if (controladorPartido.remove(partidoModificado)) {
@@ -46,7 +43,7 @@ public class TelaPartido extends JFrame {
         }
     }
 
-    public void modificaPartido() {
+    private void modificaPartido() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar o partido?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             try {
@@ -83,28 +80,9 @@ public class TelaPartido extends JFrame {
         }
     }
 
-    public String verificaNome(String nome) throws NomeVazio {
-        if (nome.length() == 0) {
-            throw new NomeVazio();
-        } else {
-            return nome;
-        }
-    }
-
-    private void addRows(ArrayList<Partido> partidos) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        removeAllRows();
-        for (Partido partido : partidos) {
-            model.addRow(new Object[]{partido.getNome(), partido.getSigla()});
-        }
-    }
-
-    private void removeAllRows() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowCount = model.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            model.removeRow(i);
-        }
+    @Override
+    Object[] atributosParaArray(Partido partido) {
+        return new Object[]{partido.getNome(), partido.getSigla()};
     }
 
     /**
@@ -393,5 +371,7 @@ public class TelaPartido extends JFrame {
     private javax.swing.JTextField txt_Nome;
     private javax.swing.JTextField txt_Sigla;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }

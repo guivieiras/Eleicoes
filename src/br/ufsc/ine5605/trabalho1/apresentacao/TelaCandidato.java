@@ -6,12 +6,9 @@ import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
-import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-public class TelaCandidato extends JFrame {
+public class TelaCandidato extends Tela<Candidato> {
 
     private final ControladorCandidato controladorCandidato;
     private Candidato candidatoModificado;
@@ -23,7 +20,7 @@ public class TelaCandidato extends JFrame {
         popularCheckBoxes();
     }
 
-    public void cadastraCandidato() {
+    private void cadastraCandidato() {
         if (verificaNumero(txt_Numero.getText())) {
             try {
                 Cargo cargo = Cargo.valueOf(cBox_Cargo.getSelectedItem().toString());
@@ -45,11 +42,11 @@ public class TelaCandidato extends JFrame {
         }
     }
 
-    public void listaCandidatos() {
-        addRows(controladorCandidato.getLista());
+    private void listaCandidatos() {
+        addRows(controladorCandidato.getLista(), jTable1);
     }
 
-    public void removeCandidato() {
+    private void removeCandidato() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover o candidato?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
             if (controladorCandidato.remove(candidatoModificado)) {
@@ -59,7 +56,7 @@ public class TelaCandidato extends JFrame {
         }
     }
 
-    public void modificaCandidato() {
+    private void modificaCandidato() {
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar o candidato?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION && verificaNumero(txt_ModificaNumero.getText())) {
             try {
@@ -106,14 +103,6 @@ public class TelaCandidato extends JFrame {
         }
     }
 
-    private String verificaNome(String nome) throws NomeVazio {
-        if (nome.length() == 0) {
-            throw new NomeVazio();
-        } else {
-            return nome;
-        }
-    }
-
     private void popularCheckBoxes() {
         for (Cargo cargo : Cargo.values()) {
             cBox_Cargo.addItem(cargo.toString());
@@ -135,20 +124,9 @@ public class TelaCandidato extends JFrame {
         cBox_ModificaPartido.setSelectedIndex(-1);
     }
 
-    private void addRows(ArrayList<Candidato> candidatos) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        removeAllRows();
-        for (Candidato candidato : candidatos) {
-            model.addRow(new Object[]{candidato.getNome(), candidato.getNumero(), candidato.getPartido().getNome(), candidato.getCargo().toString(), candidato.getCidade().getNome()});
-        }
-    }
-
-    private void removeAllRows() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowCount = model.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            model.removeRow(i);
-        }
+    @Override
+    Object[] atributosParaArray(Candidato candidato) {
+        return new Object[]{candidato.getNome(), candidato.getNumero(), candidato.getPartido().getNome(), candidato.getCargo().toString(), candidato.getCidade().getNome()};
     }
 
     /*
