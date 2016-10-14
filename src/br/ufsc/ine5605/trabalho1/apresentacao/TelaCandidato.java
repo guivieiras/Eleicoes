@@ -32,7 +32,7 @@ public class TelaCandidato extends Tela<Candidato> {
 
                     JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar, número de candidato já em uso.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar, número de candidato não permitido.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (NullPointerException nullPointerException) {

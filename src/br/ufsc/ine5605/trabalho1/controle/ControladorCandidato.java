@@ -22,6 +22,8 @@ public class ControladorCandidato implements IControlador<Candidato> {
                 return false;
             }
         }
+        if (candidato.getNumero() > 98 || candidato.getNumero() < 2)
+            return false;
 
         return candidatos.add(candidato);
 
