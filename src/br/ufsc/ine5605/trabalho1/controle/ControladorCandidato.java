@@ -3,21 +3,30 @@ package br.ufsc.ine5605.trabalho1.controle;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaCandidato;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
+import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
 
 public class ControladorCandidato implements IControlador<Candidato> {
 
-    public final ControladorPrincipal controladorPrincipal;
-    private final ArrayList<Candidato> candidatos;
-
-    public ControladorCandidato(ControladorPrincipal controladorPrincipal) {
-        this.controladorPrincipal = controladorPrincipal;
-        this.candidatos = new ArrayList<>();
+    private static ControladorCandidato instance;
+    private Mapeador<Integer, Candidato> mapper;
+    
+    private ControladorCandidato( ) {
+        mapper.load();
+        
+        this.mapper = new Mapeador<>("candidatos.urn");
+        
     }
+    public static ControladorCandidato getInstance() {
+      if(instance == null) {
+         instance = new ControladorCandidato();
+      }
+      return instance;
+   }
 
     @Override
     public boolean cadastra(Candidato candidato) {
-        for (Candidato candidatoCadastrado : candidatos) {
+        for (Candidato candidatoCadastrado : mapper.getList()) {
             if (candidatoCadastrado.getNumero() == candidato.getNumero()) {
                 return false;
             }
@@ -25,18 +34,18 @@ public class ControladorCandidato implements IControlador<Candidato> {
         if (candidato.getNumero() > 98 || candidato.getNumero() < 1)
             return false;
 
-        return candidatos.add(candidato);
+        return mapper.put(candidato.getNumero(), candidato);
 
     }
 
     @Override
     public boolean remove(Candidato candidato) {
-        return candidatos.remove(candidato);
+        return mapper.remove(candidato.getNumero());
     }
 
     @Override
     public boolean modifica(Candidato antigo, Candidato novo) {
-        if (candidatos.contains(antigo)) {
+        if (mapper.contains(antigo.getNumero())) {
             antigo.setNome(novo.getNome());
             antigo.setNumero(novo.getNumero());
             antigo.setCargo(novo.getCargo());
@@ -49,13 +58,13 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
     @Override
     public ArrayList<Candidato> getLista() {
-        return candidatos;
+        return mapper.getList();
     }
 
     public ArrayList<Candidato> getLista(Cidade cidade) {
         ArrayList<Candidato> candidatosPorCidade = new ArrayList<>();
 
-        for (Candidato candidato : candidatos) {
+        for (Candidato candidato : mapper.getList()) {
             if (candidato.getCidade().equals(cidade)) {
                 candidatosPorCidade.add(candidato);
             }
@@ -65,7 +74,7 @@ public class ControladorCandidato implements IControlador<Candidato> {
     }
     
     public Candidato getCandidato(int codigo) {
-        for (Candidato candidato : candidatos) {
+        for (Candidato candidato : mapper.getList()) {
             if (candidato.getNumero() == codigo) {
                 return candidato;
             }
