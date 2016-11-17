@@ -48,15 +48,20 @@ public class TelaCidadeB extends Tela<Cidade> {
     public TelaCidadeB() {
         setTitle("Candidatos");
         initComponents();
+        initButtonActions();
+        listaCidades();
     }
 
-    private void listaCandidatos() {
+    private void listaCidades() {
         addRows(ControladorCidade.getInstance().getLista(), jtable);
     }
 
     private void initComponents() {
 
         jTabbedPane = new JTabbedPane();
+        jTabbedPane.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+            addRows(ControladorCidade.getInstance().getLista(), jtable);
+        });
         getContentPane().add(jTabbedPane);
         setSize(450, 350);
 
@@ -174,9 +179,18 @@ public class TelaCidadeB extends Tela<Cidade> {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void setButtonActions() {
+    private void initButtonActions() {
         btn_Cadastro.addActionListener(actionManager);
+        btn_Cadastro.setActionCommand(Actions.CADASTRAR);
 
+        btn_Modificar.addActionListener(actionManager);
+        btn_Modificar.setActionCommand(Actions.MODIFICAR);
+
+        btn_ProcuraPorNome.addActionListener(actionManager);
+        btn_ProcuraPorNome.setActionCommand(Actions.PROCURAR_POR_NOME);
+
+        btn_Remove.addActionListener(actionManager);
+        btn_Remove.setActionCommand(Actions.REMOVER);
     }
 
     @Override
@@ -234,16 +248,6 @@ public class TelaCidadeB extends Tela<Cidade> {
                 }
             }
 
-        }
-
-        private boolean verificaNumero(String numero) {
-            try {
-                Integer.parseInt(numero);
-                return true;
-            } catch (NumberFormatException x) {
-                JOptionPane.showMessageDialog(null, "Numero inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
         }
 
     }

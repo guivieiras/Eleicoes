@@ -1,8 +1,8 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
-import br.ufsc.ine5605.trabalho1.entidade.Cidade;
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaCidade;
-import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
+import br.ufsc.ine5605.trabalho1.entidade.*;
+import br.ufsc.ine5605.trabalho1.apresentacao.*;
+import br.ufsc.ine5605.trabalho1.mapeador.*;
 import java.util.ArrayList;
 
 public class ControladorCidade implements IControlador<Cidade> {
@@ -66,7 +66,7 @@ public class ControladorCidade implements IControlador<Cidade> {
 
     @Override
     public void exibeTela() {
-        TelaCidade tela = new TelaCidade(this);
+        TelaCidadeB tela = new TelaCidadeB();
         tela.setVisible(true);
 
     }

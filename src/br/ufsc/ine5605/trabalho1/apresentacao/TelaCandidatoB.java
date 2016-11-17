@@ -48,19 +48,29 @@ public class TelaCandidatoB extends Tela<Candidato> {
     private JButton btn_Remove;
     private JTextField txt_ModificaNome;
     private JTextField txt_ModificaNumero;
-    private JComboBox<String> cBox_ModificaCargo;
-    private JComboBox<String> cBox_ModificaCidade;
-    private JComboBox<String> cBox_ModificaPartido;
+    private JComboBox<Cargo> cBox_ModificaCargo;
+    private JComboBox<Cidade> cBox_ModificaCidade;
+    private JComboBox<Partido> cBox_ModificaPartido;
     //panel lista
 
     public TelaCandidatoB() {
         setTitle("Candidatos");
         initComponents();
+        initButtonActions();
+        listaCandidatos();
+
+    }
+
+    private void listaCandidatos() {
+        addRows(ControladorCandidato.getInstance().getLista(), jtable);
     }
 
     private void initComponents() {
 
         jTabbedPane = new JTabbedPane();
+        jTabbedPane.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+            addRows(ControladorCandidato.getInstance().getLista(), jtable);
+        });
         getContentPane().add(jTabbedPane);
         setSize(450, 350);
 
@@ -100,7 +110,6 @@ public class TelaCandidatoB extends Tela<Candidato> {
 
         GridBagConstraints c1 = new GridBagConstraints();
         c1.fill = GridBagConstraints.HORIZONTAL;
-        //   c.anchor = GridBagConstraints.NORTHWEST;
 
         c1.insets = new Insets(40, 60, 0, 0);
         c1.gridx = 0;
@@ -279,9 +288,18 @@ public class TelaCandidatoB extends Tela<Candidato> {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void setButtonActions() {
+    private void initButtonActions() {
         btn_Cadastro.addActionListener(actionManager);
+        btn_Cadastro.setActionCommand(Actions.CADASTRAR);
 
+        btn_Modificar.addActionListener(actionManager);
+        btn_Modificar.setActionCommand(Actions.MODIFICAR);
+
+        btn_ProcuraPorNumero.addActionListener(actionManager);
+        btn_ProcuraPorNumero.setActionCommand(Actions.PROCURAR_POR_NUMERO);
+
+        btn_Remove.addActionListener(actionManager);
+        btn_Remove.setActionCommand(Actions.REMOVER);
     }
 
     @Override
