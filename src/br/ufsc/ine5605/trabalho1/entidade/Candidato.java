@@ -4,7 +4,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 
 public class Candidato {
-    
+
     private int numero;
     private String nome;
     private Cidade cidade;
@@ -29,7 +29,7 @@ public class Candidato {
                 this.numero = numero;
             }
         } catch (Exception e) {
-            
+
         }
     }
 
@@ -67,4 +67,8 @@ public class Candidato {
         this.partido = partido;
     }
 
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

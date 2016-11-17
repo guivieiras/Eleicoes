@@ -2,38 +2,47 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaCidade;
+import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
 
 public class ControladorCidade implements IControlador<Cidade> {
 
-    public final ControladorPrincipal controladorPrincipal;
-    private final ArrayList<Cidade> cidades;
+    private static ControladorCidade instance;
+    private Mapeador<Integer, Cidade> mapper;
 
-    public ControladorCidade(ControladorPrincipal controladorPrincipal) {
-        this.controladorPrincipal = controladorPrincipal;
-        this.cidades = new ArrayList<>();
+    public ControladorCidade() {
+        this.mapper = new Mapeador<>("candidatos.urn");
+        mapper.load();
+
+    }
+    
+    public static ControladorCidade getInstance() {
+        if (instance == null) {
+            instance = new ControladorCidade();
+        }
+        return instance;
     }
 
     @Override
     public boolean cadastra(Cidade cidade) {
-        for (Cidade cidadeLista : cidades) {
+        for (Cidade cidadeLista : mapper.getList()) {
             if (cidadeLista.getNome().equals(cidade.getNome())) {
                 return false;
             }
         }
 
-        cidades.add(cidade);
+        mapper.put(cidade.hashCode() ,cidade);
         return true;
     }
 
     @Override
     public boolean remove(Cidade cidade) {
-        return cidades.remove(cidade);
+        return mapper.remove(cidade.getCodigo());
     }
 
     @Override
     public boolean modifica(Cidade velha, Cidade nova) {
-        if (cidades.contains(velha)) {
+        if (mapper.contains(velha.getCodigo())) {
             velha.setNome(nova.getNome());
             return true;
         }
@@ -42,18 +51,18 @@ public class ControladorCidade implements IControlador<Cidade> {
 
     @Override
     public ArrayList<Cidade> getLista() {
-        return cidades;
+        return mapper.getList();
     }
-    
+
     public Cidade getCidade(String nome) {
-        for (Cidade cidade : cidades) {
+        for (Cidade cidade : mapper.getList()) {
             if (cidade.getNome().equals(nome)) {
                 return cidade;
             }
         }
 
         return null;
-    } 
+    }
 
     @Override
     public void exibeTela() {

@@ -2,6 +2,7 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaCandidato;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
+import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
@@ -29,13 +30,14 @@ public class ControladorCandidato implements IControlador<Candidato> {
             if (candidatoCadastrado.getNumero() == candidato.getNumero()) {
                 return false;
             }
+            if (candidatoCadastrado.getCargo() == Cargo.Prefeito && candidato.getPartido() == candidatoCadastrado.getPartido())
+                return false;
         }
         if (candidato.getNumero() > 98 || candidato.getNumero() < 1) {
             return false;
         }
 
         return mapper.put(candidato.getNumero(), candidato);
-
     }
 
     @Override
