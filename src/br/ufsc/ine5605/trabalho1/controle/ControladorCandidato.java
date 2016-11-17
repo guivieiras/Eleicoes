@@ -10,19 +10,18 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
     private static ControladorCandidato instance;
     private Mapeador<Integer, Candidato> mapper;
-    
-    private ControladorCandidato( ) {
-        mapper.load();
-        
+
+    private ControladorCandidato() {
         this.mapper = new Mapeador<>("candidatos.urn");
-        
+        mapper.load();
     }
+
     public static ControladorCandidato getInstance() {
-      if(instance == null) {
-         instance = new ControladorCandidato();
-      }
-      return instance;
-   }
+        if (instance == null) {
+            instance = new ControladorCandidato();
+        }
+        return instance;
+    }
 
     @Override
     public boolean cadastra(Candidato candidato) {
@@ -31,8 +30,9 @@ public class ControladorCandidato implements IControlador<Candidato> {
                 return false;
             }
         }
-        if (candidato.getNumero() > 98 || candidato.getNumero() < 1)
+        if (candidato.getNumero() > 98 || candidato.getNumero() < 1) {
             return false;
+        }
 
         return mapper.put(candidato.getNumero(), candidato);
 
@@ -72,7 +72,7 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
         return candidatosPorCidade;
     }
-    
+
     public Candidato getCandidato(int codigo) {
         for (Candidato candidato : mapper.getList()) {
             if (candidato.getNumero() == codigo) {
