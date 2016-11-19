@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
+import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
@@ -22,7 +23,7 @@ public class TelaMesario extends javax.swing.JFrame {
 
     public void exibirTelaVotacao() {
         if (verificaTitulo(txt_Titulo.getText())) {
-            Eleitor eleitor = controladorUrna.controladorPrincipal.controladorEleitor.getEleitor(Long.parseLong(txt_Titulo.getText()));
+            Eleitor eleitor = ControladorEleitor.getInstance().getEleitor(Long.parseLong(txt_Titulo.getText()));
             if (eleitor != null) {
                 int magicNumber = controladorUrna.verificaEleitor(urna, eleitor);
                 if (magicNumber == 0) {
@@ -169,8 +170,8 @@ public class TelaMesario extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         urna.encerra();
         if (controladorUrna.urnasEmExecucao() == 0) {
-            controladorUrna.controladorPrincipal.telaPrincipal.unlockTelaPrincipal();
-            controladorUrna.controladorPrincipal.telaPrincipal.unlockBotaoResultado();
+            //controladorUrna.controladorPrincipal.telaPrincipal.unlockTelaPrincipal();
+         //   controladorUrna.controladorPrincipal.telaPrincipal.unlockBotaoResultado();
         }
 
     }//GEN-LAST:event_formWindowClosing

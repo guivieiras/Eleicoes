@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
+import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
@@ -25,7 +26,7 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
     
 
     public void imprimeResultado() {
-        for (Cidade cidade : controlador.controladorPrincipal.controladorCidade.getLista()) {
+        for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
             for (Urna urna : controlador.getLista()) {
                 if (urna.getCidade() == cidade) {
                     insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));

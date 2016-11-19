@@ -1,6 +1,6 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
-import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
+import br.ufsc.ine5605.trabalho1.controle.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -24,31 +24,31 @@ public class TelaPrincipal extends JFrame {
 
     public void mostraTelaCandidatos() {
         setEnabled(false);
-        controladorPrincipal.controladorCandidato.exibeTela();
+        ControladorCandidato.getInstance().exibeTela();
     }
 
     public void mostraTelaEleitor() {
         setEnabled(false);
-        controladorPrincipal.controladorEleitor.exibeTela();
+        ControladorEleitor.getInstance().exibeTela();
     }
 
     public void mostraTelaCidade() {
         setEnabled(false);
-        controladorPrincipal.controladorCidade.exibeTela();
+        ControladorCidade.getInstance().exibeTela();
     }
 
     public void mostraTelaUrna() {
         setEnabled(false);
-        controladorPrincipal.controladorUrna.exibeTela();
+        ControladorUrna.getInstance().exibeTela();
     }
 
     public void mostraTelaPartido() {
         setEnabled(false);
-        controladorPrincipal.controladorPartido.exibeTela();
+        ControladorPartido.getInstance().exibeTela();
     }
 
     private void iniciaEleicoes() {
-        if (controladorPrincipal.controladorUrna.getLista().isEmpty()) {
+        if (ControladorUrna.getInstance().getLista().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Não há como iniciar as eleições, não há urnas cadastradas", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
@@ -62,11 +62,11 @@ public class TelaPrincipal extends JFrame {
 
         setEnabled(false);
 
-        controladorPrincipal.controladorUrna.iniciaEleicoes();
+        ControladorUrna.getInstance().iniciaEleicoes();
     }
 
     private void mostraTelaResultados() {
-        controladorPrincipal.controladorUrna.exibeTelaResultado();
+        ControladorUrna.getInstance().exibeTelaResultado();
     }
 
     /**

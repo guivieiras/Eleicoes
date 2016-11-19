@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
-import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
+import br.ufsc.ine5605.trabalho1.controle.*;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
@@ -24,7 +25,7 @@ public class TelaEleitor extends Tela<Eleitor> {
             try {
                 int secao = Integer.parseInt(txt_Secao.getText());
                 int zona = Integer.parseInt(txt_Zona.getText());
-                Cidade cidade = controladorEleitor.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
+                Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_Cidade.getSelectedItem().toString());
 
                 Eleitor eleitor = new Eleitor(zona, secao, Long.parseLong(txt_Titulo.getText()), verificaNome(txt_Nome.getText()), cidade);
                 if (controladorEleitor.cadastra(eleitor)) {
@@ -91,7 +92,7 @@ public class TelaEleitor extends Tela<Eleitor> {
                         Integer.parseInt(txt_ModificaZona.getText()),
                         Integer.parseInt(txt_ModificaSecao.getText()),
                         Long.parseLong(txt_ModificaTitulo.getText()),
-                        verificaNome(txt_ModificaNome.getText()), controladorEleitor.controladorPrincipal.controladorCidade.getCidade(
+                        verificaNome(txt_ModificaNome.getText()), ControladorCidade.getInstance().getCidade(
                         cBox_ModificaCidade.getSelectedItem().toString())));
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -100,7 +101,7 @@ public class TelaEleitor extends Tela<Eleitor> {
     }
 
     private void popularCheckBoxes() {
-        for (Cidade cidade : controladorEleitor.controladorPrincipal.controladorCidade.getLista()) {
+        for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
             cBox_Cidade.addItem(cidade.getNome());
             cBox_ModificaCidade.addItem(cidade.getNome());
         }
@@ -455,7 +456,7 @@ public class TelaEleitor extends Tela<Eleitor> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        controladorEleitor.controladorPrincipal.telaPrincipal.unlockTelaPrincipal();
+        ControladorPrincipal.getInstance().telaPrincipal.setEnabled(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void btn_Cadastro_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cadastro_CadastroActionPerformed

@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import javax.swing.JOptionPane;
@@ -276,7 +277,7 @@ public class TelaCidade extends Tela<Cidade> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        controladorCidade.controladorPrincipal.telaPrincipal.setEnabled(true);
+        ControladorPrincipal.getInstance().telaPrincipal.setEnabled(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void btn_Cadastro_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cadastro_CadastroActionPerformed

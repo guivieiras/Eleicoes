@@ -1,5 +1,7 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
+import br.ufsc.ine5605.trabalho1.controle.ControladorCandidato;
+import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
@@ -30,8 +32,8 @@ public class TelaUrna extends Tela<Urna> {
 
         if (verficaSecaoZonaLimite(secao, zona, limite)) {
             try {
-                Cidade cidade = controladorUrna.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
-                Urna urna = new Urna(Integer.parseInt(limite), Integer.parseInt(secao), Integer.parseInt(zona), cidade, controladorUrna.controladorPrincipal.controladorCandidato.getLista(cidade), Urna.Turno.valueOf(cBox_Turno.getSelectedItem().toString()));
+                Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_Cidade.getSelectedItem().toString());
+                Urna urna = new Urna(Integer.parseInt(limite), Integer.parseInt(secao), Integer.parseInt(zona), cidade, ControladorCandidato.getInstance().getLista(cidade), Urna.Turno.valueOf(cBox_Turno.getSelectedItem().toString()));
                 if (controladorUrna.cadastra(urna)) {
                     JOptionPane.showMessageDialog(null, "Urna cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                 } else {
@@ -53,7 +55,7 @@ public class TelaUrna extends Tela<Urna> {
         int secao = (int) jTable1.getModel().getValueAt(indexLinha, 1);
         int zona = (int) jTable1.getModel().getValueAt(indexLinha, 2);
         String city = (String) jTable1.getModel().getValueAt(indexLinha, 0);
-        Cidade cidade = controladorUrna.controladorPrincipal.controladorCidade.getCidade(city);
+        Cidade cidade = ControladorCidade.getInstance().getCidade(city);
 
         int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover a urna?", "Aviso", JOptionPane.YES_NO_OPTION);
         if (x == JOptionPane.YES_OPTION) {
@@ -69,7 +71,7 @@ public class TelaUrna extends Tela<Urna> {
         for (Urna.Turno turno : Urna.Turno.values()) {
             cBox_Turno.addItem(turno.toString());
         }
-        for (Cidade cidade : controladorUrna.controladorPrincipal.controladorCidade.getLista()) {
+        for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
             cBox_Cidade.addItem(cidade.getNome());
         }
 

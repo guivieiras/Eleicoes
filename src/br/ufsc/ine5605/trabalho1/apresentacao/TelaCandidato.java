@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorCandidato;
+import br.ufsc.ine5605.trabalho1.controle.*;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
@@ -24,8 +25,8 @@ public class TelaCandidato extends Tela<Candidato> {
         if (verificaNumero(txt_Numero.getText())) {
             try {
                 Cargo cargo = Cargo.valueOf(cBox_Cargo.getSelectedItem().toString());
-                Partido partido = controladorCandidato.controladorPrincipal.controladorPartido.getPartidoPorNome(cBox_Partido.getSelectedItem().toString());
-                Cidade cidade = controladorCandidato.controladorPrincipal.controladorCidade.getCidade(cBox_Cidade.getSelectedItem().toString());
+                Partido partido = ControladorPartido.getInstance().getPartidoPorNome(cBox_Partido.getSelectedItem().toString());
+                Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_Cidade.getSelectedItem().toString());
 
                 Candidato candidato = new Candidato(Integer.parseInt(txt_Numero.getText()), verificaNome(txt_Nome.getText()), cargo, cidade, partido);
                 if (controladorCandidato.cadastra(candidato)) {
@@ -62,8 +63,8 @@ public class TelaCandidato extends Tela<Candidato> {
         if (x == JOptionPane.YES_OPTION && verificaNumero(txt_ModificaNumero.getText())) {
             try {
                 Cargo cargo = Cargo.valueOf(cBox_ModificaCargo.getSelectedItem().toString());
-                Partido partido = controladorCandidato.controladorPrincipal.controladorPartido.getPartidoPorNome(cBox_ModificaPartido.getSelectedItem().toString());
-                Cidade cidade = controladorCandidato.controladorPrincipal.controladorCidade.getCidade(cBox_ModificaCidade.getSelectedItem().toString());
+                Partido partido = ControladorPartido.getInstance().getPartidoPorNome(cBox_ModificaPartido.getSelectedItem().toString());
+                Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_ModificaCidade.getSelectedItem().toString());
 
                 Candidato candidato = new Candidato(Integer.parseInt(txt_ModificaNumero.getText()), verificaNome(txt_ModificaNome.getText()), cargo, cidade, partido);
                 controladorCandidato.modifica(candidatoModificado, candidato);
@@ -109,11 +110,11 @@ public class TelaCandidato extends Tela<Candidato> {
             cBox_Cargo.addItem(cargo.toString());
             cBox_ModificaCargo.addItem(cargo.toString());
         }
-        for (Partido partido : controladorCandidato.controladorPrincipal.controladorPartido.getLista()) {
+        for (Partido partido : ControladorPartido.getInstance().getLista()) {
             cBox_Partido.addItem(partido.getNome());
             cBox_ModificaPartido.addItem(partido.getNome());
         }
-        for (Cidade cidade : controladorCandidato.controladorPrincipal.controladorCidade.getLista()) {
+        for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
             cBox_Cidade.addItem(cidade.getNome());
             cBox_ModificaCidade.addItem(cidade.getNome());
         }
@@ -428,7 +429,7 @@ public class TelaCandidato extends Tela<Candidato> {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        controladorCandidato.controladorPrincipal.telaPrincipal.setEnabled(true);
+        ControladorPrincipal.getInstance().telaPrincipal.setEnabled(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void btn_Cadastro_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cadastro_CadastroActionPerformed

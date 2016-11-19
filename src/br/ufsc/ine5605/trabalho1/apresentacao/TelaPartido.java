@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import javax.swing.JOptionPane;
@@ -347,7 +348,7 @@ public class TelaPartido extends Tela<Partido> {
     }//GEN-LAST:event_btn_Modificar_CadastroActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        controladorPartido.controladorPrincipal.telaPrincipal.unlockTelaPrincipal();
+        ControladorPrincipal.getInstance().telaPrincipal.setEnabled(true);
     }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
