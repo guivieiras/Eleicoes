@@ -51,7 +51,6 @@ public class TelaCandidatoB extends Tela<Candidato> {
     private JComboBox<Cargo> cBox_ModificaCargo;
     private JComboBox<Cidade> cBox_ModificaCidade;
     private JComboBox<Partido> cBox_ModificaPartido;
-    //panel lista
 
     public TelaCandidatoB() {
         setTitle("Candidatos");
@@ -69,7 +68,9 @@ public class TelaCandidatoB extends Tela<Candidato> {
 
         jTabbedPane = new JTabbedPane();
         jTabbedPane.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
-            addRows(ControladorCandidato.getInstance().getLista(), jtable);
+            if (jTabbedPane.getSelectedIndex() == 0) {
+                listaCandidatos();
+            }
         });
         getContentPane().add(jTabbedPane);
         setSize(450, 350);
@@ -307,7 +308,7 @@ public class TelaCandidatoB extends Tela<Candidato> {
         return new Object[]{candidato.getNome(), candidato.getNumero(), candidato.getPartido().getNome(), candidato.getCargo().toString(), candidato.getCidade().getNome()};
     }
 
-    class ActionManager implements ActionListener {
+    private class ActionManager implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {

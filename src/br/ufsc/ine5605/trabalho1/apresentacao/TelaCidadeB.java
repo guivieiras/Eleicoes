@@ -44,7 +44,6 @@ public class TelaCidadeB extends Tela<Cidade> {
     private JButton btn_Remove;
     private JTextField txt_ModificaNome;
 
-    //panel lista
     public TelaCidadeB() {
         setTitle("Candidatos");
         initComponents();
@@ -60,7 +59,9 @@ public class TelaCidadeB extends Tela<Cidade> {
 
         jTabbedPane = new JTabbedPane();
         jTabbedPane.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
-            addRows(ControladorCidade.getInstance().getLista(), jtable);
+            if (jTabbedPane.getSelectedIndex() == 0) {
+                listaCidades();
+            }
         });
         getContentPane().add(jTabbedPane);
         setSize(450, 350);

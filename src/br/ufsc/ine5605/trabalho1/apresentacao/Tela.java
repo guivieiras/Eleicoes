@@ -13,10 +13,10 @@ import javax.swing.table.DefaultTableModel;
 
 public abstract class Tela<T> extends JFrame {
 
-    void addRows(ArrayList<T> candidatos, JTable table) {
+    void addRows(ArrayList<T> objetos, JTable table) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         removeAllRows(table);
-        for (T objeto : candidatos) {
+        for (T objeto : objetos) {
             model.addRow(atributosParaArray(objeto));
         }
     }

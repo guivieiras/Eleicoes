@@ -10,7 +10,7 @@ public class ControladorCidade implements IControlador<Cidade> {
     private static ControladorCidade instance;
     private Mapeador<Integer, Cidade> mapper;
 
-    public ControladorCidade() {
+    private ControladorCidade() {
         this.mapper = new Mapeador<>("candidatos.urn");
         mapper.load();
 
@@ -31,7 +31,7 @@ public class ControladorCidade implements IControlador<Cidade> {
             }
         }
 
-        mapper.put(cidade.hashCode() ,cidade);
+        mapper.put(cidade.getCodigo() ,cidade);
         return true;
     }
 
