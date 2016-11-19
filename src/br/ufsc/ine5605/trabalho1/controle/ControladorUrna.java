@@ -270,4 +270,8 @@ public class ControladorUrna implements IControlador<Urna> {
         }
         return qtdUrnas;
     }
+
+    boolean eleicaoEncerrada() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

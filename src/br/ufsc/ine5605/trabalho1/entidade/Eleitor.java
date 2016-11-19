@@ -67,5 +67,5 @@ public class Eleitor {
         this.nome = nome;
 
     }
-
+        
 }
