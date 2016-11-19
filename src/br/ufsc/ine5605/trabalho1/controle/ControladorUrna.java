@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 public class ControladorUrna implements IControlador<Urna> {
 
     public final ControladorPrincipal controladorPrincipal;
+    private static ControladorUrna instance;
     private final ArrayList<Urna> urnas;
     private int vagasParaVereadores;
 
@@ -27,10 +28,18 @@ public class ControladorUrna implements IControlador<Urna> {
         return vagasParaVereadores;
     }
 
-    public ControladorUrna(ControladorPrincipal controladorPrincipal) {
-        this.controladorPrincipal = controladorPrincipal;
+    private ControladorUrna() {
+        this.controladorPrincipal = ControladorPrincipal.getInstance();
         this.urnas = new ArrayList<>();
         this.vagasParaVereadores = 3;
+    }
+    
+    public static ControladorUrna getInstance() {
+        if (instance == null) {
+            instance = new ControladorUrna();
+        }
+        return instance;
+
     }
 
     @Override
