@@ -2,37 +2,52 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitor;
+import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
 
 public class ControladorEleitor implements IControlador<Eleitor> {
 
-    public final ControladorPrincipal controladorPrincipal;
-    private final ArrayList<Eleitor> eleitores;
+    private static ControladorEleitor instance;
+    private Mapeador<Long, Eleitor> mapper;
 
-    public ControladorEleitor(ControladorPrincipal controladorPrincipal) {
-        this.controladorPrincipal = controladorPrincipal;
-        this.eleitores = new ArrayList<>();
+    private ControladorEleitor() {
+        mapper.load();
+        
+        this.mapper = new Mapeador<>("eleitores.urn");
+    }
+    
+    public static ControladorEleitor getInstance (){
+        if(instance == null){
+            instance = new ControladorEleitor();
+        }
+        
+        return instance;
     }
 
     @Override
     public boolean cadastra(Eleitor eleitor) {
-        for (Eleitor eleitorCadastrado : eleitores) {
+        for (Eleitor eleitorCadastrado : mapper.getList()) {
             if (eleitorCadastrado.getTitulo() == eleitor.getTitulo()) {
                 return false;
             }
         }
 
-        return eleitores.add(eleitor);     
+        return mapper.put(eleitor.getTitulo(), eleitor);     
     }
 
     @Override
-    public boolean remove(Eleitor eleitor) {    
-        return eleitores.remove(eleitor);
+    public boolean remove(Eleitor eleitor) {  
+        for(Eleitor eleitorCadastrado : mapper.getList()){
+            if (eleitorCadastrado.getTitulo() == eleitor.getTitulo()){
+                return mapper.put(eleitor.getTitulo(), eleitor);
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean modifica(Eleitor antigo, Eleitor novo) {
-        if (eleitores.contains(antigo)) {
+        if (mapper.contains(antigo.getTitulo())) {
             antigo.setNome(novo.getNome());
             antigo.setTitulo(novo.getTitulo());
             antigo.setSecaoEleitoral(novo.getSecaoEleitoral());
@@ -44,11 +59,11 @@ public class ControladorEleitor implements IControlador<Eleitor> {
 
     @Override
     public ArrayList<Eleitor> getLista() {
-        return eleitores;
+        return mapper.getList();
     }
 
     public Eleitor getEleitor(long titulo) {
-        for (Eleitor eleitor : eleitores) {
+        for (Eleitor eleitor : mapper.getList()) {
             if (eleitor.getTitulo() == titulo) {
                 return eleitor;
             }
@@ -58,7 +73,7 @@ public class ControladorEleitor implements IControlador<Eleitor> {
     }
 
     public Eleitor getEleitor(String nome) {
-        for (Eleitor eleitor : eleitores) {
+        for (Eleitor eleitor : mapper.getList()) {
             if (eleitor.getNome().equals(nome)) {
                 return eleitor;
             }

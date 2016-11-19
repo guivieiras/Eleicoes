@@ -3,35 +3,44 @@ package br.ufsc.ine5605.trabalho1.controle;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartido;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
+import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
 
 public class ControladorPartido implements IControlador<Partido> {
 
-    public final ControladorPrincipal controladorPrincipal;
-    private final ArrayList<Partido> partidos;
+    private static ControladorPartido instance;
+    private Mapeador<Integer, Partido> mapper;
 
-    public ControladorPartido(ControladorPrincipal controladorPrincipal) {
-        this.controladorPrincipal = controladorPrincipal;
-        partidos = new ArrayList<>();
+    private ControladorPartido() {
+        mapper.load();
+        
+        this.mapper = new Mapeador<>("partidos.urn");
     }
 
     @Override
     public boolean cadastra(Partido partido) {
-        for (Partido p : partidos)
-            if (p.getNome().equals(partido.getNome()) || p.getSigla().equals(partido.getSigla()))
+        for (Partido partidoCadastrado : mapper.getList()) {
+            if (partidoCadastrado.getNome().equals(partido.getNome())) {
                 return false;
-        return partidos.add(partido);
+            }
+        }
+        return mapper.put(partido.getCodigo(), partido);
     }
 
     @Override
     public boolean remove(Partido partido) {
-        return partidos.remove(partido);
+        for (Partido partidoCadastrado : mapper.getList()) {
+            if (partidoCadastrado.getNome().equals(partido.getNome())) {
+                return false;
+            }
+        }
+        return mapper.remove(partido.getCodigo());
     }
 
     @Override
     public boolean modifica(Partido velho, Partido novo) {
 
-        if (partidos.contains(velho)) {
+        if (mapper.contains(velho.getCodigo())) {
             velho.setNome(novo.getNome());
             velho.setSigla(novo.getSigla());
             return true;
@@ -41,7 +50,7 @@ public class ControladorPartido implements IControlador<Partido> {
 
     @Override
     public ArrayList<Partido> getLista() {
-        return partidos;
+        return mapper.getList();
     }
     
     public ArrayList<Partido> getLista(ArrayList<Candidato> candidatos)
@@ -56,7 +65,7 @@ public class ControladorPartido implements IControlador<Partido> {
     }
 
     public Partido getPartidoPorNome(String nome) {
-        for (Partido partido : partidos) {
+        for (Partido partido : mapper.getList()) {
             if (partido.getNome().equals(nome)) {
                 return partido;
             }
@@ -65,8 +74,8 @@ public class ControladorPartido implements IControlador<Partido> {
     }
   
     public Partido getPartidoPorSigla(String sigla) {
-        for (Partido partido : partidos) {
-            if (partido.getSigla().equals(sigla)) {
+        for(Partido partido : mapper.getList()){
+            if(partido.getSigla().equals(sigla)){
                 return partido;
             }
         }
@@ -77,6 +86,13 @@ public class ControladorPartido implements IControlador<Partido> {
     public void exibeTela() {
         TelaPartido tela = new TelaPartido(this);
         tela.setVisible(true);
+    }
+    
+    public static ControladorPartido getInstance(){
+        if(instance == null){
+            instance = new ControladorPartido();
+        }
+        return instance;
     }
 
 }
