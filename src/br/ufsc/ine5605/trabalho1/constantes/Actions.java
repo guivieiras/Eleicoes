@@ -15,5 +15,5 @@ public class Actions {
     public static final String REMOVER = "Remover";
     public static final String PROCURAR_POR_NOME = "Procura por nome";
     public static final String PROCURAR_POR_NUMERO = "Procura por numero";
-    
+    public static final String VOTAR = "votar";
 }

@@ -108,7 +108,21 @@ public class Urna implements Serializable {
             votosNulosParaVereador++;
         }
     }
-
+    
+    public void contabilizaVoto(int codigoPrefeito) {
+        Candidato prefeito = getPrefeitoPorCodigo(codigoPrefeito);
+        if (prefeito != null && (prefeito.getCargo() == Cargo.Vereador || !prefeito.getCidade().equals(getCidade()))) {
+            prefeito = null;
+        }
+        votosEfetuadosParaPrefeito++;
+        if (codigoPrefeito == 00) {
+            votosBrancosParaPrefeito++;
+        } else if (prefeito != null) {
+            totalDeVotosPorPrefeito.put(prefeito, totalDeVotosPorPrefeito.get(prefeito) + 1);
+        } else {
+            votosNulosParaPrefeito++;
+        }
+    }
     public Candidato getPrefeitoPorCodigo(int codigo) {
         for (Entry<Candidato, Integer> entry : totalDeVotosPorPrefeito.entrySet()) {
             Candidato key = entry.getKey();
