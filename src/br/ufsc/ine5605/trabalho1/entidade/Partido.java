@@ -1,6 +1,8 @@
 package br.ufsc.ine5605.trabalho1.entidade;
 
-public class Partido {
+import java.io.Serializable;
+
+public class Partido implements Serializable{
 
     private String nome;
     private String sigla;

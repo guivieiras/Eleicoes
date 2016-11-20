@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 
-public class Urna {
-    public enum Turno{
+public class Urna implements Serializable{
+
+    public enum Turno {
         Primeiro, Segundo
     }
 
@@ -25,11 +27,15 @@ public class Urna {
     private int votosBrancosParaVereador;
     private int votosNulosParaVereador;
 
+    private int codigo;
+
     private boolean executando;
     private Turno turno;
 
     public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, Turno turno) {
         this.turno = turno;
+        codigo = hashCode();
+
         votosEfetuadosParaPrefeito = 0;
         votosEfetuadosParaVereador = 0;
         votosBrancosParaPrefeito = 0;
@@ -72,7 +78,7 @@ public class Urna {
         if (prefeito != null && (prefeito.getCargo() == Cargo.Vereador || prefeito.getCidade() != getCidade())) {
             prefeito = null;
         }
-        if (vereador != null && (vereador.getCargo() == Cargo.Prefeito|| vereador.getCidade() != getCidade())) {
+        if (vereador != null && (vereador.getCargo() == Cargo.Prefeito || vereador.getCidade() != getCidade())) {
             vereador = null;
         }
 
@@ -122,6 +128,9 @@ public class Urna {
         return turno;
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
 
     public LinkedHashMap<Candidato, Integer> getTotalDeVotosPorPrefeito() {
         return totalDeVotosPorPrefeito;
@@ -180,11 +189,10 @@ public class Urna {
     }
 
     public int getVotosInvalidosParaPrefeito() {
-        return (this.votosNulosParaPrefeito  + this.votosBrancosParaPrefeito);
+        return (this.votosNulosParaPrefeito + this.votosBrancosParaPrefeito);
     }
-    
-    public int getAbstencoes()
-    {
+
+    public int getAbstencoes() {
         return limiteDeEleitores - votosEfetuadosParaPrefeito;
     }
 

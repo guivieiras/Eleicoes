@@ -38,7 +38,7 @@ public class Mapeador<K, V> {
             ObjectOutputStream oos = new ObjectOutputStream(fs);
 
             oos.writeObject(cache);
-            
+
             oos.flush();
             oos.close();
             fs.close();
@@ -61,34 +61,29 @@ public class Mapeador<K, V> {
             fs.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Não foi possivel encontrar o arquivo " + filename);
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public boolean put(K chave, V valor)
-    {
-       return cache.put(chave, valor) != null;
+
+    public boolean put(K chave, V valor) {
+        return cache.put(chave, valor) == null;
     }
-    
-    public V get(K chave)
-    {
+
+    public V get(K chave) {
         return cache.get(chave);
     }
-    
-    public boolean remove(K chave)
-    {
+
+    public boolean remove(K chave) {
         return cache.remove(chave) != null;
     }
-    
-    public ArrayList<V> getList()
-    {
+
+    public ArrayList<V> getList() {
         return new ArrayList<>(cache.values());
     }
-    
-    public boolean contains(K chave)
-    {
+
+    public boolean contains(K chave) {
         return cache.containsKey(chave);
     }
 

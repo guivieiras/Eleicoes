@@ -1,114 +1,375 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
-import br.ufsc.ine5605.trabalho1.controle.*;
+import br.ufsc.ine5605.trabalho1.constantes.Actions;
+import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
+import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
+/**
+ *
+ * @author lucas
+ */
 public class TelaEleitor extends Tela<Eleitor> {
 
-    private final ControladorEleitor controladorEleitor;
+    private JTabbedPane jTabbedPane;
+    private ActionManager actionManager = new ActionManager();
     private Eleitor eleitorModificado;
 
-    public TelaEleitor(ControladorEleitor controladorEleitor) {
-        this.controladorEleitor = controladorEleitor;
+    // Panel Lista
+    private JPanel jpnLista;
+    private JTable jTable;
+
+    //Panel Cadastro
+    private JPanel jpnCadastro;
+
+    private JLabel jlbNome;
+    private JLabel jlbTitulo;
+    private JLabel jlbCidade;
+    private JLabel jlbSecao;
+    private JLabel jlbZona;
+
+    private JButton jbtCadastro;
+
+    private JTextField jtfNome;
+    private JTextField jtfTitulo;
+    private JTextField jtfSecao;
+    private JTextField jtfZona;
+
+    private JComboBox<Cidade> jcbCidade;
+
+    //Panel Modifica
+    private JPanel jpnModifica;
+
+    private JButton jbtModificar;
+    private JButton jbtProcuraPorTitulo;
+    private JButton jbtRemove;
+
+    private JLabel jlbNomeModifica;
+    private JLabel jlbTituloModifica;
+    private JLabel jlbCidadeModifica;
+    private JLabel jlbSecaoModifica;
+    private JLabel jlbZonaModifica;
+
+    private JTextField jtfModificaNome;
+    private JTextField jtfModificaTitulo;
+    private JTextField jtfModificaSecao;
+    private JTextField jtfModificaZona;
+
+    private JComboBox<Cidade> jcbModificaCidade;
+
+    public TelaEleitor() {
+        setTitle("Eleitores");
         initComponents();
+        setButtonActions();
         listaEleitores();
         popularCheckBoxes();
-        setLocationRelativeTo(null);
-    }
-
-    private void cadastraEleitor() {
-        if (verificaTitulo(txt_Titulo.getText()) && verificaSecaoZona(txt_Secao.getText(), txt_Zona.getText())) {
-            try {
-                int secao = Integer.parseInt(txt_Secao.getText());
-                int zona = Integer.parseInt(txt_Zona.getText());
-                Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_Cidade.getSelectedItem().toString());
-
-                Eleitor eleitor = new Eleitor(zona, secao, Long.parseLong(txt_Titulo.getText()), verificaNome(txt_Nome.getText()), cidade);
-                if (controladorEleitor.cadastra(eleitor)) {
-                    JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Eleitor com o mesmo título ja cadastrado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                }
-            } catch (NomeVazio ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    private void listaEleitores() {
-        addRows(controladorEleitor.getLista(),jTable1);
-    }
-
-    private void procuraEleitorPorNome() {
-        eleitorModificado = controladorEleitor.getEleitor(txt_ModificaNome.getText());
-        setEleitorModificado(eleitorModificado);
-    }
-
-    private void procuraEleitorPorTitulo() {
-        if (verificaTitulo(txt_ModificaTitulo.getText())) {
-            eleitorModificado = controladorEleitor.getEleitor(Long.parseLong(txt_ModificaTitulo.getText()));
-            setEleitorModificado(eleitorModificado);
-        }
-    }
-
-    private void setEleitorModificado(Eleitor eleitorModificado) {
-        if (eleitorModificado != null) {
-            txt_ModificaNome.setText(eleitorModificado.getNome());
-            txt_ModificaTitulo.setText(String.valueOf(eleitorModificado.getTitulo()));
-            txt_ModificaSecao.setText(String.valueOf(eleitorModificado.getSecaoEleitoral()));
-            txt_ModificaZona.setText(String.valueOf(eleitorModificado.getZonaEleitoral()));
-            cBox_ModificaCidade.setSelectedItem(eleitorModificado.getCidade().getNome());
-
-            btn_Modificar.setEnabled(true);
-            btn_Remove.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Eleitor não encontrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            btn_Modificar.setEnabled(false);
-            btn_Remove.setEnabled(false);
-        }
-    }
-
-    private void removeEleitor() {
-        int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover o eleitor?", "Aviso", JOptionPane.YES_NO_OPTION);
-        if (x == JOptionPane.YES_OPTION) {
-            if (controladorEleitor.remove(eleitorModificado)) {
-                btn_Modificar.setEnabled(false);
-                btn_Remove.setEnabled(false);
-            }
-        }
-    }
-
-    private void modificaEleitor() {
-        int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja modificar o eleitor?", "Aviso", JOptionPane.YES_NO_OPTION);
-        if (x == JOptionPane.YES_OPTION && verificaTitulo(txt_ModificaTitulo.getText()) && verificaSecaoZona(txt_ModificaSecao.getText(), txt_ModificaZona.getText())) {
-            try {
-                controladorEleitor.modifica(eleitorModificado, new Eleitor(
-                        Integer.parseInt(txt_ModificaZona.getText()),
-                        Integer.parseInt(txt_ModificaSecao.getText()),
-                        Long.parseLong(txt_ModificaTitulo.getText()),
-                        verificaNome(txt_ModificaNome.getText()), ControladorCidade.getInstance().getCidade(
-                        cBox_ModificaCidade.getSelectedItem().toString())));
-            } catch (NomeVazio ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        }
     }
 
     private void popularCheckBoxes() {
         for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
-            cBox_Cidade.addItem(cidade.getNome());
-            cBox_ModificaCidade.addItem(cidade.getNome());
+            jcbCidade.addItem(cidade);
+            jcbModificaCidade.addItem(cidade);
         }
 
-        cBox_Cidade.setSelectedIndex(-1);
-        cBox_ModificaCidade.setSelectedIndex(-1);
+        jcbCidade.setSelectedIndex(-1);
+        jcbModificaCidade.setSelectedIndex(-1);
 
+    }
+
+    private void listaEleitores() {
+        addRows(ControladorEleitor.getInstance().getLista(), jTable);
+    }
+
+    private void initComponents() {
+
+        jTabbedPane = new JTabbedPane();
+        jTabbedPane.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+            if (jTabbedPane.getSelectedIndex() == 0) {
+                listaEleitores();
+            }
+        });
+        getContentPane().add(jTabbedPane);
+        setSize(450, 350);
+
+        //Lista
+        jTable = new JTable();
+        jpnLista = new JPanel(new GridBagLayout());
+
+        JScrollPane tableContainer = new JScrollPane(jTable);
+
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
+                new String[][]{}, new String[]{
+                    "Nome", "Título", "Cidade", "Zona", "Seção"
+                }
+        ) {
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        });
+
+        jpnLista.add(tableContainer, new GridBagConstraints(0, 0, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0));
+        jTabbedPane.add("Lista", jpnLista);
+
+        //Cadastro
+        jpnCadastro = new JPanel();
+        jbtCadastro = new JButton("Cadastrar");
+
+        jtfNome = new JTextField();
+        jtfTitulo = new JTextField();
+        jtfZona = new JTextField();
+        jtfSecao = new JTextField();
+
+        jlbNome = new JLabel("Nome");
+        jlbTitulo = new JLabel("Título");
+        jlbCidade = new JLabel("Cidade");
+        jlbZona = new JLabel("Zona");
+        jlbSecao = new JLabel("Seção");
+
+        jcbCidade = new JComboBox<>();
+
+        jpnCadastro.setLayout(new GridBagLayout());
+
+        GridBagConstraints c1 = new GridBagConstraints();
+        c1.fill = GridBagConstraints.HORIZONTAL;
+
+        c1.insets = new Insets(40, 60, 0, 0);
+        c1.gridx = 0;
+        c1.gridy = 0;
+        c1.weightx = 0;
+        jpnCadastro.add(jlbNome, c1);
+
+        c1.insets = new Insets(40, 40, 0, 0);
+        c1.gridx = 1;
+        c1.gridy = 0;
+        c1.weightx = 1;
+        jpnCadastro.add(jtfNome, c1);
+
+        c1.insets = new Insets(15, 60, 0, 0);
+        c1.gridx = 0;
+        c1.gridy = 1;
+        c1.weightx = 0;
+        jpnCadastro.add(jlbTitulo, c1);
+
+        c1.insets = new Insets(15, 40, 0, 0);
+        c1.gridx = 1;
+        c1.gridy = 1;
+        c1.weightx = 1;
+        jpnCadastro.add(jtfTitulo, c1);
+
+        c1.insets = new Insets(15, 60, 0, 0);
+        c1.gridx = 0;
+        c1.gridy = 2;
+        c1.weightx = 0;
+        jpnCadastro.add(jlbCidade, c1);
+
+        c1.insets = new Insets(15, 40, 0, 0);
+        c1.gridx = 1;
+        c1.gridy = 2;
+        c1.weightx = 1;
+        jpnCadastro.add(jcbCidade, c1);
+
+        c1.insets = new Insets(15, 60, 0, 0);
+        c1.gridx = 0;
+        c1.gridy = 3;
+        c1.weightx = 0;
+        jpnCadastro.add(jlbSecao, c1);
+
+        c1.insets = new Insets(15, 40, 0, 0);
+        c1.gridx = 1;
+        c1.gridy = 3;
+        c1.weightx = 1;
+        jpnCadastro.add(jtfSecao, c1);
+
+        c1.insets = new Insets(15, 60, 0, 0);
+        c1.gridx = 0;
+        c1.gridy = 4;
+        c1.weightx = 0;
+        jpnCadastro.add(jlbZona, c1);
+
+        c1.insets = new Insets(15, 40, 0, 0);
+        c1.gridx = 1;
+        c1.gridy = 4;
+        c1.weightx = 1;
+        jpnCadastro.add(jtfZona, c1);
+
+        c1.insets = new Insets(27, 10, 20, 15);
+        c1.gridx = 2;
+        c1.gridy = 5;
+        c1.weightx = .01;
+        c1.weighty = 1;
+        jpnCadastro.add(jbtCadastro, c1);
+
+        jTabbedPane.add("Cadastro", jpnCadastro);
+
+        //Modifica
+        jpnModifica = new JPanel();
+
+        jbtModificar = new JButton("Modificar");
+        jbtProcuraPorTitulo = new JButton("Pesquisar");
+        jbtRemove = new JButton("Remover");
+
+        jbtModificar.setEnabled(false);
+        jbtRemove.setEnabled(false);
+
+        jtfModificaNome = new JTextField();
+        jtfModificaTitulo = new JTextField();
+        jtfModificaZona = new JTextField();
+        jtfModificaSecao = new JTextField();
+
+        jlbNomeModifica = new JLabel("Nome");
+        jlbTituloModifica = new JLabel("Título");
+        jlbCidadeModifica = new JLabel("Cidade");
+        jlbZonaModifica = new JLabel("Zona");
+        jlbSecaoModifica = new JLabel("Seção");
+
+        jcbModificaCidade = new JComboBox<>();
+
+        jpnModifica.setLayout(new GridBagLayout());
+
+        GridBagConstraints c2 = new GridBagConstraints();
+        c2.fill = GridBagConstraints.HORIZONTAL;
+
+        c2.insets = new Insets(40, 60, 0, 0);
+        c2.gridx = 0;
+        c2.gridy = 0;
+        c2.weightx = 0;
+        jpnModifica.add(jlbNomeModifica, c2);
+
+        c2.insets = new Insets(40, 40, 0, 0);
+        c2.gridx = 1;
+        c2.gridy = 0;
+        c2.weightx = 1;
+        jpnModifica.add(jtfModificaNome, c2);
+
+        c2.insets = new Insets(15, 60, 0, 0);
+        c2.gridx = 0;
+        c2.gridy = 1;
+        c2.weightx = 0;
+        jpnModifica.add(jlbTituloModifica, c2);
+
+        c2.insets = new Insets(15, 40, 0, 0);
+        c2.gridx = 1;
+        c2.gridy = 1;
+        c2.weightx = 1;
+        jpnModifica.add(jtfModificaTitulo, c2);
+
+        c2.insets = new Insets(15, 20, 0, 20);
+        c2.gridx = 2;
+        c2.gridy = 1;
+        c2.weightx = 0;
+        jpnModifica.add(jbtProcuraPorTitulo, c2);
+
+        c2.insets = new Insets(15, 60, 0, 0);
+        c2.gridx = 0;
+        c2.gridy = 2;
+        c2.weightx = 0;
+        jpnModifica.add(jlbCidadeModifica, c2);
+
+        c2.insets = new Insets(15, 40, 0, 0);
+        c2.gridx = 1;
+        c2.gridy = 2;
+        c2.weightx = 1;
+        jpnModifica.add(jcbModificaCidade, c2);
+
+        c2.insets = new Insets(15, 60, 0, 0);
+        c2.gridx = 0;
+        c2.gridy = 3;
+        c2.weightx = 0;
+        jpnModifica.add(jlbSecaoModifica, c2);
+
+        c2.insets = new Insets(15, 40, 0, 0);
+        c2.gridx = 1;
+        c2.gridy = 3;
+        c2.weightx = 1;
+        jpnModifica.add(jtfModificaSecao, c2);
+
+        c2.insets = new Insets(15, 60, 0, 0);
+        c2.gridx = 0;
+        c2.gridy = 4;
+        c2.weightx = 0;
+        jpnModifica.add(jlbZonaModifica, c2);
+
+        c2.insets = new Insets(15, 40, 0, 0);
+        c2.gridx = 1;
+        c2.gridy = 4;
+        c2.weightx = 1;
+        jpnModifica.add(jtfModificaZona, c2);
+
+        c2.insets = new Insets(27, 100, 20, 15);
+        c2.gridx = 1;
+        c2.gridy = 5;
+        c2.weightx = 0;
+        c2.fill = GridBagConstraints.NONE;
+        c2.weighty = 1;
+        jpnModifica.add(jbtRemove, c2);
+
+        c2.insets = new Insets(27, 5, 20, 15);
+        c2.gridx = 2;
+        c2.gridy = 5;
+        c2.weightx = 0;
+        c2.weighty = 1;
+        jpnModifica.add(jbtModificar, c2);
+
+        jTabbedPane.add("Modificar", jpnModifica);
+
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ControladorPrincipal.getInstance().liberaTelaPrincipal();
+                ControladorEleitor.getInstance().persist();
+            }
+        });
+
+    }
+
+    private void setButtonActions() {
+        jbtCadastro.addActionListener(actionManager);
+        jbtCadastro.setActionCommand(Actions.CADASTRAR);
+
+        jbtModificar.addActionListener(actionManager);
+        jbtModificar.setActionCommand(Actions.MODIFICAR);
+
+        jbtProcuraPorTitulo.addActionListener(actionManager);
+        jbtProcuraPorTitulo.setActionCommand(Actions.PROCURAR_POR_NUMERO);
+
+        jbtRemove.addActionListener(actionManager);
+        jbtRemove.setActionCommand(Actions.REMOVER);
+
+    }
+
+    @Override
+    Object[] atributosParaArray(Eleitor eleitor) {
+        return new Object[]{eleitor.getNome(), eleitor.getTitulo(),
+            eleitor.getCidade().getNome(), eleitor.getZonaEleitoral(),
+            eleitor.getSecaoEleitoral()};
     }
 
     private boolean verificaTitulo(String titulo) {
@@ -135,394 +396,79 @@ public class TelaEleitor extends Tela<Eleitor> {
         }
         return true;
     }
-    
-    @Override
-    Object[] atributosParaArray(Eleitor eleitor) {
-        return new Object[]{eleitor.getNome(), eleitor.getTitulo(), eleitor.getCidade().getNome(), eleitor.getZonaEleitoral(), eleitor.getSecaoEleitoral()};
-    }
-    
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    class ActionManager implements ActionListener {
 
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        panel_Lista = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        panel_Cadastro = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        txt_Titulo = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        btn_Cadastro = new javax.swing.JButton();
-        txt_Nome = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txt_Zona = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        txt_Secao = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        cBox_Cidade = new javax.swing.JComboBox<>();
-        panel_Modifica = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        txt_ModificaTitulo = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        btn_Modificar = new javax.swing.JButton();
-        txt_ModificaNome = new javax.swing.JTextField();
-        btn_ProcuraPorNome = new javax.swing.JButton();
-        btn_ProcuraPorTitulo = new javax.swing.JButton();
-        btn_Remove = new javax.swing.JButton();
-        txt_ModificaZona = new javax.swing.JTextField();
-        txt_ModificaSecao = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        cBox_ModificaCidade = new javax.swing.JComboBox<>();
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getActionCommand().equals(Actions.CADASTRAR)) {
+                if (verificaTitulo(jtfTitulo.getText()) && verificaSecaoZona(jtfSecao.getText(), jtfZona.getText())) {
+                    try {
+                        int secao = Integer.parseInt(jtfSecao.getText());
+                        int zona = Integer.parseInt(jtfZona.getText());
+                        Cidade cidade = ControladorCidade.getInstance().getCidade(jcbCidade.getSelectedItem().toString());
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Eleitores");
-        setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
+                        Eleitor eleitor = new Eleitor(zona, secao, Long.parseLong(jtfTitulo.getText()), verificaNome(jtfNome.getText()), cidade);
+                        if (ControladorEleitor.getInstance().cadastra(eleitor)) {
+                            JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Eleitor com o mesmo título ja cadastrado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (NomeVazio ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (NullPointerException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
             }
-        });
+            if (e.getActionCommand().equals(Actions.MODIFICAR)) {
+                int x = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja modificar o eleitor?", "Aviso", JOptionPane.YES_NO_OPTION);
+                if (x == JOptionPane.YES_OPTION && verificaTitulo(jtfModificaTitulo.getText())) {
+                    try {
+                        Cidade cidade = (Cidade) jcbModificaCidade.getSelectedItem();
 
-        jTabbedPane2.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTabbedPane2StateChanged(evt);
+                        Eleitor eleitor = new Eleitor(Integer.parseInt(jtfModificaZona.getText()), Integer.parseInt(jtfModificaSecao.getText()), Long.parseLong(jtfModificaTitulo.getText()), verificaNome(jtfModificaNome.getText()), cidade);
+                        ControladorEleitor.getInstance().modifica(eleitorModificado, eleitor);
+                    } catch (NullPointerException nullPointerException) {
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (NomeVazio ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
             }
-        });
+            if (e.getActionCommand().equals(Actions.REMOVER)) {
+                int x = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover o eleitor?", "Aviso", JOptionPane.YES_NO_OPTION);
+                if (x == JOptionPane.YES_OPTION) {
+                    if (ControladorEleitor.getInstance().remove(eleitorModificado)) {
+                        jbtModificar.setEnabled(false);
+                        jbtRemove.setEnabled(false);
+                    }
+                }
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Nome", "Título", "Cidade", "Zona", "Seção"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, true, false, false
-            };
+            if (e.getActionCommand().equals(Actions.PROCURAR_POR_NUMERO)) {
+                if (verificaTitulo(jtfModificaTitulo.getText())) {
+                    eleitorModificado = ControladorEleitor.getInstance().getEleitor(Long.parseLong(jtfModificaTitulo.getText()));
+                    if (eleitorModificado != null) {
+                        jtfModificaNome.setText(eleitorModificado.getNome());
+                        jtfModificaZona.setText(Integer.toString(eleitorModificado.getZonaEleitoral()));
+                        jtfModificaSecao.setText(Integer.toString(eleitorModificado.getSecaoEleitoral()));
+                        jcbModificaCidade.setSelectedItem(eleitorModificado.getCidade());
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                        jbtModificar.setEnabled(true);
+                        jbtRemove.setEnabled(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Eleitor não encontrado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        jbtModificar.setEnabled(false);
+                        jbtRemove.setEnabled(false);
+                    }
+                }
             }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-
-        javax.swing.GroupLayout panel_ListaLayout = new javax.swing.GroupLayout(panel_Lista);
-        panel_Lista.setLayout(panel_ListaLayout);
-        panel_ListaLayout.setHorizontalGroup(
-            panel_ListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_ListaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        panel_ListaLayout.setVerticalGroup(
-            panel_ListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_ListaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Lista", panel_Lista);
-
-        jLabel2.setText("Título");
-
-        jLabel1.setText("Nome");
-
-        btn_Cadastro.setText("Cadastrar");
-        btn_Cadastro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Cadastro_CadastroActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Zona");
-
-        jLabel6.setText("Seção");
-
-        jLabel9.setText("Cidade");
-
-        javax.swing.GroupLayout panel_CadastroLayout = new javax.swing.GroupLayout(panel_Cadastro);
-        panel_Cadastro.setLayout(panel_CadastroLayout);
-        panel_CadastroLayout.setHorizontalGroup(
-            panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_CadastroLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_Nome, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addComponent(txt_Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addComponent(txt_Secao, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addComponent(txt_Zona, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addComponent(cBox_Cidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(74, 74, 74))
-            .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CadastroLayout.createSequentialGroup()
-                    .addContainerGap(289, Short.MAX_VALUE)
-                    .addComponent(btn_Cadastro)
-                    .addGap(25, 25, 25)))
-        );
-        panel_CadastroLayout.setVerticalGroup(
-            panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_CadastroLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_Nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txt_Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(cBox_Cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_Secao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txt_Zona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(101, Short.MAX_VALUE))
-            .addGroup(panel_CadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panel_CadastroLayout.createSequentialGroup()
-                    .addContainerGap(219, Short.MAX_VALUE)
-                    .addComponent(btn_Cadastro)
-                    .addGap(30, 30, 30)))
-        );
-
-        jTabbedPane2.addTab("Cadastro", panel_Cadastro);
-
-        jLabel3.setText("Título");
-
-        jLabel4.setText("Nome");
-
-        btn_Modificar.setText("Modificar");
-        btn_Modificar.setEnabled(false);
-        btn_Modificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Modificar_CadastroActionPerformed(evt);
-            }
-        });
-
-        btn_ProcuraPorNome.setText("Procurar");
-        btn_ProcuraPorNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_ProcuraPorNomeActionPerformed(evt);
-            }
-        });
-
-        btn_ProcuraPorTitulo.setText("Procurar");
-        btn_ProcuraPorTitulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_ProcuraPorTituloActionPerformed(evt);
-            }
-        });
-
-        btn_Remove.setText("Remover");
-        btn_Remove.setEnabled(false);
-        btn_Remove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_RemoveActionPerformed(evt);
-            }
-        });
-
-        txt_ModificaSecao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_ModificaSecaoActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setText("Seção");
-
-        jLabel8.setText("Zona");
-
-        jLabel10.setText("Cidade");
-
-        javax.swing.GroupLayout panel_ModificaLayout = new javax.swing.GroupLayout(panel_Modifica);
-        panel_Modifica.setLayout(panel_ModificaLayout);
-        panel_ModificaLayout.setHorizontalGroup(
-            panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_ModificaLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_ModificaLayout.createSequentialGroup()
-                        .addGap(198, 198, 198)
-                        .addComponent(btn_Remove)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_Modificar)
-                        .addGap(25, 25, 25))
-                    .addGroup(panel_ModificaLayout.createSequentialGroup()
-                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panel_ModificaLayout.createSequentialGroup()
-                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel10))
-                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panel_ModificaLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-                                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_ModificaNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(panel_ModificaLayout.createSequentialGroup()
-                                        .addGap(83, 83, 83)
-                                        .addComponent(cBox_ModificaCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addGroup(panel_ModificaLayout.createSequentialGroup()
-                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_ModificaSecao, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txt_ModificaZona, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_ProcuraPorTitulo)
-                            .addComponent(btn_ProcuraPorNome))
-                        .addContainerGap())))
-        );
-        panel_ModificaLayout.setVerticalGroup(
-            panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_ModificaLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_ModificaNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(btn_ProcuraPorNome))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_ModificaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(btn_ProcuraPorTitulo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(cBox_ModificaCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_ModificaSecao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txt_ModificaZona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(panel_ModificaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_Modificar)
-                    .addComponent(btn_Remove))
-                .addGap(30, 30, 30))
-        );
-
-        jTabbedPane2.addTab("Modifica", panel_Modifica);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2)
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        ControladorPrincipal.getInstance().telaPrincipal.setEnabled(true);
-    }//GEN-LAST:event_formWindowClosing
-
-    private void btn_Cadastro_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cadastro_CadastroActionPerformed
-        cadastraEleitor();
-    }//GEN-LAST:event_btn_Cadastro_CadastroActionPerformed
-
-    private void btn_Modificar_CadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Modificar_CadastroActionPerformed
-        modificaEleitor();
-    }//GEN-LAST:event_btn_Modificar_CadastroActionPerformed
-
-    private void btn_ProcuraPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorTituloActionPerformed
-        procuraEleitorPorTitulo();
-    }//GEN-LAST:event_btn_ProcuraPorTituloActionPerformed
-
-    private void btn_ProcuraPorNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProcuraPorNomeActionPerformed
-        procuraEleitorPorNome();
-    }//GEN-LAST:event_btn_ProcuraPorNomeActionPerformed
-
-    private void btn_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RemoveActionPerformed
-        removeEleitor();
-    }//GEN-LAST:event_btn_RemoveActionPerformed
-
-    private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
-        if (jTabbedPane2.getSelectedIndex() == 0) {
-            listaEleitores();
         }
-    }//GEN-LAST:event_jTabbedPane2StateChanged
 
-    private void txt_ModificaSecaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ModificaSecaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_ModificaSecaoActionPerformed
+    }
 
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_Cadastro;
-    private javax.swing.JButton btn_Modificar;
-    private javax.swing.JButton btn_ProcuraPorNome;
-    private javax.swing.JButton btn_ProcuraPorTitulo;
-    private javax.swing.JButton btn_Remove;
-    private javax.swing.JComboBox<String> cBox_Cidade;
-    private javax.swing.JComboBox<String> cBox_ModificaCidade;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JPanel panel_Cadastro;
-    private javax.swing.JPanel panel_Lista;
-    private javax.swing.JPanel panel_Modifica;
-    private javax.swing.JTextField txt_ModificaNome;
-    private javax.swing.JTextField txt_ModificaSecao;
-    private javax.swing.JTextField txt_ModificaTitulo;
-    private javax.swing.JTextField txt_ModificaZona;
-    private javax.swing.JTextField txt_Nome;
-    private javax.swing.JTextField txt_Secao;
-    private javax.swing.JTextField txt_Titulo;
-    private javax.swing.JTextField txt_Zona;
-    // End of variables declaration//GEN-END:variables
-
-    
 }

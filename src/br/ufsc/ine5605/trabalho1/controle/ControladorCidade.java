@@ -8,14 +8,18 @@ import java.util.ArrayList;
 public class ControladorCidade implements IControlador<Cidade> {
 
     private static ControladorCidade instance;
-    private Mapeador<Integer, Cidade> mapper;
+    private final Mapeador<Integer, Cidade> mapper;
 
     private ControladorCidade() {
-        this.mapper = new Mapeador<>("candidatos.urn");
+        this.mapper = new Mapeador<>("cidades.urn");
         mapper.load();
 
     }
-    
+
+    public void persist() {
+        mapper.persist();
+    }
+
     public static ControladorCidade getInstance() {
         if (instance == null) {
             instance = new ControladorCidade();
@@ -31,7 +35,7 @@ public class ControladorCidade implements IControlador<Cidade> {
             }
         }
 
-        mapper.put(cidade.getCodigo() ,cidade);
+        mapper.put(cidade.getCodigo(), cidade);
         return true;
     }
 
@@ -66,7 +70,7 @@ public class ControladorCidade implements IControlador<Cidade> {
 
     @Override
     public void exibeTela() {
-        TelaCidadeB tela = new TelaCidadeB();
+        TelaCidade tela = new TelaCidade();
         tela.setVisible(true);
 
     }

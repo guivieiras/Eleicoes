@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitorOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitor;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
@@ -8,19 +9,22 @@ import java.util.ArrayList;
 public class ControladorEleitor implements IControlador<Eleitor> {
 
     private static ControladorEleitor instance;
-    private Mapeador<Long, Eleitor> mapper;
+    private final Mapeador<Long, Eleitor> mapper;
 
     private ControladorEleitor() {
-        mapper.load();
-        
         this.mapper = new Mapeador<>("eleitores.urn");
+        mapper.load();
     }
-    
-    public static ControladorEleitor getInstance (){
-        if(instance == null){
+
+    public void persist() {
+        mapper.persist();
+    }
+
+    public static ControladorEleitor getInstance() {
+        if (instance == null) {
             instance = new ControladorEleitor();
         }
-        
+
         return instance;
     }
 
@@ -32,17 +36,12 @@ public class ControladorEleitor implements IControlador<Eleitor> {
             }
         }
 
-        return mapper.put(eleitor.getTitulo(), eleitor);     
+        return mapper.put(eleitor.getTitulo(), eleitor);
     }
 
     @Override
-    public boolean remove(Eleitor eleitor) {  
-        for(Eleitor eleitorCadastrado : mapper.getList()){
-            if (eleitorCadastrado.getTitulo() == eleitor.getTitulo()){
-                return mapper.put(eleitor.getTitulo(), eleitor);
-            }
-        }
-        return false;
+    public boolean remove(Eleitor eleitor) {
+        return mapper.remove(eleitor.getTitulo());
     }
 
     @Override
@@ -84,10 +83,9 @@ public class ControladorEleitor implements IControlador<Eleitor> {
 
     @Override
     public void exibeTela() {
-        TelaEleitor tela = new TelaEleitor(this);
+        TelaEleitor tela = new TelaEleitor();
         tela.setVisible(true);
 
     }
-
 
 }

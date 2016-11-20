@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class ControladorCandidato implements IControlador<Candidato> {
 
     private static ControladorCandidato instance;
-    private Mapeador<Integer, Candidato> mapper;
+    private final Mapeador<Integer, Candidato> mapper;
 
     private ControladorCandidato() {
         this.mapper = new Mapeador<>("candidatos.urn");
@@ -22,16 +22,21 @@ public class ControladorCandidato implements IControlador<Candidato> {
         return instance;
     }
 
+    public void persist() {
+        mapper.persist();
+    }
+
     @Override
     public boolean cadastra(Candidato candidato) {
         for (Candidato candidatoCadastrado : mapper.getList()) {
             if (candidatoCadastrado.getNumero() == candidato.getNumero()) {
                 return false;
             }
-            if (candidatoCadastrado.getCargo() == Cargo.Prefeito &&
-                    candidato.getCargo() == Cargo.Prefeito &&
-                    candidato.getPartido() == candidatoCadastrado.getPartido())
+            if (candidatoCadastrado.getCargo() == Cargo.Prefeito
+                    && candidato.getCargo() == Cargo.Prefeito
+                    && candidato.getPartido() == candidatoCadastrado.getPartido()) {
                 return false;
+            }
         }
         if (candidato.getNumero() > 98 || candidato.getNumero() < 1) {
             return false;
@@ -87,7 +92,7 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
     @Override
     public void exibeTela() {
-        TelaCandidatoB tela = new TelaCandidatoB();
+        TelaCandidato tela = new TelaCandidato();
         tela.setVisible(true);
 
     }

@@ -2,8 +2,9 @@ package br.ufsc.ine5605.trabalho1.entidade;
 
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
+import java.io.Serializable;
 
-public class Candidato {
+public class Candidato implements Serializable{
 
     private int numero;
     private String nome;

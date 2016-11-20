@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartidoOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartido;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
@@ -9,12 +10,15 @@ import java.util.ArrayList;
 public class ControladorPartido implements IControlador<Partido> {
 
     private static ControladorPartido instance;
-    private Mapeador<Integer, Partido> mapper;
+    private final Mapeador<Integer, Partido> mapper;
 
     private ControladorPartido() {
-        mapper.load();
-        
         this.mapper = new Mapeador<>("partidos.urn");
+        mapper.load();
+    }
+
+    public void persist() {
+        mapper.persist();
     }
 
     @Override
@@ -29,11 +33,6 @@ public class ControladorPartido implements IControlador<Partido> {
 
     @Override
     public boolean remove(Partido partido) {
-        for (Partido partidoCadastrado : mapper.getList()) {
-            if (partidoCadastrado.getNome().equals(partido.getNome())) {
-                return false;
-            }
-        }
         return mapper.remove(partido.getCodigo());
     }
 
@@ -52,9 +51,8 @@ public class ControladorPartido implements IControlador<Partido> {
     public ArrayList<Partido> getLista() {
         return mapper.getList();
     }
-    
-    public ArrayList<Partido> getLista(ArrayList<Candidato> candidatos)
-    {
+
+    public ArrayList<Partido> getLista(ArrayList<Candidato> candidatos) {
         ArrayList<Partido> partidos = new ArrayList<>();
         for (Candidato candidato : candidatos) {
             if (!partidos.contains(candidato.getPartido())) {
@@ -72,10 +70,10 @@ public class ControladorPartido implements IControlador<Partido> {
         }
         return null;
     }
-  
+
     public Partido getPartidoPorSigla(String sigla) {
-        for(Partido partido : mapper.getList()){
-            if(partido.getSigla().equals(sigla)){
+        for (Partido partido : mapper.getList()) {
+            if (partido.getSigla().equals(sigla)) {
                 return partido;
             }
         }
@@ -84,12 +82,12 @@ public class ControladorPartido implements IControlador<Partido> {
 
     @Override
     public void exibeTela() {
-        TelaPartido tela = new TelaPartido(this);
+        TelaPartido tela = new TelaPartido();
         tela.setVisible(true);
     }
-    
-    public static ControladorPartido getInstance(){
-        if(instance == null){
+
+    public static ControladorPartido getInstance() {
+        if (instance == null) {
             instance = new ControladorPartido();
         }
         return instance;

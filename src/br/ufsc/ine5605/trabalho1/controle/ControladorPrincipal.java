@@ -1,7 +1,7 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipalOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipal;
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipalB;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
@@ -11,7 +11,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Urna;
 
 public class ControladorPrincipal {
 
-    public final TelaPrincipalB telaPrincipal;
+    private final TelaPrincipal telaPrincipal;
 
     private static ControladorPrincipal instance;
 
@@ -25,12 +25,21 @@ public class ControladorPrincipal {
         ControladorEleitor.getInstance();
         ControladorUrna.getInstance();
 
-        telaPrincipal = new TelaPrincipalB();
+        telaPrincipal = new TelaPrincipal();
         telaPrincipal.setVisible(true);
 
         if (ControladorUrna.getInstance().eleicaoEncerrada() == true) {
             telaPrincipal.blockButtons(true);
         }
+    }
+    
+    public void bloqueiaTelaPrincipalButtons()
+    {
+        telaPrincipal.blockButtons(false);
+    }
+    public void liberaTelaPrincipal()
+    {
+        telaPrincipal.setEnabled(true);
     }
 
     public static ControladorPrincipal getInstance() {

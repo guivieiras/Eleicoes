@@ -1,6 +1,8 @@
 package br.ufsc.ine5605.trabalho1.entidade;
 
-public class Eleitor {
+import java.io.Serializable;
+
+public class Eleitor implements Serializable{
 
     private int zonaEleitoral;
     private int secaoEleitoral;
