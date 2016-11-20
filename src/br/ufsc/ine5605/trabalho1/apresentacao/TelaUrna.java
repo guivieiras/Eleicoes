@@ -104,7 +104,7 @@ public class TelaUrna extends Tela<Urna> {
 
         jtable.setModel(new javax.swing.table.DefaultTableModel(
                 new String[][]{}, new String[]{
-                    "Cidade", "Seção", "Zona", "Turno"
+                    "Cidade", "Seção", "Zona", "Turno", "Candidatos"
                 }
         ) {
 
@@ -226,7 +226,7 @@ public class TelaUrna extends Tela<Urna> {
 
     @Override
     Object[] atributosParaArray(Urna urna) {
-        return new Object[]{urna.getCidade().getNome(), urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getTurno().toString()};
+        return new Object[]{urna.getCidade().getNome(), urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getTurno().toString(), urna.getTotalDeCandidatos()};
     }
 
     private boolean verficaSecaoZonaLimite(String secao, String zona, String limite) {
@@ -262,7 +262,7 @@ public class TelaUrna extends Tela<Urna> {
 
                 if (verficaSecaoZonaLimite(secao, zona, limite)) {
                     try {
-                        Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_Cidade.getSelectedItem().toString());
+                        Cidade cidade = (Cidade) cBox_Cidade.getSelectedItem();
                         Urna urna = new Urna(Integer.parseInt(limite), Integer.parseInt(secao), Integer.parseInt(zona), cidade, ControladorCandidato.getInstance().getLista(cidade), Urna.Turno.valueOf(cBox_Turno.getSelectedItem().toString()));
                         if (ControladorUrna.getInstance().cadastra(urna)) {
                             JOptionPane.showMessageDialog(null, "Urna cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);

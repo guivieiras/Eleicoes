@@ -28,7 +28,7 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
     public void imprimeResultado() {
         for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
             for (Urna urna : controlador.getLista()) {
-                if (urna.getCidade() == cidade) {
+                if (urna.getCidade().equals(cidade)) {
                     insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));
                     insereTexto("--------------- Vereadores ---------------\n");
                     LinkedHashMap<Candidato, Integer> vereadores = controlador.ordenaHashMap(urna.getTotalDeVotosPorVereador());

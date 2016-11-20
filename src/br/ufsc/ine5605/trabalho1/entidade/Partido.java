@@ -2,7 +2,7 @@ package br.ufsc.ine5605.trabalho1.entidade;
 
 import java.io.Serializable;
 
-public class Partido implements Serializable{
+public class Partido implements Serializable {
 
     private String nome;
     private String sigla;
@@ -12,7 +12,6 @@ public class Partido implements Serializable{
         setSigla(sigla);
         setNome(nome);
         this.codigo = hashCode();
-
     }
 
     public String getNome() {
@@ -30,9 +29,23 @@ public class Partido implements Serializable{
     public void setSigla(String sigla) {
         this.sigla = sigla;
     }
-    
-    public int getCodigo(){
+
+    public int getCodigo() {
         return this.codigo;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
+
+    @Override
+    public boolean equals(Object p) {
+        if (p instanceof Partido) {
+            Partido p1 = (Partido) p;
+            return p1.getCodigo() == codigo;
+        }
+        return false;
     }
 
 }

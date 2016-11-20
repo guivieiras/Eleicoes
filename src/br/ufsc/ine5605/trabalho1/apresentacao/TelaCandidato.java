@@ -9,6 +9,7 @@ import br.ufsc.ine5605.trabalho1.constantes.Actions;
 
 import br.ufsc.ine5605.trabalho1.controle.*;
 import br.ufsc.ine5605.trabalho1.entidade.*;
+import br.ufsc.ine5605.trabalho1.exception.DoisPrefeitosPorPartidoException;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 
 import java.awt.GridBagConstraints;
@@ -57,7 +58,29 @@ public class TelaCandidato extends Tela<Candidato> {
         initComponents();
         initButtonActions();
         listaCandidatos();
+        popularCheckBoxes();
 
+    }
+
+    private void popularCheckBoxes() {
+        for (Cargo cargo : Cargo.values()) {
+            cBox_Cargo.addItem(cargo);
+            cBox_ModificaCargo.addItem(cargo);
+        }
+        for (Partido partido : ControladorPartido.getInstance().getLista()) {
+            cBox_Partido.addItem(partido);
+            cBox_ModificaPartido.addItem(partido);
+        }
+        for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
+            cBox_Cidade.addItem(cidade);
+            cBox_ModificaCidade.addItem(cidade);
+        }
+        cBox_Cargo.setSelectedIndex(-1);
+        cBox_ModificaCargo.setSelectedIndex(-1);
+        cBox_Cidade.setSelectedIndex(-1);
+        cBox_ModificaCidade.setSelectedIndex(-1);
+        cBox_Partido.setSelectedIndex(-1);
+        cBox_ModificaPartido.setSelectedIndex(-1);
     }
 
     private void listaCandidatos() {
@@ -187,7 +210,7 @@ public class TelaCandidato extends Tela<Candidato> {
         btn_Modificar = new JButton("Modificar");
         btn_ProcuraPorNumero = new JButton("Pesquisar");
         btn_Remove = new JButton("Remover");
-        
+
         btn_Modificar.setEnabled(false);
         btn_Remove.setEnabled(false);
 
@@ -325,10 +348,10 @@ public class TelaCandidato extends Tela<Candidato> {
             if (e.getActionCommand().equals(Actions.CADASTRAR)) {
                 if (verificaNumero(txt_Numero.getText())) {
                     try {
-                        Cargo cargo = Cargo.valueOf(cBox_Cargo.getSelectedItem().toString());
-                        Partido partido = ControladorPartido.getInstance().getPartidoPorNome(cBox_Partido.getSelectedItem().toString());
-                        Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_Cidade.getSelectedItem().toString());
 
+                        Cargo cargo = (Cargo) cBox_Cargo.getSelectedItem();
+                        Partido partido = (Partido) cBox_Partido.getSelectedItem();
+                        Cidade cidade = (Cidade) cBox_Cidade.getSelectedItem();
                         Candidato candidato = new Candidato(Integer.parseInt(txt_Numero.getText()), verificaNome(txt_Nome.getText()), cargo, cidade, partido);
                         if (ControladorCandidato.getInstance().cadastra(candidato)) {
 
@@ -339,6 +362,8 @@ public class TelaCandidato extends Tela<Candidato> {
 
                     } catch (NullPointerException nullPointerException) {
                         JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (DoisPrefeitosPorPartidoException dps) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + dps.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     } catch (NomeVazio ex) {
                         JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
@@ -349,9 +374,9 @@ public class TelaCandidato extends Tela<Candidato> {
                 int x = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja modificar o candidato?", "Aviso", JOptionPane.YES_NO_OPTION);
                 if (x == JOptionPane.YES_OPTION && verificaNumero(txt_ModificaNumero.getText())) {
                     try {
-                        Cargo cargo = Cargo.valueOf(cBox_ModificaCargo.getSelectedItem().toString());
-                        Partido partido = ControladorPartido.getInstance().getPartidoPorNome(cBox_ModificaPartido.getSelectedItem().toString());
-                        Cidade cidade = ControladorCidade.getInstance().getCidade(cBox_ModificaCidade.getSelectedItem().toString());
+                        Cargo cargo = (Cargo) cBox_ModificaCargo.getSelectedItem();
+                        Partido partido = (Partido) cBox_ModificaPartido.getSelectedItem();
+                        Cidade cidade = (Cidade) cBox_ModificaCidade.getSelectedItem();
 
                         Candidato candidato = new Candidato(Integer.parseInt(txt_ModificaNumero.getText()), verificaNome(txt_ModificaNome.getText()), cargo, cidade, partido);
                         ControladorCandidato.getInstance().modifica(candidatoModificado, candidato);
@@ -378,9 +403,9 @@ public class TelaCandidato extends Tela<Candidato> {
                     candidatoModificado = ControladorCandidato.getInstance().getCandidato(Integer.parseInt(txt_ModificaNumero.getText()));
                     if (candidatoModificado != null) {
                         txt_ModificaNome.setText(candidatoModificado.getNome());
-                        cBox_ModificaCargo.setSelectedItem(candidatoModificado.getCargo().toString());
-                        cBox_ModificaCidade.setSelectedItem(candidatoModificado.getCidade().getNome());
-                        cBox_ModificaPartido.setSelectedItem(candidatoModificado.getPartido().getNome());
+                        cBox_ModificaCargo.setSelectedItem(candidatoModificado.getCargo());
+                        cBox_ModificaCidade.setSelectedItem(candidatoModificado.getCidade());
+                        cBox_ModificaPartido.setSelectedItem(candidatoModificado.getPartido());
 
                         btn_Modificar.setEnabled(true);
                         btn_Remove.setEnabled(true);

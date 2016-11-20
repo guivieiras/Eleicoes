@@ -51,7 +51,7 @@ public class ControladorUrna implements IControlador<Urna> {
     @Override
     public boolean cadastra(Urna novaUrna) {
         for (Urna urna : mapper.getList()) {
-            if (novaUrna.getCidade() == urna.getCidade()
+            if (novaUrna.getCidade().equals(urna.getCidade())
                     && novaUrna.getZonaEleitoral() == urna.getZonaEleitoral()
                     && novaUrna.getSecaoEleitoral() == urna.getSecaoEleitoral()) {
                 return false;
@@ -79,7 +79,7 @@ public class ControladorUrna implements IControlador<Urna> {
         ArrayList<Urna> temp = new ArrayList<>();
 
         for (Urna urna : mapper.getList()) {
-            if (urna.getCidade() == cidade) {
+            if (urna.getCidade().equals(cidade)) {
                 temp.add(urna);
             }
         }
@@ -89,7 +89,7 @@ public class ControladorUrna implements IControlador<Urna> {
 
     public Urna getUrna(int secao, int zona, Cidade cidade) {
         for (Urna urna : mapper.getList()) {
-            if (urna.getSecaoEleitoral() == secao && urna.getZonaEleitoral() == zona && urna.getCidade() == cidade) {
+            if (urna.getSecaoEleitoral() == secao && urna.getZonaEleitoral() == zona && urna.getCidade().equals(cidade)) {
                 return urna;
             }
         }
@@ -103,7 +103,7 @@ public class ControladorUrna implements IControlador<Urna> {
         if (urna.getLimiteDeEleitores() > urna.getTotalDeVotosEfetuados()) {
             if (eleitor.getZonaEleitoral() == urna.getZonaEleitoral()
                     && eleitor.getSecaoEleitoral() == urna.getSecaoEleitoral()
-                    && eleitor.getCidade() == urna.getCidade()) {
+                    && eleitor.getCidade().equals(urna.getCidade())) {
                 return 0; //Sem erros
             }
             return 2; //Erro: Eleitor esta vontado na urna errada
@@ -228,7 +228,7 @@ public class ControladorUrna implements IControlador<Urna> {
                 break;
             }
             for (Entry<Candidato, Integer> entryVereador : votosOrdenadosVereadores.entrySet()) {
-                if (entryVereador.getKey().getPartido() == entryPartido.getKey()) {
+                if (entryVereador.getKey().getPartido().equals(entryPartido.getKey())) {
                     if (quocientePartidario[i] > 0) {
                         vereadoresEleitos.put(entryVereador.getKey(), entryVereador.getValue());
                         quocientePartidario[i]--;
@@ -244,7 +244,7 @@ public class ControladorUrna implements IControlador<Urna> {
         int i = 50;
         for (Urna urna : mapper.getList()) {
             urna.inicia();
-            TelaMesario tela = new TelaMesario(this, urna);
+            TelaMesario tela = new TelaMesario(urna);
 
             tela.setLocation(i, 200);
             i += 340;
@@ -263,17 +263,15 @@ public class ControladorUrna implements IControlador<Urna> {
         tela.setVisible(true);
     }
 
-    public int urnasEmExecucao() {
+    public boolean eleicaoEncerrada() {
+        if (mapper.getList().isEmpty()) return false;
+        
         int qtdUrnas = 0;
         for (Urna urna : mapper.getList()) {
-            if (urna.estaExecutando()) {
+            if (urna.getEstado() == Urna.Estado.Aberta || urna.getEstado() == Urna.Estado.Executando) {
                 qtdUrnas++;
             }
         }
-        return qtdUrnas;
-    }
-
-    boolean eleicaoEncerrada() {
-        return false;
+        return qtdUrnas == 0;
     }
 }

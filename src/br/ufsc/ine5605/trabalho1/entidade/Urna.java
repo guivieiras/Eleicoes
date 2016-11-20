@@ -7,10 +7,14 @@ import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
-public class Urna implements Serializable{
+public class Urna implements Serializable {
 
     public enum Turno {
         Primeiro, Segundo
+    }
+    
+    public enum Estado{
+        Aberta, Executando, Encerrada
     }
 
     private final LinkedHashMap<Candidato, Integer> totalDeVotosPorPrefeito;
@@ -26,10 +30,11 @@ public class Urna implements Serializable{
     private int votosEfetuadosParaVereador;
     private int votosBrancosParaVereador;
     private int votosNulosParaVereador;
-
+    private int totalDeCandidatos;
     private int codigo;
 
-    private boolean executando;
+    private Estado estado = Estado.Aberta;
+    
     private Turno turno;
 
     public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, Turno turno) {
@@ -49,36 +54,39 @@ public class Urna implements Serializable{
         totalDeVotosPorPrefeito = new LinkedHashMap<>();
         totalDeVotosPorVereador = new LinkedHashMap<>();
         totalDeVotosPorPartidoParaVereador = new LinkedHashMap<>();
+
         for (Candidato candidato : candidatos) {
             if (candidato.getCargo() == Cargo.Prefeito) {
                 totalDeVotosPorPrefeito.put(candidato, 0);
-            } else if (candidato.getCargo() == Cargo.Vereador) {
+                totalDeCandidatos++;
+            } else if (turno == Turno.Primeiro) {
                 totalDeVotosPorPartidoParaVereador.put(candidato.getPartido(), 0);
                 totalDeVotosPorVereador.put(candidato, 0);
+                totalDeCandidatos++;
             }
         }
     }
 
     public void inicia() {
-        executando = true;
+        estado = Estado.Executando;
     }
 
     public void encerra() {
-        executando = false;
+        estado = Estado.Encerrada;
     }
 
-    public boolean estaExecutando() {
-        return executando;
+    public Estado getEstado() {
+        return estado;
     }
 
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
         Candidato prefeito = getPrefeitoPorCodigo(codigoPrefeito);
         Candidato vereador = getVereadorPorCodigo(codigoVereador);
 
-        if (prefeito != null && (prefeito.getCargo() == Cargo.Vereador || prefeito.getCidade() != getCidade())) {
+        if (prefeito != null && (prefeito.getCargo() == Cargo.Vereador || !prefeito.getCidade().equals(getCidade()))) {
             prefeito = null;
         }
-        if (vereador != null && (vereador.getCargo() == Cargo.Prefeito || vereador.getCidade() != getCidade())) {
+        if (vereador != null && (vereador.getCargo() == Cargo.Prefeito || !vereador.getCidade().equals(getCidade()))) {
             vereador = null;
         }
 
@@ -130,6 +138,10 @@ public class Urna implements Serializable{
 
     public int getCodigo() {
         return codigo;
+    }
+
+    public int getTotalDeCandidatos() {
+        return totalDeCandidatos;
     }
 
     public LinkedHashMap<Candidato, Integer> getTotalDeVotosPorPrefeito() {

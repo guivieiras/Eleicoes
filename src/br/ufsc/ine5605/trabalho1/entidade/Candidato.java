@@ -4,7 +4,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import java.io.Serializable;
 
-public class Candidato implements Serializable{
+public class Candidato implements Serializable {
 
     private int numero;
     private String nome;
@@ -71,5 +71,14 @@ public class Candidato implements Serializable{
     @Override
     public String toString() {
         return nome;
+    }
+
+    @Override
+    public boolean equals(Object p) {
+        if (p instanceof Candidato) {
+            Candidato p1 = (Candidato) p;
+            return p1.getNumero() == numero;
+        }
+        return false;
     }
 }

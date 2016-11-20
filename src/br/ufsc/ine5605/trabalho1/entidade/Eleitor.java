@@ -69,5 +69,14 @@ public class Eleitor implements Serializable{
         this.nome = nome;
 
     }
+    
+    @Override
+    public boolean equals(Object p) {
+        if (p instanceof Eleitor) {
+            Eleitor p1 = (Eleitor) p;
+            return p1.getTitulo()== titulo;
+        }
+        return false;
+    }
         
 }

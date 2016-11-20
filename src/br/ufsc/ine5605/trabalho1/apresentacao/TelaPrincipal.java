@@ -49,6 +49,8 @@ public class TelaPrincipal extends JFrame {
         btn_TelaPartido = new JButton("Partidos");
         btn_TelaResultados = new JButton("Resultado da eleição");
         btn_TelaUrna = new JButton("Urnas");
+        
+        btn_TelaResultados.setEnabled(false);
 
         btn_IniciarEleicoes.setMaximumSize(new Dimension(180, 200));
         btn_TelaCandidato.setMaximumSize(new Dimension(180, 200));
@@ -105,6 +107,7 @@ public class TelaPrincipal extends JFrame {
         btn_TelaPartido.setActionCommand(btn_TelaPartido.getText());
         btn_TelaEleitor.setActionCommand(btn_TelaEleitor.getText());
     }
+   
 
     public void blockButtons(boolean eleicaoEncerrada) {
 

@@ -32,15 +32,6 @@ public class ControladorPrincipal {
             telaPrincipal.blockButtons(true);
         }
     }
-    
-    public void bloqueiaTelaPrincipalButtons()
-    {
-        telaPrincipal.blockButtons(false);
-    }
-    public void liberaTelaPrincipal()
-    {
-        telaPrincipal.setEnabled(true);
-    }
 
     public static ControladorPrincipal getInstance() {
         if (instance == null) {
@@ -48,6 +39,18 @@ public class ControladorPrincipal {
         }
         return instance;
 
+    }
+
+    public void bloqueiaTelaPrincipalButtons() {
+        telaPrincipal.blockButtons(false);
+    }
+
+    public void liberaTelaPrincipal() {
+        telaPrincipal.setEnabled(true);
+    }
+
+    public void liberaBotaoResultado() {
+       telaPrincipal.blockButtons(true);
     }
 
     public void inicializaVariaveis() {

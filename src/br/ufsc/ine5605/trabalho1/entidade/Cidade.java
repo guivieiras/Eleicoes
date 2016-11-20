@@ -2,7 +2,7 @@ package br.ufsc.ine5605.trabalho1.entidade;
 
 import java.io.Serializable;
 
-public class Cidade implements Serializable{
+public class Cidade implements Serializable {
 
     private String nome;
     private int codigo;
@@ -23,10 +23,18 @@ public class Cidade implements Serializable{
     public int getCodigo() {
         return codigo;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return nome;
     }
 
+    @Override
+    public boolean equals(Object p) {
+        if (p instanceof Cidade) {
+            Cidade p1 = (Cidade) p;
+            return p1.getCodigo() == codigo;
+        }
+        return false;
+    }
 }

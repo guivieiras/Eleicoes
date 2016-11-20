@@ -2,6 +2,7 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.*;
 import br.ufsc.ine5605.trabalho1.entidade.*;
+import br.ufsc.ine5605.trabalho1.exception.DoisPrefeitosPorPartidoException;
 import br.ufsc.ine5605.trabalho1.mapeador.*;
 import java.util.ArrayList;
 
@@ -34,8 +35,9 @@ public class ControladorCandidato implements IControlador<Candidato> {
             }
             if (candidatoCadastrado.getCargo() == Cargo.Prefeito
                     && candidato.getCargo() == Cargo.Prefeito
-                    && candidato.getPartido() == candidatoCadastrado.getPartido()) {
-                return false;
+                    && candidato.getPartido().equals(candidatoCadastrado.getPartido())
+                    && candidato.getCidade().equals(candidatoCadastrado.getCidade())) {
+                throw new DoisPrefeitosPorPartidoException();
             }
         }
         if (candidato.getNumero() > 98 || candidato.getNumero() < 1) {
@@ -80,9 +82,9 @@ public class ControladorCandidato implements IControlador<Candidato> {
         return candidatosPorCidade;
     }
 
-    public Candidato getCandidato(int codigo) {
+    public Candidato getCandidato(int numero) {
         for (Candidato candidato : mapper.getList()) {
-            if (candidato.getNumero() == codigo) {
+            if (candidato.getNumero() == numero) {
                 return candidato;
             }
         }
