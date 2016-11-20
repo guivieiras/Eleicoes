@@ -47,10 +47,15 @@ public class ControladorEleitor implements IControlador<Eleitor> {
     @Override
     public boolean modifica(Eleitor antigo, Eleitor novo) {
         if (mapper.contains(antigo.getTitulo())) {
+
+            mapper.remove(antigo.getTitulo());
+
             antigo.setNome(novo.getNome());
             antigo.setTitulo(novo.getTitulo());
             antigo.setSecaoEleitoral(novo.getSecaoEleitoral());
             antigo.setZonaEleitoral(novo.getZonaEleitoral());
+          
+            mapper.put(antigo.getTitulo(), antigo);
             return true;
         }
         return false;

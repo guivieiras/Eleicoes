@@ -379,10 +379,17 @@ public class TelaCandidato extends Tela<Candidato> {
                         Cidade cidade = (Cidade) cBox_ModificaCidade.getSelectedItem();
 
                         Candidato candidato = new Candidato(Integer.parseInt(txt_ModificaNumero.getText()), verificaNome(txt_ModificaNome.getText()), cargo, cidade, partido);
-                        ControladorCandidato.getInstance().modifica(candidatoModificado, candidato);
+                        if (ControladorCandidato.getInstance().modifica(candidatoModificado, candidato)) {
+                            JOptionPane.showMessageDialog(null, "Candidato modificado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Erro ao modficar, número de candidato não permitido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+
                     } catch (NullPointerException nullPointerException) {
                         JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    } catch (NomeVazio ex) {
+                    } catch (DoisPrefeitosPorPartidoException dps) {
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, " + dps.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }catch (NomeVazio ex) {
                         JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }

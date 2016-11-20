@@ -167,10 +167,9 @@ public class TelaMesario extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         urna.encerra();
-        if (ControladorUrna.getInstance().eleicaoEncerrada()) {
-            ControladorPrincipal.getInstance().liberaTelaPrincipal();
-            ControladorPrincipal.getInstance().liberaBotaoResultado();
-        }
+        ControladorUrna.getInstance().testaFimEleição();
+          
+        
 
 
     }//GEN-LAST:event_formWindowClosing

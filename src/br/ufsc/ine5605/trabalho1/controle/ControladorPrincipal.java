@@ -28,7 +28,10 @@ public class ControladorPrincipal {
         telaPrincipal = new TelaPrincipal();
         telaPrincipal.setVisible(true);
 
-        if (ControladorUrna.getInstance().eleicaoEncerrada() == true) {
+    }
+    public void testaFimEleicao()
+    {
+        if (ControladorUrna.getInstance().testaFimEleição() == true) {
             telaPrincipal.blockButtons(true);
         }
     }
@@ -36,6 +39,7 @@ public class ControladorPrincipal {
     public static ControladorPrincipal getInstance() {
         if (instance == null) {
             instance = new ControladorPrincipal();
+            instance.testaFimEleicao();
         }
         return instance;
 

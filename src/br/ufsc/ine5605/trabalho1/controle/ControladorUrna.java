@@ -263,15 +263,26 @@ public class ControladorUrna implements IControlador<Urna> {
         tela.setVisible(true);
     }
 
-    public boolean eleicaoEncerrada() {
-        if (mapper.getList().isEmpty()) return false;
-        
+    public boolean testaFimEleição() {
         int qtdUrnas = 0;
+
+        if (mapper.getList().isEmpty()) {
+            qtdUrnas++;
+        }
+
         for (Urna urna : mapper.getList()) {
             if (urna.getEstado() == Urna.Estado.Aberta || urna.getEstado() == Urna.Estado.Executando) {
                 qtdUrnas++;
             }
         }
+
+        if (qtdUrnas == 0) {
+            ControladorPrincipal.getInstance().liberaTelaPrincipal();
+            ControladorPrincipal.getInstance().liberaBotaoResultado();
+            
+            ControladorUrna.getInstance().persist();
+        }
+        
         return qtdUrnas == 0;
     }
 }

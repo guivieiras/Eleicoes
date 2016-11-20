@@ -29,22 +29,11 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
     @Override
     public boolean cadastra(Candidato candidato) {
-        for (Candidato candidatoCadastrado : mapper.getList()) {
-            if (candidatoCadastrado.getNumero() == candidato.getNumero()) {
-                return false;
-            }
-            if (candidatoCadastrado.getCargo() == Cargo.Prefeito
-                    && candidato.getCargo() == Cargo.Prefeito
-                    && candidato.getPartido().equals(candidatoCadastrado.getPartido())
-                    && candidato.getCidade().equals(candidatoCadastrado.getCidade())) {
-                throw new DoisPrefeitosPorPartidoException();
-            }
-        }
-        if (candidato.getNumero() > 98 || candidato.getNumero() < 1) {
+        if (testeCandidato(candidato, false)) {
+            return mapper.put(candidato.getNumero(), candidato);
+        } else {
             return false;
         }
-
-        return mapper.put(candidato.getNumero(), candidato);
     }
 
     @Override
@@ -54,15 +43,40 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
     @Override
     public boolean modifica(Candidato antigo, Candidato novo) {
-        if (mapper.contains(antigo.getNumero())) {
+        if (testeCandidato(novo, true)) {
+            mapper.remove(antigo.getNumero());
+
             antigo.setNome(novo.getNome());
             antigo.setNumero(novo.getNumero());
             antigo.setCargo(novo.getCargo());
             antigo.setCidade(novo.getCidade());
             antigo.setPartido(novo.getPartido());
+
+            mapper.put(antigo.getNumero(), antigo);
             return true;
         }
         return false;
+    }
+
+    public boolean testeCandidato(Candidato candidato, boolean modificando) {
+        for (Candidato candidatoCadastrado : mapper.getList()) {
+            if (candidatoCadastrado.getNumero() == candidato.getNumero() && !modificando) {
+                return false;
+            }
+            if (candidatoCadastrado.getCargo() == Cargo.Prefeito
+                    && candidato.getCargo() == Cargo.Prefeito
+                    && candidato.getPartido().equals(candidatoCadastrado.getPartido())
+                    && candidato.getCidade().equals(candidatoCadastrado.getCidade())) {
+
+                if (candidato.getNumero() != candidatoCadastrado.getNumero()) {
+                    throw new DoisPrefeitosPorPartidoException();
+                }
+            }
+        }
+        if (candidato.getNumero() > 98 || candidato.getNumero() < 1) {
+            return false;
+        }
+        return true;
     }
 
     @Override
