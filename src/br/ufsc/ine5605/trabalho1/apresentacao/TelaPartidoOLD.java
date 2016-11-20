@@ -4,6 +4,9 @@ import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import br.ufsc.ine5605.trabalho1.exception.PartidoDuplicado;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class TelaPartidoOLD extends Tela<Partido> {
@@ -27,6 +30,8 @@ public class TelaPartidoOLD extends Tela<Partido> {
             }
         } catch (NomeVazio ex) {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PartidoDuplicado ex) {
+            Logger.getLogger(TelaPartidoOLD.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -53,6 +58,8 @@ public class TelaPartidoOLD extends Tela<Partido> {
                         verificaNome(txt_ModificaSigla.getText())));
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (PartidoDuplicado ex) {
+                Logger.getLogger(TelaPartidoOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

@@ -10,6 +10,10 @@ import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.entidade.KeyValue;
+import br.ufsc.ine5605.trabalho1.entidade.Urna.Turno;
+import br.ufsc.ine5605.trabalho1.exception.CandidatosInsuficientes;
+import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
+import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,10 +28,6 @@ public class ControladorUrna implements IControlador<Urna> {
     private static ControladorUrna instance;
     private int vagasParaVereadores;
     private Mapeador<Integer, Urna> mapper;
-
-    public int getVagasParaVereadores() {
-        return vagasParaVereadores;
-    }
 
     private ControladorUrna() {
         this.mapper = new Mapeador<>("urnas.urn");
@@ -49,14 +49,25 @@ public class ControladorUrna implements IControlador<Urna> {
     }
 
     @Override
-    public boolean cadastra(Urna novaUrna) {
+    public boolean cadastra(Urna novaUrna) throws UrnaDuplicada, TurnoInvalido, CandidatosInsuficientes{
         for (Urna urna : mapper.getList()) {
             if (novaUrna.getCidade().equals(urna.getCidade())
                     && novaUrna.getZonaEleitoral() == urna.getZonaEleitoral()
                     && novaUrna.getSecaoEleitoral() == urna.getSecaoEleitoral()) {
-                return false;
+                throw new UrnaDuplicada();
             }
         }
+
+        if (novaUrna.getTotalDeVotosPorPrefeito().isEmpty())
+            throw new CandidatosInsuficientes();
+        
+        if (novaUrna.getTotalDeVotosPorVereador().isEmpty() && novaUrna.getTurno() == Turno.Segundo)
+            throw new CandidatosInsuficientes();
+        
+        if (!checkTurnos(novaUrna.getCidade(), novaUrna.getTurno())) {
+            throw new TurnoInvalido();
+        }
+
         return mapper.put(novaUrna.getCodigo(), novaUrna);
     }
 
@@ -87,6 +98,15 @@ public class ControladorUrna implements IControlador<Urna> {
         return temp;
     }
 
+    public boolean checkTurnos(Cidade cidade, Turno turno) {
+        for (Urna urna : getLista(cidade)) {
+            if (urna.getTurno() != turno) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Urna getUrna(int secao, int zona, Cidade cidade) {
         for (Urna urna : mapper.getList()) {
             if (urna.getSecaoEleitoral() == secao && urna.getZonaEleitoral() == zona && urna.getCidade().equals(cidade)) {
@@ -94,6 +114,9 @@ public class ControladorUrna implements IControlador<Urna> {
             }
         }
         return null;
+    }
+    public int getVagasParaVereadores() {
+        return vagasParaVereadores;
     }
 
     public int verificaEleitor(Urna urna, Eleitor eleitor) {
@@ -239,7 +262,7 @@ public class ControladorUrna implements IControlador<Urna> {
         }
         return ordenaHashMap(vereadoresEleitos);
     }
-
+    
     public void iniciaEleicoes() {
         int i = 50;
         for (Urna urna : mapper.getList()) {
@@ -264,25 +287,25 @@ public class ControladorUrna implements IControlador<Urna> {
     }
 
     public boolean testaFimEleição() {
-        int qtdUrnas = 0;
+        int urnasEncerradas = 0;
 
         if (mapper.getList().isEmpty()) {
-            qtdUrnas++;
+            urnasEncerradas++;
         }
 
         for (Urna urna : mapper.getList()) {
             if (urna.getEstado() == Urna.Estado.Aberta || urna.getEstado() == Urna.Estado.Executando) {
-                qtdUrnas++;
+                urnasEncerradas++;
             }
         }
 
-        if (qtdUrnas == 0) {
+        if (urnasEncerradas == 0) {
             ControladorPrincipal.getInstance().liberaTelaPrincipal();
             ControladorPrincipal.getInstance().liberaBotaoResultado();
-            
+
             ControladorUrna.getInstance().persist();
         }
-        
-        return qtdUrnas == 0;
+
+        return urnasEncerradas == 0;
     }
 }

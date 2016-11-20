@@ -9,6 +9,7 @@ import br.ufsc.ine5605.trabalho1.constantes.Actions;
 
 import br.ufsc.ine5605.trabalho1.controle.*;
 import br.ufsc.ine5605.trabalho1.entidade.*;
+import br.ufsc.ine5605.trabalho1.exception.CandidatoDuplicado;
 import br.ufsc.ine5605.trabalho1.exception.DoisPrefeitosPorPartidoException;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 
@@ -17,6 +18,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -357,15 +360,13 @@ public class TelaCandidato extends Tela<Candidato> {
 
                             JOptionPane.showMessageDialog(null, "Candidato cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Erro ao cadastrar, número de candidato não permitido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Erro ao cadastrar.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
 
                     } catch (NullPointerException nullPointerException) {
                         JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    } catch (DoisPrefeitosPorPartidoException dps) {
-                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + dps.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                    } catch (NomeVazio ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (DoisPrefeitosPorPartidoException | NomeVazio | CandidatoDuplicado ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
 
@@ -382,15 +383,13 @@ public class TelaCandidato extends Tela<Candidato> {
                         if (ControladorCandidato.getInstance().modifica(candidatoModificado, candidato)) {
                             JOptionPane.showMessageDialog(null, "Candidato modificado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Erro ao modficar, número de candidato não permitido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Erro ao modficar.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
 
                     } catch (NullPointerException nullPointerException) {
                         JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    } catch (DoisPrefeitosPorPartidoException dps) {
-                        JOptionPane.showMessageDialog(null, "Erro ao modificar, " + dps.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                    }catch (NomeVazio ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (DoisPrefeitosPorPartidoException | NomeVazio | CandidatoDuplicado ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
 

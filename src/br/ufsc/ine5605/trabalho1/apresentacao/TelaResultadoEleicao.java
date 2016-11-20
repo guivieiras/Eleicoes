@@ -6,6 +6,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.KeyValue;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
+import br.ufsc.ine5605.trabalho1.entidade.Urna.Turno;
 import java.awt.Font;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -23,26 +24,30 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
 
     }
 
-    
-
     public void imprimeResultado() {
         for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
+            Turno turno = Turno.Primeiro;
             for (Urna urna : controlador.getLista()) {
                 if (urna.getCidade().equals(cidade)) {
                     insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));
-                    insereTexto("--------------- Vereadores ---------------\n");
-                    LinkedHashMap<Candidato, Integer> vereadores = controlador.ordenaHashMap(urna.getTotalDeVotosPorVereador());
-                    for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
-                        insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+
+                    if (urna.getTurno() == Urna.Turno.Primeiro) {
+                        insereTexto("--------------- Vereadores ---------------\n");
+                        LinkedHashMap<Candidato, Integer> vereadores = controlador.ordenaHashMap(urna.getTotalDeVotosPorVereador());
+                        for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
+                            insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+                        }
+                        insereTexto(urna.getVotosInvalidosParaVerador() + " votos inválidos (" + urna.getVotosBrancosParaVereador() + " brancos e " + urna.getVotosNulosParaVereador() + " nulos)\n");
+                    } else {
+                        turno = Turno.Segundo;
                     }
-                    insereTexto(urna.getVotosInvalidosParaVerador()+ " votos inválidos ("+urna.getVotosBrancosParaVereador()+ " brancos e "+urna.getVotosNulosParaVereador()+" nulos)\n");
 
                     insereTexto("--------------- Prefeitos  ---------------\n");
                     LinkedHashMap<Candidato, Integer> prefeitos = controlador.ordenaHashMap(urna.getTotalDeVotosPorPrefeito());
                     for (Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
                         insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                     }
-                    insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos ("+urna.getVotosBrancosParaPrefeito() + " brancos e "+urna.getVotosNulosParaPrefeito()+" nulos)\n");
+                    insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos (" + urna.getVotosBrancosParaPrefeito() + " brancos e " + urna.getVotosNulosParaPrefeito() + " nulos)\n");
                     //insereTexto("-------------- " + urna.getAbstencoes() + " abstenções --------------\n");
                     insereTexto("-----------------------------------------\n");
 
@@ -52,17 +57,19 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
             insereTexto("--------- Vencedores " + cidade.getNome() + " --------\n");
             KeyValue<Candidato, Integer> prefeitoVotos = controlador.prefeitoVencedor(cidade);
             insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.key.getNome(), prefeitoVotos.value));
-            insereTexto("Vereadores:\n");
 
-            LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor(cidade);
-            int vagas = 3;
-            for (Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
-                if (vagas > -100) {
-                    insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+            if (turno == Turno.Primeiro) {
+                insereTexto("Vereadores:\n");
+
+                LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor(cidade);
+                int vagas = 3;
+                for (Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
+                    if (vagas > -100) {
+                        insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
+                    }
+                    vagas--;
                 }
-                vagas--;
             }
-
             insereTexto("------------------------------------------\n");
             insereTexto("\n--------------------------------------------------------------------------------------------------\n\n");
         }

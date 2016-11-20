@@ -3,7 +3,10 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
+import br.ufsc.ine5605.trabalho1.exception.CidadeDuplicada;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class TelaCidadeOLD extends Tela<Cidade> {
@@ -27,6 +30,8 @@ public class TelaCidadeOLD extends Tela<Cidade> {
             }
         } catch (NomeVazio ex) {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (CidadeDuplicada ex) {
+            Logger.getLogger(TelaCidadeOLD.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -51,6 +56,8 @@ public class TelaCidadeOLD extends Tela<Cidade> {
                 controladorCidade.modifica(cidadeModificada, new Cidade(verificaNome(txt_ModificaNome.getText())));
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (CidadeDuplicada ex) {
+                Logger.getLogger(TelaCidadeOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

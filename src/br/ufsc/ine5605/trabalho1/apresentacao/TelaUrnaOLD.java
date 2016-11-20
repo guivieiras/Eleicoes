@@ -6,7 +6,12 @@ import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
+import br.ufsc.ine5605.trabalho1.exception.CandidatosInsuficientes;
+import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
+import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -43,6 +48,12 @@ public class TelaUrnaOLD extends Tela<Urna> {
             } catch (NullPointerException npe) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
 
+            } catch (UrnaDuplicada ex) {
+                Logger.getLogger(TelaUrnaOLD.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (TurnoInvalido ex) {
+                Logger.getLogger(TelaUrnaOLD.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (CandidatosInsuficientes ex) {
+                Logger.getLogger(TelaUrnaOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

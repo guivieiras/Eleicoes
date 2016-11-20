@@ -11,12 +11,15 @@ import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import br.ufsc.ine5605.trabalho1.exception.PartidoDuplicado;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -264,9 +267,8 @@ public class TelaPartido extends Tela<Partido> {
                     } else {
                         JOptionPane.showMessageDialog(null, "Erro ao cadastrar partido", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
-
-                } catch (NomeVazio ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (NomeVazio | PartidoDuplicado ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
@@ -278,10 +280,8 @@ public class TelaPartido extends Tela<Partido> {
                         Partido partido = new Partido(verificaNome(jtfModificaNome.getText()), verificaNome(jtfModificaSigla.getText()));
                         ControladorPartido.getInstance().modifica(partidoModificado, partido);
 
-                    } catch (NullPointerException nullPointerException) {
-                        JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    } catch (NomeVazio ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (NomeVazio | PartidoDuplicado ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }

@@ -9,6 +9,7 @@ import br.ufsc.ine5605.trabalho1.constantes.Actions;
 
 import br.ufsc.ine5605.trabalho1.controle.*;
 import br.ufsc.ine5605.trabalho1.entidade.*;
+import br.ufsc.ine5605.trabalho1.exception.CidadeDuplicada;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 
 import java.awt.GridBagConstraints;
@@ -16,6 +17,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -218,8 +221,8 @@ public class TelaCidade extends Tela<Cidade> {
                     } else {
                         JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar a cidade", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                     }
-                } catch (NomeVazio ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (NomeVazio | CidadeDuplicada ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -228,8 +231,8 @@ public class TelaCidade extends Tela<Cidade> {
                 if (x == JOptionPane.YES_OPTION) {
                     try {
                         ControladorCidade.getInstance().modifica(cidadeModificada, new Cidade(verificaNome(txt_ModificaNome.getText())));
-                    } catch (NomeVazio ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (NomeVazio | CidadeDuplicada ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao modificar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }

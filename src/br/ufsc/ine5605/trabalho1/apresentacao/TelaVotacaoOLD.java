@@ -6,13 +6,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class TelaVotacao extends JFrame {
+public class TelaVotacaoOLD extends JFrame {
 
     private final Urna urna;
     private final Eleitor eleitor;
     private final TelaMesario telaMesario;
 
-    public TelaVotacao(Urna urna, Eleitor eleitor, TelaMesario telaMesario) {
+    public TelaVotacaoOLD(Urna urna, Eleitor eleitor, TelaMesario telaMesario) {
         this.urna = urna;
         this.eleitor = eleitor;
         this.telaMesario = telaMesario;

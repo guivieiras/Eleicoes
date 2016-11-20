@@ -13,13 +13,18 @@ import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.entidade.Urna.Turno;
+import br.ufsc.ine5605.trabalho1.exception.CandidatosInsuficientes;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
+import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -267,11 +272,13 @@ public class TelaUrna extends Tela<Urna> {
                         if (ControladorUrna.getInstance().cadastra(urna)) {
                             JOptionPane.showMessageDialog(null, "Urna cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Erro ao cadastrar. Urna da mesma seção, zona eleitoral e cidade já está cadastrada.", "Erro", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Erro ao cadastrar.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
                     } catch (NullPointerException npe) {
                         JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
 
+                    } catch (UrnaDuplicada | TurnoInvalido | CandidatosInsuficientes ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -298,16 +305,6 @@ public class TelaUrna extends Tela<Urna> {
 
             }
 
-        }
-
-        private boolean verificaNumero(String numero) {
-            try {
-                Integer.parseInt(numero);
-                return true;
-            } catch (NumberFormatException x) {
-                JOptionPane.showMessageDialog(null, "Numero inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
         }
 
     }

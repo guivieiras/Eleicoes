@@ -4,6 +4,7 @@ import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartidoOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartido;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
+import br.ufsc.ine5605.trabalho1.exception.PartidoDuplicado;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
 
@@ -17,15 +18,22 @@ public class ControladorPartido implements IControlador<Partido> {
         mapper.load();
     }
 
+    public static ControladorPartido getInstance() {
+        if (instance == null) {
+            instance = new ControladorPartido();
+        }
+        return instance;
+    }
+
     public void persist() {
         mapper.persist();
     }
 
     @Override
-    public boolean cadastra(Partido partido) {
+    public boolean cadastra(Partido partido) throws PartidoDuplicado {
         for (Partido partidoCadastrado : mapper.getList()) {
             if (partidoCadastrado.getNome().equals(partido.getNome())) {
-                return false;
+                throw new PartidoDuplicado();
             }
         }
         return mapper.put(partido.getCodigo(), partido);
@@ -37,7 +45,10 @@ public class ControladorPartido implements IControlador<Partido> {
     }
 
     @Override
-    public boolean modifica(Partido velho, Partido novo) {
+    public boolean modifica(Partido velho, Partido novo) throws PartidoDuplicado {
+        if (getPartidoPorNome(novo.getNome()) != null) {
+            throw new PartidoDuplicado();
+        }
 
         if (mapper.contains(velho.getCodigo())) {
             velho.setNome(novo.getNome());
@@ -80,17 +91,14 @@ public class ControladorPartido implements IControlador<Partido> {
         return null;
     }
 
+    public Partido getPartido(int codigo) {
+        return mapper.get(codigo);
+    }
+
     @Override
     public void exibeTela() {
         TelaPartido tela = new TelaPartido();
         tela.setVisible(true);
-    }
-
-    public static ControladorPartido getInstance() {
-        if (instance == null) {
-            instance = new ControladorPartido();
-        }
-        return instance;
     }
 
 }

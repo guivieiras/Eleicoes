@@ -4,7 +4,10 @@ import br.ufsc.ine5605.trabalho1.controle.*;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
+import br.ufsc.ine5605.trabalho1.exception.EleitorDuplicado;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class TelaEleitorOLD extends Tela<Eleitor> {
@@ -37,6 +40,8 @@ public class TelaEleitorOLD extends Tela<Eleitor> {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (NullPointerException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (EleitorDuplicado ex) {
+                Logger.getLogger(TelaEleitorOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -96,6 +101,8 @@ public class TelaEleitorOLD extends Tela<Eleitor> {
                         cBox_ModificaCidade.getSelectedItem().toString())));
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (EleitorDuplicado ex) {
+                Logger.getLogger(TelaEleitorOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

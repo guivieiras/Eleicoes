@@ -25,7 +25,7 @@ public class TelaMesario extends javax.swing.JFrame {
             if (eleitor != null) {
                 int magicNumber = ControladorUrna.getInstance().verificaEleitor(urna, eleitor);
                 if (magicNumber == 0) {
-                    TelaVotacao tv = new TelaVotacao(urna, eleitor, this);
+                    TelaVotacaoOLD tv = new TelaVotacaoOLD(urna, eleitor, this);
                     this.setEnabled(false);
                     tv.setVisible(true);
                 }

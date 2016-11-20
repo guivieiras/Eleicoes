@@ -8,29 +8,36 @@ import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
+import br.ufsc.ine5605.trabalho1.exception.CandidatosInsuficientes;
+import br.ufsc.ine5605.trabalho1.exception.CidadeDuplicada;
+import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
+import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 
 public class ControladorPrincipal {
 
-    private final TelaPrincipal telaPrincipal;
+    private TelaPrincipal telaPrincipal;
 
     private static ControladorPrincipal instance;
 
-    protected ControladorPrincipal() {
+    private ControladorPrincipal() {
+    }
 
+    public void inicializarSistema() {
         //inicializaVariaveis();
         //votacaoTeste();
-        ControladorCandidato.getInstance();
-        ControladorPartido.getInstance();
         ControladorCidade.getInstance();
         ControladorEleitor.getInstance();
+        ControladorPartido.getInstance();
+        ControladorCandidato.getInstance();
         ControladorUrna.getInstance();
 
         telaPrincipal = new TelaPrincipal();
         telaPrincipal.setVisible(true);
 
+        testaFimEleicao();
     }
-    public void testaFimEleicao()
-    {
+
+    public void testaFimEleicao() {
         if (ControladorUrna.getInstance().testaFimEleição() == true) {
             telaPrincipal.blockButtons(true);
         }
@@ -39,13 +46,12 @@ public class ControladorPrincipal {
     public static ControladorPrincipal getInstance() {
         if (instance == null) {
             instance = new ControladorPrincipal();
-            instance.testaFimEleicao();
         }
         return instance;
 
     }
 
-    public void bloqueiaTelaPrincipalButtons() {
+    public void blockButtonsTelaPrincipal() {
         telaPrincipal.blockButtons(false);
     }
 
@@ -54,10 +60,10 @@ public class ControladorPrincipal {
     }
 
     public void liberaBotaoResultado() {
-       telaPrincipal.blockButtons(true);
+        telaPrincipal.blockButtons(true);
     }
 
-    public void inicializaVariaveis() {
+    public void inicializaVariaveis() throws Exception {
         ControladorCidade.getInstance().cadastra(new Cidade("Florianópolis"));
         ControladorCidade.getInstance().cadastra(new Cidade("São José"));
         ControladorEleitor.getInstance().cadastra(new Eleitor(1, 1, 1111111111110l, "A", ControladorCidade.getInstance().getCidade("Florianópolis")));

@@ -6,7 +6,11 @@ import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
+import br.ufsc.ine5605.trabalho1.exception.CandidatoDuplicado;
+import br.ufsc.ine5605.trabalho1.exception.DoisPrefeitosPorPartidoException;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class TelaCandidatoOLD extends Tela<Candidato> {
@@ -40,6 +44,10 @@ public class TelaCandidatoOLD extends Tela<Candidato> {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (CandidatoDuplicado ex) {
+                Logger.getLogger(TelaCandidatoOLD.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DoisPrefeitosPorPartidoException ex) {
+                Logger.getLogger(TelaCandidatoOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -72,6 +80,10 @@ public class TelaCandidatoOLD extends Tela<Candidato> {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
             } catch (NomeVazio ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (CandidatoDuplicado ex) {
+                Logger.getLogger(TelaCandidatoOLD.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DoisPrefeitosPorPartidoException ex) {
+                Logger.getLogger(TelaCandidatoOLD.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

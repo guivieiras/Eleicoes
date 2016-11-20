@@ -11,12 +11,15 @@ import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
+import br.ufsc.ine5605.trabalho1.exception.EleitorDuplicado;
 import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -412,10 +415,10 @@ public class TelaEleitor extends Tela<Eleitor> {
                         if (ControladorEleitor.getInstance().cadastra(eleitor)) {
                             JOptionPane.showMessageDialog(null, "Eleitor cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Eleitor com o mesmo título ja cadastrado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Erro ao cadastrar.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                         }
-                    } catch (NomeVazio ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (NomeVazio | EleitorDuplicado ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     } catch (NullPointerException ex) {
                         JOptionPane.showMessageDialog(null, "Erro ao cadastrar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
@@ -429,11 +432,15 @@ public class TelaEleitor extends Tela<Eleitor> {
                         Cidade cidade = (Cidade) jcbModificaCidade.getSelectedItem();
 
                         Eleitor eleitor = new Eleitor(Integer.parseInt(jtfModificaZona.getText()), Integer.parseInt(jtfModificaSecao.getText()), Long.parseLong(jtfModificaTitulo.getText()), verificaNome(jtfModificaNome.getText()), cidade);
-                        ControladorEleitor.getInstance().modifica(eleitorModificado, eleitor);
+                        if (ControladorEleitor.getInstance().modifica(eleitorModificado, eleitor)) {
+                            JOptionPane.showMessageDialog(null, "Eleitor modificar com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Erro ao modificar.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     } catch (NullPointerException nullPointerException) {
                         JOptionPane.showMessageDialog(null, "Erro ao modificar, certifique-se de selecionar todas as caixas de seleção.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    } catch (NomeVazio ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao modificar, nome em branco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } catch (NomeVazio | EleitorDuplicado ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
 

@@ -3,7 +3,7 @@ package br.ufsc.ine5605.trabalho1.entidade;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacao;
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacaoOLD;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
@@ -12,8 +12,8 @@ public class Urna implements Serializable {
     public enum Turno {
         Primeiro, Segundo
     }
-    
-    public enum Estado{
+
+    public enum Estado {
         Aberta, Executando, Encerrada
     }
 
@@ -34,7 +34,7 @@ public class Urna implements Serializable {
     private int codigo;
 
     private Estado estado = Estado.Aberta;
-    
+
     private Turno turno;
 
     public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, Turno turno) {
@@ -47,10 +47,12 @@ public class Urna implements Serializable {
         votosBrancosParaVereador = 0;
         votosNulosParaPrefeito = 0;
         votosNulosParaVereador = 0;
-        setSecaoEleitoral(secaoEleitoral);
-        setLimiteDeEleitores(limiteDeEleitores);
-        setZonaEleitoral(zonaEleitoral);
-        setCidade(cidade);
+
+        this.secaoEleitoral = secaoEleitoral;
+        this.limiteDeEleitores = limiteDeEleitores;
+        this.zonaEleitoral = zonaEleitoral;
+        this.cidade = cidade;
+
         totalDeVotosPorPrefeito = new LinkedHashMap<>();
         totalDeVotosPorVereador = new LinkedHashMap<>();
         totalDeVotosPorPartidoParaVereador = new LinkedHashMap<>();
@@ -73,10 +75,6 @@ public class Urna implements Serializable {
 
     public void encerra() {
         estado = Estado.Encerrada;
-    }
-
-    public Estado getEstado() {
-        return estado;
     }
 
     public void contabilizaVoto(int codigoPrefeito, int codigoVereador) {
@@ -109,6 +107,9 @@ public class Urna implements Serializable {
         }
     }
 
+    //
+    //      Aqui comecam os get and setters da classe
+    //
     public Candidato getPrefeitoPorCodigo(int codigo) {
         for (Entry<Candidato, Integer> entry : totalDeVotosPorPrefeito.entrySet()) {
             Candidato key = entry.getKey();
@@ -129,9 +130,10 @@ public class Urna implements Serializable {
         return null;
     }
 
-    //
-    //      Aqui comecam os get and setters da classe
-    //
+    public Estado getEstado() {
+        return estado;
+    }
+
     public Turno getTurno() {
         return turno;
     }
@@ -168,20 +170,12 @@ public class Urna implements Serializable {
         return cidade;
     }
 
+    public int getTotalDeVotosEfetuados() {
+        return votosEfetuadosParaPrefeito;
+    }
+
     public int getVotosValidosParaVerador() {
-        return (-getVotosNulosParaVereador() + getVotosEfetuadosParaVereador() - getVotosBrancosParaVereador());
-    }
-
-    public int getVotosBrancosParaPrefeito() {
-        return votosBrancosParaPrefeito;
-    }
-
-    public int getVotosNulosParaPrefeito() {
-        return votosNulosParaPrefeito;
-    }
-
-    public int getVotosEfetuadosParaVereador() {
-        return votosEfetuadosParaVereador;
+        return (-votosNulosParaVereador + votosEfetuadosParaVereador - votosBrancosParaVereador);
     }
 
     public int getVotosBrancosParaVereador() {
@@ -193,15 +187,19 @@ public class Urna implements Serializable {
     }
 
     public int getVotosInvalidosParaVerador() {
-        return (this.votosNulosParaVereador + this.votosBrancosParaVereador);
+        return (votosNulosParaVereador + votosBrancosParaVereador);
     }
 
-    public int getTotalDeVotosEfetuados() {
-        return votosEfetuadosParaPrefeito;
+    public int getVotosBrancosParaPrefeito() {
+        return votosBrancosParaPrefeito;
+    }
+
+    public int getVotosNulosParaPrefeito() {
+        return votosNulosParaPrefeito;
     }
 
     public int getVotosInvalidosParaPrefeito() {
-        return (this.votosNulosParaPrefeito + this.votosBrancosParaPrefeito);
+        return (votosNulosParaPrefeito + votosBrancosParaPrefeito);
     }
 
     public int getAbstencoes() {
@@ -210,21 +208,5 @@ public class Urna implements Serializable {
 
     public int getLimiteDeEleitores() {
         return limiteDeEleitores;
-    }
-
-    private void setZonaEleitoral(int zonaEleitoral) {
-        this.zonaEleitoral = zonaEleitoral;
-    }
-
-    private void setCidade(Cidade cidade) {
-        this.cidade = cidade;
-    }
-
-    private void setLimiteDeEleitores(int limiteDeEleitores) {
-        this.limiteDeEleitores = limiteDeEleitores;
-    }
-
-    private void setSecaoEleitoral(int secaoEleitoral) {
-        this.secaoEleitoral = secaoEleitoral;
     }
 }

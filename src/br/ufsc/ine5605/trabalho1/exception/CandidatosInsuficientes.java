@@ -9,9 +9,10 @@ package br.ufsc.ine5605.trabalho1.exception;
  *
  * @author Guilherme
  */
-public class DoisPrefeitosPorPartidoException extends Exception {
-
-    public DoisPrefeitosPorPartidoException() {
-        super("não é permitido cadastrar dois prefeitos no mesmo partido e na mesma cidade");
+public class CandidatosInsuficientes extends Exception{
+    public CandidatosInsuficientes()
+    {
+        super("não ha candidatos suficientes na cidade para as eleições.");
     }
+    
 }

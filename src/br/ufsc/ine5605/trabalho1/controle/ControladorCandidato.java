@@ -2,6 +2,7 @@ package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.*;
 import br.ufsc.ine5605.trabalho1.entidade.*;
+import br.ufsc.ine5605.trabalho1.exception.CandidatoDuplicado;
 import br.ufsc.ine5605.trabalho1.exception.DoisPrefeitosPorPartidoException;
 import br.ufsc.ine5605.trabalho1.mapeador.*;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class ControladorCandidato implements IControlador<Candidato> {
 
     private ControladorCandidato() {
         this.mapper = new Mapeador<>("candidatos.urn");
-        mapper.load();
+        load();
     }
 
     public static ControladorCandidato getInstance() {
@@ -27,8 +28,17 @@ public class ControladorCandidato implements IControlador<Candidato> {
         mapper.persist();
     }
 
+    private void load() {
+        mapper.load();
+
+        for (Candidato x : mapper.getList()) {
+            x.setCidade(ControladorCidade.getInstance().getCidade(x.getCidade().getCodigo()));
+            x.setPartido(ControladorPartido.getInstance().getPartido(x.getPartido().getCodigo()));
+        }
+    }
+
     @Override
-    public boolean cadastra(Candidato candidato) {
+    public boolean cadastra(Candidato candidato) throws CandidatoDuplicado, DoisPrefeitosPorPartidoException{
         if (testeCandidato(candidato, false)) {
             return mapper.put(candidato.getNumero(), candidato);
         } else {
@@ -42,7 +52,7 @@ public class ControladorCandidato implements IControlador<Candidato> {
     }
 
     @Override
-    public boolean modifica(Candidato antigo, Candidato novo) {
+    public boolean modifica(Candidato antigo, Candidato novo) throws CandidatoDuplicado, DoisPrefeitosPorPartidoException {
         if (testeCandidato(novo, true)) {
             mapper.remove(antigo.getNumero());
 
@@ -58,10 +68,10 @@ public class ControladorCandidato implements IControlador<Candidato> {
         return false;
     }
 
-    public boolean testeCandidato(Candidato candidato, boolean modificando) {
+    public boolean testeCandidato(Candidato candidato, boolean modificando) throws CandidatoDuplicado, DoisPrefeitosPorPartidoException {
         for (Candidato candidatoCadastrado : mapper.getList()) {
             if (candidatoCadastrado.getNumero() == candidato.getNumero() && !modificando) {
-                return false;
+                throw new CandidatoDuplicado();
             }
             if (candidatoCadastrado.getCargo() == Cargo.Prefeito
                     && candidato.getCargo() == Cargo.Prefeito
