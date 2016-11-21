@@ -323,6 +323,16 @@ public class TelaCandidato extends Tela<Candidato> {
         });
     }
 
+    private boolean verificaNumero(String numero) {
+        try {
+            Integer.parseInt(numero);
+            return true;
+        } catch (NumberFormatException x) {
+            JOptionPane.showMessageDialog(null, "Numero inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
     private void initButtonActions() {
         btn_Cadastro.addActionListener(actionManager);
         btn_Cadastro.setActionCommand(Actions.CADASTRAR);
@@ -422,16 +432,5 @@ public class TelaCandidato extends Tela<Candidato> {
             }
 
         }
-
-        private boolean verificaNumero(String numero) {
-            try {
-                Integer.parseInt(numero);
-                return true;
-            } catch (NumberFormatException x) {
-                JOptionPane.showMessageDialog(null, "Numero inválido, insira somente números.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
-
     }
 }

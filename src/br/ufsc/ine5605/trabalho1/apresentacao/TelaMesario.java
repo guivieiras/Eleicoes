@@ -62,7 +62,7 @@ public class TelaMesario extends JFrame{
         setTitle("Mesário");
     }
     
-    private void exibiTelaVotacao() {
+    private void exibeTelaVotacao() {
         String titulo = txtField_Titulo.getText();
         if (verificaTitulo(titulo)) {
             Eleitor eleitor = ControladorEleitor.getInstance().getEleitor(Long.parseLong(titulo));
@@ -185,7 +185,7 @@ public class TelaMesario extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            exibiTelaVotacao();
+            exibeTelaVotacao();
             
         }
 
