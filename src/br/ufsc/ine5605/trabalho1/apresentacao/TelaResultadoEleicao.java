@@ -1,50 +1,65 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.KeyValue;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
-import br.ufsc.ine5605.trabalho1.entidade.Urna.Turno;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-public class TelaResultadoEleicao extends javax.swing.JFrame {
+/**
+ *
+ * @author Guilherme
+ */
+public class TelaResultadoEleicao extends JFrame {
 
-    private ControladorUrna controlador;
+    private JTextArea txtArea_Results;
 
-    public TelaResultadoEleicao(ControladorUrna controlador) {
-        this.controlador = controlador;
+    public TelaResultadoEleicao() {
+        setTitle("Resultado eleições");
+        setSize(950, 600);
         initComponents();
         imprimeResultado();
-        setLocationRelativeTo(null);
-        texto_Resultado.setFont(new Font("Consolas", Font.PLAIN, 16));
+        txtArea_Results.setFont(new Font("Consolas", Font.PLAIN, 16));
 
     }
 
     public void imprimeResultado() {
         for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
-            Turno turno = Turno.Primeiro;
-            for (Urna urna : controlador.getLista()) {
+            Urna.Turno turno = Urna.Turno.Primeiro;
+            for (Urna urna : ControladorUrna.getInstance().getLista()) {
                 if (urna.getCidade().equals(cidade)) {
                     insereTexto(String.format("Seção: %1$d Zona: %2$d Cidade: %3$s\n", urna.getSecaoEleitoral(), urna.getZonaEleitoral(), urna.getCidade().getNome()));
 
                     if (urna.getTurno() == Urna.Turno.Primeiro) {
                         insereTexto("--------------- Vereadores ---------------\n");
-                        LinkedHashMap<Candidato, Integer> vereadores = controlador.ordenaHashMap(urna.getTotalDeVotosPorVereador());
-                        for (Entry<Candidato, Integer> entry : vereadores.entrySet()) {
+                        LinkedHashMap<Candidato, Integer> vereadores = ControladorUrna.getInstance().ordenaHashMap(urna.getTotalDeVotosPorVereador());
+                        for (Map.Entry<Candidato, Integer> entry : vereadores.entrySet()) {
                             insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                         }
                         insereTexto(urna.getVotosInvalidosParaVerador() + " votos inválidos (" + urna.getVotosBrancosParaVereador() + " brancos e " + urna.getVotosNulosParaVereador() + " nulos)\n");
                     } else {
-                        turno = Turno.Segundo;
+                        turno = Urna.Turno.Segundo;
                     }
 
                     insereTexto("--------------- Prefeitos  ---------------\n");
-                    LinkedHashMap<Candidato, Integer> prefeitos = controlador.ordenaHashMap(urna.getTotalDeVotosPorPrefeito());
-                    for (Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
+                    LinkedHashMap<Candidato, Integer> prefeitos = ControladorUrna.getInstance().ordenaHashMap(urna.getTotalDeVotosPorPrefeito());
+                    for (Map.Entry<Candidato, Integer> entry : prefeitos.entrySet()) {
                         insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                     }
                     insereTexto(urna.getVotosInvalidosParaPrefeito() + " votos inválidos (" + urna.getVotosBrancosParaPrefeito() + " brancos e " + urna.getVotosNulosParaPrefeito() + " nulos)\n");
@@ -55,15 +70,15 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
                 }
             }
             insereTexto("--------- Vencedores " + cidade.getNome() + " --------\n");
-            KeyValue<Candidato, Integer> prefeitoVotos = controlador.prefeitoVencedor(cidade);
+            KeyValue<Candidato, Integer> prefeitoVotos = ControladorUrna.getInstance().prefeitoVencedor(cidade);
             insereTexto(String.format("Prefeito vencedor: %1$s (%2$d votos)\n", prefeitoVotos.key.getNome(), prefeitoVotos.value));
 
-            if (turno == Turno.Primeiro) {
+            if (turno == Urna.Turno.Primeiro) {
                 insereTexto("Vereadores:\n");
 
-                LinkedHashMap<Candidato, Integer> vereadoresVencedores = controlador.vereadorVencedor(cidade);
+                LinkedHashMap<Candidato, Integer> vereadoresVencedores = ControladorUrna.getInstance().vereadorVencedor(cidade);
                 int vagas = 3;
-                for (Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
+                for (Map.Entry<Candidato, Integer> entry : vereadoresVencedores.entrySet()) {
                     if (vagas > -100) {
                         insereTexto(entry.getKey().getNome() + "  (" + entry.getValue() + " votos)\n");
                     }
@@ -76,51 +91,24 @@ public class TelaResultadoEleicao extends javax.swing.JFrame {
     }
 
     public void insereTexto(String txt) {
-        texto_Resultado.append(txt);
+        txtArea_Results.append(txt);
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        getContentPane().setLayout(new GridBagLayout());
+        txtArea_Results = new JTextArea();
+        JScrollPane jScrollPane1 = new JScrollPane(txtArea_Results);
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        texto_Resultado = new javax.swing.JTextArea();
+        getContentPane().add(jScrollPane1, new GridBagConstraints(0, 0, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Resultado");
-
-        texto_Resultado.setColumns(20);
-        texto_Resultado.setRows(5);
-        jScrollPane1.setViewportView(texto_Resultado);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 937, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea texto_Resultado;
-    // End of variables declaration//GEN-END:variables
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ControladorPrincipal.getInstance().liberaTelaPrincipal();
+            }
+        });
+    }
 }

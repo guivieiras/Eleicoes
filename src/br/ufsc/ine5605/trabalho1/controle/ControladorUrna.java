@@ -276,13 +276,13 @@ public class ControladorUrna implements IControlador<Urna> {
             TelaMesario tela = new TelaMesario(urna);
 
             tela.setLocation(i, 200);
-            i += 340;
+            i += 345;
             tela.setVisible(true);
         }
     }
 
     public void exibeTelaResultado() {
-        TelaResultadoEleicao tre = new TelaResultadoEleicao(this);
+        TelaResultadoEleicao tre = new TelaResultadoEleicao();
         tre.setVisible(true);
     }
 

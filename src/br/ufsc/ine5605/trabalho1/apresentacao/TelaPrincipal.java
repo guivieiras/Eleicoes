@@ -145,6 +145,10 @@ public class TelaPrincipal extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals(btn_IniciarEleicoes.getText())) {
 
+                if (ControladorCidade.getInstance().getLista().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Não há como iniciar as eleições, não há cidades cadastradas ainda.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
                 for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
                     if (ControladorUrna.getInstance().getLista(cidade).isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Não há como iniciar as eleições, não há urnas cadastradas na cidade: " + cidade.getNome(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -173,7 +177,7 @@ public class TelaPrincipal extends JFrame {
                 ControladorPartido.getInstance().exibeTela();
             }
             if (e.getActionCommand().equals(btn_TelaResultados.getText())) {
-            //    setEnabled(false);
+                setEnabled(false);
                 ControladorUrna.getInstance().exibeTelaResultado();
             }
             if (e.getActionCommand().equals(btn_TelaUrna.getText())) {
