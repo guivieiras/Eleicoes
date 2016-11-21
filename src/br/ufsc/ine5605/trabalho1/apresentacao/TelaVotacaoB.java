@@ -95,7 +95,7 @@ public class TelaVotacaoB extends JFrame{
         getContentPane().add(jpanel);
         
         jpanel.setLayout(new GridBagLayout());
-        setSize(400, 300);
+        setSize(300, 200);
         
         label_Prefeito = new JLabel("Voto para prefeito");
         txtField_Prefeito = new JTextField();
