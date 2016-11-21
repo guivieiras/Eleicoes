@@ -1,6 +1,8 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.constantes.Actions;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
+import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.entidade.Urna.Turno;
@@ -83,6 +85,7 @@ public class TelaVotacaoB extends JFrame{
         if (valido){
             urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()));
             eleitor.votar();
+            
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
@@ -138,6 +141,14 @@ public class TelaVotacaoB extends JFrame{
         layout.weighty = 1;
         jpanel.add(button_Votar, layout);
         
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ControladorPrincipal.getInstance().liberaTelaPrincipal();
+                ControladorPartido.getInstance().persist();
+                telaMesario.unlockTela();
+            }
+        });
     }
 
     private void setButtonActions() {
@@ -156,6 +167,7 @@ public class TelaVotacaoB extends JFrame{
             } else{
                 votarSegundoTurno();
             }
+            
         }
     }
 }
