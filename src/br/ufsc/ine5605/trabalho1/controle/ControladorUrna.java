@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesario;
+import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesarioB;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaResultadoEleicao;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrnaOLD;
@@ -244,10 +245,10 @@ public class ControladorUrna implements IControlador<Urna> {
         int i = 50;
         for (Urna urna : mapper.getList()) {
             urna.inicia();
-            TelaMesario tela = new TelaMesario(urna);
+            TelaMesarioB tela = new TelaMesarioB(urna);
 
             tela.setLocation(i, 200);
-            i += 340;
+            i += 345;
             tela.setVisible(true);
         }
     }

@@ -23,7 +23,7 @@ public class TelaVotacaoB extends JFrame{
     
     private final Urna urna;
     private final Eleitor eleitor;
-    private final TelaMesario telaMesario;
+    private final TelaMesarioB telaMesario;
     
     private JPanel jpanel;
     private ActionManager actionManager = new ActionManager();
@@ -32,11 +32,11 @@ public class TelaVotacaoB extends JFrame{
     JLabel label_Vereador;
      
     JTextField txtField_Prefeito;
-    JTextField txtfield_vereador;
+    JTextField txtField_Vereador;
      
     JButton button_Votar;
 
-    public TelaVotacaoB(Urna urna, Eleitor eleitor, TelaMesario telaMesario) {
+    public TelaVotacaoB(Urna urna, Eleitor eleitor, TelaMesarioB telaMesario) {
         this.urna = urna;
         this.eleitor = eleitor;
         this.telaMesario = telaMesario;
@@ -47,42 +47,33 @@ public class TelaVotacaoB extends JFrame{
         setResizable(false);
         setTitle("Votar");
     }
-    public void verificaNumero(JTextField txt) throws NumberFormatException{
-        if (txt.getText().length() > 0) {
-                Integer.parseInt(txt.getText());
-        } else {
-            txt.setText("00");
-        }
-    }
-    public boolean verificaNumeros() {
+    public boolean verificaNumero(JTextField txt) {
         try {
-            verificaNumero(txtField_Prefeito);
-            verificaNumero(txtfield_vereador);
-        } catch (NumberFormatException numberFormatException) {
+            if (txt.getText().length() > 0) {
+                Integer.parseInt(txt.getText());
+            } else {
+                txt.setText("00");
+            }
+            return true;
+        } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(null, "Erro ao votar, Insira apenas numeros.", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
-        return true;
-
+    }
+ 
+    public boolean verificaNumeros() {
+        return verificaNumero(txtField_Prefeito) && verificaNumero(txtField_Vereador);
     }
     public void votar() {
         if (verificaNumeros()) {
-            urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()), Integer.parseInt(txtfield_vereador.getText()));
+            urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()), Integer.parseInt(txtField_Vereador.getText()));
             eleitor.votar();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
    
-    private void votarSegundoTurno() {
-        boolean valido;
-        try {
-            verificaNumero(txtField_Prefeito);
-            valido =true;
-        } catch (NumberFormatException numberFormatException) {
-            JOptionPane.showMessageDialog(null, "Erro ao votar, Insira apenas numeros.", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
-            valido = false;
-        }
-        if (valido){
+    private void votarSegundoTurno(){
+        if (verificaNumero(txtField_Prefeito)){
             urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()));
             eleitor.votar();
             
@@ -117,7 +108,7 @@ public class TelaVotacaoB extends JFrame{
         jpanel.add(txtField_Prefeito, layout);
         
         if(urna.getTurno()==Turno.Primeiro){
-            txtfield_vereador = new JTextField();
+            txtField_Vereador = new JTextField();
             label_Vereador = new JLabel("Voto para Vereador: ");
             
             layout.insets = new Insets(20, 20, 0, 20);
@@ -130,7 +121,7 @@ public class TelaVotacaoB extends JFrame{
             layout.gridx = 1;
             layout.gridy = 1;
             layout.weightx = 1;
-            jpanel.add(txtfield_vereador, layout);
+            jpanel.add(txtField_Vereador, layout);
             
         }
         
@@ -144,8 +135,6 @@ public class TelaVotacaoB extends JFrame{
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
-                ControladorPrincipal.getInstance().liberaTelaPrincipal();
-                ControladorPartido.getInstance().persist();
                 telaMesario.unlockTela();
             }
         });
