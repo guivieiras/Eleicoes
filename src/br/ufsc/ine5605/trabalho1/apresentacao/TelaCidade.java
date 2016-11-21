@@ -230,9 +230,13 @@ public class TelaCidade extends Tela<Cidade> {
                 int x = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja modificar a cidade?", "Aviso", JOptionPane.YES_NO_OPTION);
                 if (x == JOptionPane.YES_OPTION) {
                     try {
-                        ControladorCidade.getInstance().modifica(cidadeModificada, new Cidade(verificaNome(txt_ModificaNome.getText())));
+                        if (ControladorCidade.getInstance().modifica(cidadeModificada, new Cidade(verificaNome(txt_ModificaNome.getText())))) {
+                            JOptionPane.showMessageDialog(null, "Cidade modificada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Não foi possivel modificar a cidade", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     } catch (NomeVazio | CidadeDuplicada ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao modificar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Erro ao modificar, " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
