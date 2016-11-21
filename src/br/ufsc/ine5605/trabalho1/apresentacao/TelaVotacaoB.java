@@ -45,7 +45,7 @@ public class TelaVotacaoB extends JFrame{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
-        
+        setTitle("Votar");
     }
     public void verificaNumero(JTextField txt) throws NumberFormatException{
         if (txt.getText().length() > 0) {
@@ -95,22 +95,22 @@ public class TelaVotacaoB extends JFrame{
         getContentPane().add(jpanel);
         
         jpanel.setLayout(new GridBagLayout());
-        setSize(300, 200);
+        setSize(320, 220);
         
-        label_Prefeito = new JLabel("Voto para prefeito");
+        label_Prefeito = new JLabel("Voto para prefeito: ");
         txtField_Prefeito = new JTextField();
         button_Votar = new JButton("Votar");
         
         GridBagConstraints layout = new GridBagConstraints();
         layout.fill = GridBagConstraints.HORIZONTAL;
         
-        layout.insets = new Insets(60, 40, 0, 0);
+        layout.insets = new Insets(40, 20, 0, 20);
         layout.gridx = 0;
         layout.gridy = 0;
         layout.weightx = 0;
         jpanel.add(label_Prefeito, layout);
         
-        layout.insets = new Insets(60, 40, 0, 40);
+        layout.insets = new Insets(40, 20, 0, 20);
         layout.gridx = 1;
         layout.gridy = 0;
         layout.weightx = 1;
@@ -118,15 +118,15 @@ public class TelaVotacaoB extends JFrame{
         
         if(urna.getTurno()==Turno.Primeiro){
             txtfield_vereador = new JTextField();
-            label_Vereador = new JLabel();
+            label_Vereador = new JLabel("Voto para Vereador: ");
             
-            layout.insets = new Insets(40, 40, 0, 0);
+            layout.insets = new Insets(20, 20, 0, 20);
             layout.gridx = 0;
             layout.gridy = 1;
             layout.weightx = 0;
             jpanel.add(label_Vereador, layout);
             
-            layout.insets = new Insets(40, 40, 0, 40);
+            layout.insets = new Insets(20, 20, 0, 20);
             layout.gridx = 1;
             layout.gridy = 1;
             layout.weightx = 1;
@@ -134,11 +134,11 @@ public class TelaVotacaoB extends JFrame{
             
         }
         
-        layout.insets = new Insets(0, 0, 40, 40);
-        layout.gridx = 2;
+        layout.insets = new Insets(0, 0, 0, 20);
+        layout.gridx = 1;
         layout.gridy = 2;
         layout.weightx = 0;
-        layout.weighty = 1;
+        layout.weighty = 0.1;
         jpanel.add(button_Votar, layout);
         
         addWindowListener(new java.awt.event.WindowAdapter() {
