@@ -19,21 +19,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TelaVotacao extends JFrame{
-    
+public class TelaVotacao extends JFrame {
+
     private final Urna urna;
     private final Eleitor eleitor;
     private final TelaMesario telaMesario;
-    
+
     private JPanel jpanel;
-    private ActionManager actionManager = new ActionManager();
-    
+    private final ActionManager actionManager = new ActionManager();
+
     JLabel label_Prefeito;
     JLabel label_Vereador;
-     
+
     JTextField txtField_Prefeito;
     JTextField txtfield_vereador;
-     
+
     JButton button_Votar;
 
     public TelaVotacao(Urna urna, Eleitor eleitor, TelaMesario telaMesario) {
@@ -45,102 +45,96 @@ public class TelaVotacao extends JFrame{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
-        
+        setTitle("Votar");
     }
-    public void verificaNumero(JTextField txt) throws NumberFormatException{
-        if (txt.getText().length() > 0) {
-                Integer.parseInt(txt.getText());
-        } else {
-            txt.setText("00");
-        }
-    }
-    public boolean verificaNumeros() {
+
+    public boolean verificaNumero(JTextField txt) {
         try {
-            verificaNumero(txtField_Prefeito);
-            verificaNumero(txtfield_vereador);
-        } catch (NumberFormatException numberFormatException) {
+            if (txt.getText().length() > 0) {
+                Integer.parseInt(txt.getText());
+            } else {
+                txt.setText("00");
+            }
+            return true;
+        } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(null, "Erro ao votar, Insira apenas numeros.", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
-        return true;
+    }
 
+    public boolean verificaNumeros(boolean segundoTurno) {
+        if (segundoTurno) {
+            return verificaNumero(txtField_Prefeito);
+        } else {
+            return verificaNumero(txtfield_vereador) && verificaNumero(txtField_Prefeito);
+        }
     }
-    public void votar() {
-        if (verificaNumeros()) {
-            urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()), Integer.parseInt(txtfield_vereador.getText()));
+
+    public void votar(boolean segundoTurno) {
+        if (verificaNumeros(segundoTurno)) {
+
+            if (segundoTurno) {
+                urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()));
+            } else {
+                urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()), Integer.parseInt(txtfield_vereador.getText()));
+            }
             eleitor.votar();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
-   
-    private void votarSegundoTurno() {
-        boolean valido;
-        try {
-            verificaNumero(txtField_Prefeito);
-            valido =true;
-        } catch (NumberFormatException numberFormatException) {
-            JOptionPane.showMessageDialog(null, "Erro ao votar, Insira apenas numeros.", "Aviso!", JOptionPane.INFORMATION_MESSAGE);
-            valido = false;
-        }
-        if (valido){
-            urna.contabilizaVoto(Integer.parseInt(txtField_Prefeito.getText()));
-            eleitor.votar();
-            
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        }
-    }
+
     private void iniciaComponents() {
-        
+
         jpanel = new JPanel();
         getContentPane().add(jpanel);
-        
+
         jpanel.setLayout(new GridBagLayout());
-        setSize(400, 300);
-        
-        label_Prefeito = new JLabel("Voto para prefeito");
+        setSize(320, 220);
+
+        label_Prefeito = new JLabel("Voto para prefeito: ");
         txtField_Prefeito = new JTextField();
         button_Votar = new JButton("Votar");
-        
+
         GridBagConstraints layout = new GridBagConstraints();
         layout.fill = GridBagConstraints.HORIZONTAL;
-        
-        layout.insets = new Insets(60, 40, 0, 0);
+
+        layout.insets = new Insets(40, 20, 0, 20);
         layout.gridx = 0;
         layout.gridy = 0;
         layout.weightx = 0;
         jpanel.add(label_Prefeito, layout);
-        
-        layout.insets = new Insets(60, 40, 0, 40);
+
+        layout.insets = new Insets(40, 20, 0, 20);
         layout.gridx = 1;
         layout.gridy = 0;
         layout.weightx = 1;
         jpanel.add(txtField_Prefeito, layout);
-        
-        if(urna.getTurno()==Turno.Primeiro){
+
+        if (urna.getTurno() == Turno.Primeiro) {
             txtfield_vereador = new JTextField();
-            label_Vereador = new JLabel();
-            
-            layout.insets = new Insets(40, 40, 0, 0);
+            label_Vereador = new JLabel("Voto para Vereador: ");
+
+            layout.insets = new Insets(20, 20, 0, 20);
             layout.gridx = 0;
             layout.gridy = 1;
             layout.weightx = 0;
             jpanel.add(label_Vereador, layout);
-            
-            layout.insets = new Insets(40, 40, 0, 40);
+
+            layout.insets = new Insets(20, 20, 0, 20);
             layout.gridx = 1;
             layout.gridy = 1;
             layout.weightx = 1;
             jpanel.add(txtfield_vereador, layout);
-            
+
         }
-        
-        layout.insets = new Insets(0, 0, 40, 40);
-        layout.gridx = 2;
+
+        layout.insets = new Insets(0, 0, 0, 20);
+        layout.gridx = 1;
         layout.gridy = 2;
         layout.weightx = 0;
-        layout.weighty = 1;
+        layout.weighty = 0.1;
         jpanel.add(button_Votar, layout);
-        
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -154,20 +148,14 @@ public class TelaVotacao extends JFrame{
     private void setButtonActions() {
         button_Votar.addActionListener(actionManager);
         button_Votar.setActionCommand(Actions.VOTAR);
-        
+
     }
 
     private class ActionManager implements ActionListener {
 
-
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(urna.getTurno()==Turno.Primeiro){
-                votar();
-            } else{
-                votarSegundoTurno();
-            }
-            
+            votar(urna.getTurno() == Turno.Segundo);
         }
     }
 }

@@ -17,8 +17,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -28,7 +26,7 @@ import javax.swing.*;
 public class TelaCidade extends Tela<Cidade> {
 
     private JTabbedPane jTabbedPane;
-    private ActionManager actionManager = new ActionManager();
+    private final ActionManager actionManager = new ActionManager();
     private Cidade cidadeModificada;
 
     //Panel lista

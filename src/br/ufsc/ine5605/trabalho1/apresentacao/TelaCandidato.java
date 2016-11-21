@@ -18,8 +18,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -29,7 +27,7 @@ import javax.swing.*;
 public class TelaCandidato extends Tela<Candidato> {
 
     private JTabbedPane jTabbedPane;
-    private ActionManager actionManager = new ActionManager();
+    private final ActionManager actionManager = new ActionManager();
     private Candidato candidatoModificado;
 
     //Panel lista

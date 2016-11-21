@@ -1,7 +1,6 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartidoOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPartido;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.exception.PartidoDuplicado;

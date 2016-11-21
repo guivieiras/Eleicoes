@@ -1,6 +1,5 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipalOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cargo;
@@ -8,10 +7,6 @@ import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
-import br.ufsc.ine5605.trabalho1.exception.CandidatosInsuficientes;
-import br.ufsc.ine5605.trabalho1.exception.CidadeDuplicada;
-import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
-import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 
 public class ControladorPrincipal {
 
@@ -37,18 +32,17 @@ public class ControladorPrincipal {
         testaFimEleicao();
     }
 
-    public void testaFimEleicao() {
-        if (ControladorUrna.getInstance().testaFimEleição() == true) {
-            telaPrincipal.blockButtons(true);
-        }
-    }
-
     public static ControladorPrincipal getInstance() {
         if (instance == null) {
             instance = new ControladorPrincipal();
         }
         return instance;
+    }
 
+    public void testaFimEleicao() {
+        if (ControladorUrna.getInstance().testaFimEleição() == true) {
+            liberaBotaoResultado();
+        }
     }
 
     public void blockButtonsTelaPrincipal() {
@@ -61,6 +55,10 @@ public class ControladorPrincipal {
 
     public void liberaBotaoResultado() {
         telaPrincipal.blockButtons(true);
+    }
+
+    public void liberaButtonsTelaPrincipal() {
+        telaPrincipal.liberaButtons();
     }
 
     public void inicializaVariaveis() throws Exception {

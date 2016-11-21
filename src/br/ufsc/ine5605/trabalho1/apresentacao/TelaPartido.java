@@ -6,7 +6,6 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.constantes.Actions;
-import static br.ufsc.ine5605.trabalho1.constantes.Actions.CADASTRAR;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.entidade.Partido;
@@ -14,21 +13,10 @@ import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import br.ufsc.ine5605.trabalho1.exception.PartidoDuplicado;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  *

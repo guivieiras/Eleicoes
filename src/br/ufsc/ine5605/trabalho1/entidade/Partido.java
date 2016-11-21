@@ -6,7 +6,7 @@ public class Partido implements Serializable {
 
     private String nome;
     private String sigla;
-    private int codigo;
+    private final int codigo;
 
     public Partido(String nome, String sigla) {
         setSigla(sigla);

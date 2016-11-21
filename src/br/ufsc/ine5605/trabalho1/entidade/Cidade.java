@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Cidade implements Serializable {
 
     private String nome;
-    private int codigo;
+    private final int codigo;
 
     public Cidade(String nome) {
         this.nome = nome;

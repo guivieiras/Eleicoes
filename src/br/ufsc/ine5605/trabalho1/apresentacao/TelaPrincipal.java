@@ -6,6 +6,7 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
  * and open the template in the editor.
  */
 import br.ufsc.ine5605.trabalho1.controle.*;
+import br.ufsc.ine5605.trabalho1.entidade.Cidade;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,7 @@ import javax.swing.*;
  */
 public class TelaPrincipal extends JFrame {
 
-    private ActionManager actionManager = new ActionManager();
+    private final ActionManager actionManager = new ActionManager();
 
     private JPanel jpanel;
     private JButton btn_IniciarEleicoes;
@@ -28,6 +29,7 @@ public class TelaPrincipal extends JFrame {
     private JButton btn_TelaPartido;
     private JButton btn_TelaResultados;
     private JButton btn_TelaUrna;
+    private JButton btn_ResetEleicoes;
 
     public TelaPrincipal() {
         setTitle("Menu principal");
@@ -49,7 +51,8 @@ public class TelaPrincipal extends JFrame {
         btn_TelaPartido = new JButton("Partidos");
         btn_TelaResultados = new JButton("Resultado da eleição");
         btn_TelaUrna = new JButton("Urnas");
-        
+        btn_ResetEleicoes = new JButton("Reset eleições");
+
         btn_TelaResultados.setEnabled(false);
 
         btn_IniciarEleicoes.setMaximumSize(new Dimension(180, 200));
@@ -59,6 +62,7 @@ public class TelaPrincipal extends JFrame {
         btn_TelaPartido.setMaximumSize(new Dimension(180, 200));
         btn_TelaResultados.setMaximumSize(new Dimension(180, 200));
         btn_TelaUrna.setMaximumSize(new Dimension(180, 200));
+        btn_ResetEleicoes.setMaximumSize(new Dimension(180, 200));
 
         btn_IniciarEleicoes.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn_TelaCidade.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -67,6 +71,7 @@ public class TelaPrincipal extends JFrame {
         btn_TelaPartido.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn_TelaResultados.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn_TelaUrna.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn_ResetEleicoes.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         jpanel.add(Box.createVerticalGlue());
         jpanel.add(btn_TelaCidade);
@@ -83,6 +88,8 @@ public class TelaPrincipal extends JFrame {
         jpanel.add(Box.createVerticalGlue());
         jpanel.add(btn_TelaResultados);
         jpanel.add(Box.createVerticalGlue());
+        jpanel.add(btn_ResetEleicoes);
+        jpanel.add(Box.createVerticalGlue());
 
         setResizable(false);
         setLocationRelativeTo(null);
@@ -98,6 +105,7 @@ public class TelaPrincipal extends JFrame {
         btn_TelaCandidato.addActionListener(actionManager);
         btn_TelaPartido.addActionListener(actionManager);
         btn_TelaEleitor.addActionListener(actionManager);
+        btn_ResetEleicoes.addActionListener(actionManager);
 
         btn_IniciarEleicoes.setActionCommand(btn_IniciarEleicoes.getText());
         btn_TelaCidade.setActionCommand(btn_TelaCidade.getText());
@@ -106,8 +114,8 @@ public class TelaPrincipal extends JFrame {
         btn_TelaCandidato.setActionCommand(btn_TelaCandidato.getText());
         btn_TelaPartido.setActionCommand(btn_TelaPartido.getText());
         btn_TelaEleitor.setActionCommand(btn_TelaEleitor.getText());
+        btn_ResetEleicoes.setActionCommand(btn_ResetEleicoes.getText());
     }
-   
 
     public void blockButtons(boolean eleicaoEncerrada) {
 
@@ -121,18 +129,30 @@ public class TelaPrincipal extends JFrame {
         btn_TelaResultados.setEnabled(eleicaoEncerrada);
     }
 
+    public void liberaButtons() {
+        btn_TelaCandidato.setEnabled(true);
+        btn_TelaEleitor.setEnabled(true);
+        btn_TelaCidade.setEnabled(true);
+        btn_TelaPartido.setEnabled(true);
+        btn_TelaUrna.setEnabled(true);
+        btn_IniciarEleicoes.setEnabled(true);
+        btn_TelaResultados.setEnabled(false);
+    }
+
     class ActionManager implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals(btn_IniciarEleicoes.getText())) {
 
-                if (ControladorUrna.getInstance().getLista().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Não há como iniciar as eleições, não há urnas cadastradas", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                    return;
+                for (Cidade cidade : ControladorCidade.getInstance().getLista()) {
+                    if (ControladorUrna.getInstance().getLista(cidade).isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Não há como iniciar as eleições, não há urnas cadastradas na cidade: " + cidade.getNome(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
                 }
-                blockButtons(false);
 
+                blockButtons(false);
                 setEnabled(false);
                 ControladorUrna.getInstance().iniciaEleicoes();
             }
@@ -153,14 +173,19 @@ public class TelaPrincipal extends JFrame {
                 ControladorPartido.getInstance().exibeTela();
             }
             if (e.getActionCommand().equals(btn_TelaResultados.getText())) {
-                setEnabled(false);
+            //    setEnabled(false);
                 ControladorUrna.getInstance().exibeTelaResultado();
             }
             if (e.getActionCommand().equals(btn_TelaUrna.getText())) {
                 setEnabled(false);
                 ControladorUrna.getInstance().exibeTela();
             }
+            if (e.getActionCommand().equals(btn_ResetEleicoes.getText())) {
+                if (JOptionPane.showConfirmDialog(null, "Tem certeza que deseja resetar a eleição? Esta ação ira zerar todos os votos já registrados nas urnas e alterar o estado das urnas para 'Aberto'", "Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    ControladorUrna.getInstance().resetEleicao();
+                }
+            }
+
         }
     }
-
 }

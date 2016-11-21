@@ -1,7 +1,6 @@
 package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.controle.ControladorEleitor;
-import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
@@ -25,7 +24,7 @@ public class TelaMesario extends javax.swing.JFrame {
             if (eleitor != null) {
                 int magicNumber = ControladorUrna.getInstance().verificaEleitor(urna, eleitor);
                 if (magicNumber == 0) {
-                    TelaVotacaoOLD tv = new TelaVotacaoOLD(urna, eleitor, this);
+                    TelaVotacao tv = new TelaVotacao(urna, eleitor, this);
                     this.setEnabled(false);
                     tv.setVisible(true);
                 }

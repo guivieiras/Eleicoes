@@ -2,8 +2,6 @@ package br.ufsc.ine5605.trabalho1.entidade;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaVotacaoOLD;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
@@ -20,10 +18,10 @@ public class Urna implements Serializable {
     private final LinkedHashMap<Candidato, Integer> totalDeVotosPorPrefeito;
     private final LinkedHashMap<Candidato, Integer> totalDeVotosPorVereador;
     private final LinkedHashMap<Partido, Integer> totalDeVotosPorPartidoParaVereador;
-    private int secaoEleitoral;
-    private int zonaEleitoral;
-    private Cidade cidade;
-    private int limiteDeEleitores;
+    private final int secaoEleitoral;
+    private final int zonaEleitoral;
+    private final Cidade cidade;
+    private final int limiteDeEleitores;
     private int votosEfetuadosParaPrefeito;
     private int votosBrancosParaPrefeito;
     private int votosNulosParaPrefeito;
@@ -31,11 +29,11 @@ public class Urna implements Serializable {
     private int votosBrancosParaVereador;
     private int votosNulosParaVereador;
     private int totalDeCandidatos;
-    private int codigo;
+    private final int codigo;
 
     private Estado estado = Estado.Aberta;
 
-    private Turno turno;
+    private final Turno turno;
 
     public Urna(int limiteDeEleitores, int secaoEleitoral, int zonaEleitoral, Cidade cidade, ArrayList<Candidato> candidatos, Turno turno) {
         this.turno = turno;
@@ -120,6 +118,27 @@ public class Urna implements Serializable {
         } else {
             votosNulosParaPrefeito++;
         }
+    }
+
+    public void zerar() {
+        votosEfetuadosParaPrefeito = 0;
+        votosEfetuadosParaVereador = 0;
+        votosBrancosParaPrefeito = 0;
+        votosBrancosParaVereador = 0;
+        votosNulosParaPrefeito = 0;
+        votosNulosParaVereador = 0;
+
+        for (Entry<Candidato, Integer> entry : totalDeVotosPorVereador.entrySet()) {
+            entry.setValue(0);
+        }
+        for (Entry<Candidato, Integer> entry : totalDeVotosPorPrefeito.entrySet()) {
+            entry.setValue(0);
+        }
+        for (Entry<Partido, Integer> entry : totalDeVotosPorPartidoParaVereador.entrySet()) {
+            entry.setValue(0);
+        }
+        
+        estado = Estado.Aberta;
     }
 
     //

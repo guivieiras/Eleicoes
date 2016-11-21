@@ -1,7 +1,6 @@
 package br.ufsc.ine5605.trabalho1.controle;
 
 import br.ufsc.ine5605.trabalho1.entidade.Eleitor;
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitorOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaEleitor;
 import br.ufsc.ine5605.trabalho1.exception.EleitorDuplicado;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;

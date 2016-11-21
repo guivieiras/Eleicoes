@@ -3,7 +3,6 @@ package br.ufsc.ine5605.trabalho1.controle;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaMesario;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaResultadoEleicao;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
-import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrnaOLD;
 import br.ufsc.ine5605.trabalho1.apresentacao.TelaUrna;
 import br.ufsc.ine5605.trabalho1.entidade.Candidato;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
@@ -16,18 +15,15 @@ import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
 import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 import br.ufsc.ine5605.trabalho1.mapeador.Mapeador;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 public class ControladorUrna implements IControlador<Urna> {
 
     private static ControladorUrna instance;
-    private int vagasParaVereadores;
-    private Mapeador<Integer, Urna> mapper;
+    private final int vagasParaVereadores;
+    private final Mapeador<Integer, Urna> mapper;
 
     private ControladorUrna() {
         this.mapper = new Mapeador<>("urnas.urn");
@@ -49,7 +45,7 @@ public class ControladorUrna implements IControlador<Urna> {
     }
 
     @Override
-    public boolean cadastra(Urna novaUrna) throws UrnaDuplicada, TurnoInvalido, CandidatosInsuficientes{
+    public boolean cadastra(Urna novaUrna) throws UrnaDuplicada, TurnoInvalido, CandidatosInsuficientes {
         for (Urna urna : mapper.getList()) {
             if (novaUrna.getCidade().equals(urna.getCidade())
                     && novaUrna.getZonaEleitoral() == urna.getZonaEleitoral()
@@ -58,12 +54,14 @@ public class ControladorUrna implements IControlador<Urna> {
             }
         }
 
-        if (novaUrna.getTotalDeVotosPorPrefeito().isEmpty())
+        if (novaUrna.getTotalDeVotosPorPrefeito().isEmpty()) {
             throw new CandidatosInsuficientes();
-        
-        if (novaUrna.getTotalDeVotosPorVereador().isEmpty() && novaUrna.getTurno() == Turno.Segundo)
+        }
+
+        if (novaUrna.getTotalDeVotosPorVereador().isEmpty() && novaUrna.getTurno() == Turno.Primeiro) {
             throw new CandidatosInsuficientes();
-        
+        }
+
         if (!checkTurnos(novaUrna.getCidade(), novaUrna.getTurno())) {
             throw new TurnoInvalido();
         }
@@ -115,6 +113,7 @@ public class ControladorUrna implements IControlador<Urna> {
         }
         return null;
     }
+
     public int getVagasParaVereadores() {
         return vagasParaVereadores;
     }
@@ -262,7 +261,14 @@ public class ControladorUrna implements IControlador<Urna> {
         }
         return ordenaHashMap(vereadoresEleitos);
     }
-    
+
+    public void resetEleicao() {
+        for (Urna urna : mapper.getList()) {       
+            urna.zerar();
+        }
+        ControladorPrincipal.getInstance().liberaButtonsTelaPrincipal();
+    }
+
     public void iniciaEleicoes() {
         int i = 50;
         for (Urna urna : mapper.getList()) {
@@ -290,7 +296,7 @@ public class ControladorUrna implements IControlador<Urna> {
         int urnasEncerradas = 0;
 
         if (mapper.getList().isEmpty()) {
-            urnasEncerradas++;
+            return false;
         }
 
         for (Urna urna : mapper.getList()) {

@@ -2,19 +2,13 @@ package br.ufsc.ine5605.trabalho1.apresentacao;
 
 import br.ufsc.ine5605.trabalho1.constantes.Actions;
 import br.ufsc.ine5605.trabalho1.controle.ControladorCandidato;
-import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
 import br.ufsc.ine5605.trabalho1.controle.ControladorCidade;
-import br.ufsc.ine5605.trabalho1.controle.ControladorPartido;
 import br.ufsc.ine5605.trabalho1.controle.ControladorPrincipal;
 import br.ufsc.ine5605.trabalho1.controle.ControladorUrna;
-import br.ufsc.ine5605.trabalho1.entidade.Urna;
-import br.ufsc.ine5605.trabalho1.entidade.Cargo;
 import br.ufsc.ine5605.trabalho1.entidade.Cidade;
-import br.ufsc.ine5605.trabalho1.entidade.Partido;
 import br.ufsc.ine5605.trabalho1.entidade.Urna;
 import br.ufsc.ine5605.trabalho1.entidade.Urna.Turno;
 import br.ufsc.ine5605.trabalho1.exception.CandidatosInsuficientes;
-import br.ufsc.ine5605.trabalho1.exception.NomeVazio;
 import br.ufsc.ine5605.trabalho1.exception.TurnoInvalido;
 import br.ufsc.ine5605.trabalho1.exception.UrnaDuplicada;
 import java.awt.GridBagConstraints;
@@ -22,22 +16,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author 10349509913
@@ -45,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class TelaUrna extends Tela<Urna> {
 
     private JTabbedPane jTabbedPane;
-    private ActionManager actionManager = new ActionManager();
+    private final ActionManager actionManager = new ActionManager();
 
     //Panel lista
     private JPanel panel_Lista;
