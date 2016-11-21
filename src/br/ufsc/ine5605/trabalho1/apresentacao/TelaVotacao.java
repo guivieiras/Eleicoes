@@ -18,7 +18,7 @@ public class TelaVotacao extends JFrame {
         this.telaMesario = telaMesario;
         initComponents();
         setLocationRelativeTo(null);
-
+        setTitle("Votar");
     }
 
     public void votar() {

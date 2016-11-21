@@ -31,7 +31,14 @@ import javax.swing.JTextField;
  * @author Matheus
  */
 public class TelaMesarioB extends JFrame{
+    
     private final Urna urna;
+    
+    JLabel label_Secao;
+    JLabel label_Zona;
+    JLabel label_Cidade;
+    JLabel label_Titulo;
+    
     
     public TelaMesarioB(Urna urna){
         this.urna=urna;
@@ -40,10 +47,14 @@ public class TelaMesarioB extends JFrame{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
+        setTitle("Mesário");
     }
 
     private void iniciaComponents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        label_Secao = new JLabel("Secao: ");
+        label_Zona = new JLabel("Zona: ");
+        label_Cidade = new JLabel("Cidade: ");
+        label_Titulo = new JLabel("Título: ");
     }
 
     private void setButtonAction() {
